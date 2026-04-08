@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Generador de Informes · TANTECNO</title>
+<script>
+(function(){
+  if(localStorage.getItem('tantecno_auth') !== 'tantecno_internal_2026'){
+    window.location.href = 'login.html?redirect=generador-informe.html';
+  }
+})();
+</script>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800&family=Barlow:wght@300;400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --bg:#0f172a;--bg2:#111827;--bg3:#1e293b;--border:rgba(255,255,255,.08);--accent:#3b82f6;
+  --text:rgba(255,255,255,.9);--text2:rgba(255,255,255,.55);--text3:rgba(255,255,255,.3);
+  --mono:'IBM Plex Mono',monospace;--body:'Barlow',sans-serif;--cond:'Barlow Condensed',sans-serif;
+  --green:#22c55e;--red:#ef4444;
+}
+body{font-family:var(--body);background:var(--bg);color:var(--text);display:flex;height:100vh;overflow:hidden;}
+#left{width:400px;flex-shrink:0;display:flex;flex-direction:column;background:var(--bg2);border-right:1px solid var(--border);}
+.lh{padding:13px 16px 11px;border-bottom:1px solid var(--border);flex-shrink:0;display:flex;justify-content:space-between;align-items:center;gap:10px;}
+.lh-left .tag{font-family:var(--mono);font-size:9px;color:var(--accent);letter-spacing:.14em;text-transform:uppercase;}
+.lh-left .brand{font-family:var(--cond);font-size:18px;font-weight:800;margin-top:1px;line-height:1;}
+.ot-pill{font-family:var(--mono);font-size:11px;color:var(--text3);border:1px solid var(--border);border-radius:5px;padding:4px 8px;display:flex;align-items:center;gap:4px;}
+.ot-pill input{background:none;border:none;outline:none;font-family:var(--mono);font-size:11px;color:var(--text);width:46px;text-align:center;}
+.btn-exit{background:none;border:1px solid rgba(255,255,255,.1);border-radius:5px;color:rgba(255,255,255,.3);font-family:var(--mono);font-size:9px;letter-spacing:.06em;padding:4px 8px;cursor:pointer;transition:.15s;}
+.btn-exit:hover{color:rgba(255,255,255,.65);}
+.api-row{display:flex;align-items:center;gap:6px;padding:6px 16px;border-bottom:1px solid var(--border);flex-shrink:0;}
+.api-dot{width:7px;height:7px;border-radius:50%;background:var(--red);flex-shrink:0;transition:.3s;}
+.api-dot.ok{background:var(--green);}
+.api-row input{flex:1;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:4px;padding:4px 8px;color:var(--text);font-family:var(--mono);font-size:10px;outline:none;transition:.15s;}
+.api-row input:focus{border-color:rgba(59,130,246,.35);}
+.api-row input::placeholder{color:var(--text3);}
+.api-save{padding:4px 9px;background:rgba(59,130,246,.15);border:1px solid rgba(59,130,246,.25);border-radius:4px;color:#93c5fd;font-family:var(--mono);font-size:9px;cursor:pointer;white-space:nowrap;transition:.15s;}
+.api-save:hover{background:rgba(59,130,246,.28);}
+.mode-bar{display:flex;padding:8px 16px 0;gap:5px;flex-shrink:0;}
+.mode-btn{flex:1;padding:7px 4px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:6px;cursor:pointer;font-family:var(--mono);font-size:10px;color:var(--text3);letter-spacing:.04em;text-align:center;transition:.15s;}
+.mode-btn:hover{background:rgba(255,255,255,.06);}
+.mode-btn.on{background:rgba(59,130,246,.12);border-color:rgba(59,130,246,.3);color:#93c5fd;}
+.lb{flex:1;overflow-y:auto;padding:12px 16px;}
+.lb::-webkit-scrollbar{width:3px;}
+.lb::-webkit-scrollbar-thumb{background:rgba(255,255,255,.08);}
+.ia-label{font-family:var(--mono);font-size:9px;color:var(--text3);letter-spacing:.1em;text-transform:uppercase;margin-bottom:5px;}
+.ia-hint{font-size:11px;color:var(--text3);line-height:1.55;margin-bottom:8px;font-style:italic;}
+.ia-textarea{width:100%;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:7px;padding:10px 12px;color:var(--text);font-family:var(--body);font-size:13px;outline:none;resize:none;transition:.15s;line-height:1.6;}
+.ia-textarea:focus{border-color:rgba(59,130,246,.35);background:rgba(255,255,255,.06);}
+.ia-textarea::placeholder{color:var(--text3);font-style:italic;}
+.ia-bar{display:flex;align-items:center;gap:7px;margin-top:6px;}
+.btn-mic{display:flex;align-items:center;gap:6px;padding:7px 12px;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:6px;cursor:pointer;font-family:var(--mono);font-size:10px;color:var(--text3);letter-spacing:.05em;transition:.15s;flex-shrink:0;}
+.btn-mic:hover{background:rgba(255,255,255,.08);color:var(--text2);}
+.btn-mic.recording{background:rgba(239,68,68,.12);border-color:rgba(239,68,68,.35);color:#fca5a5;animation:pulse-border 1.2s ease-in-out infinite;}
+@keyframes pulse-border{0%,100%{border-color:rgba(239,68,68,.35);}50%{border-color:rgba(239,68,68,.7);}}
+.mic-dot{width:8px;height:8px;border-radius:50%;background:currentColor;flex-shrink:0;}
+.btn-mic.recording .mic-dot{animation:blink .8s ease-in-out infinite;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:.2;}}
+.mic-status{font-family:var(--mono);font-size:9px;color:var(--text3);flex:1;}
+#panel-rapido{display:none;}
+.rf{margin-bottom:7px;}
+.rf label{display:block;font-family:var(--mono);font-size:9px;color:var(--text3);letter-spacing:.06em;text-transform:uppercase;margin-bottom:3px;}
+.rf input,.rf textarea,.rf select{width:100%;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:5px;padding:6px 9px;color:var(--text);font-family:var(--body);font-size:13px;outline:none;transition:.15s;}
+.rf input:focus,.rf textarea:focus{border-color:rgba(59,130,246,.35);}
+.rf textarea{resize:none;}
+.rf select option{background:#1e293b;}
+.r2{display:grid;grid-template-columns:1fr 1fr;gap:7px;}
+.glbl{font-family:var(--mono);font-size:9px;color:var(--accent);letter-spacing:.08em;text-transform:uppercase;margin:10px 0 4px;}
+.ci{display:flex;align-items:flex-start;gap:7px;margin-bottom:3px;cursor:pointer;padding:2px 0;}
+.ci input[type=checkbox]{margin-top:2px;accent-color:var(--accent);flex-shrink:0;width:12px;height:12px;}
+.ci span{font-size:12px;color:var(--text2);line-height:1.4;}
+.ci:hover span,.ci.sel span{color:var(--text);}
+.sec-sep{font-family:var(--mono);font-size:9px;color:var(--text3);letter-spacing:.1em;text-transform:uppercase;margin:14px 0 6px;padding-top:12px;border-top:1px solid var(--border);}
+.svc-sel-wrap{margin-bottom:6px;}
+.no-svc{font-size:11px;color:var(--text3);font-style:italic;padding:2px 0;}
+.cat-btn{display:flex;justify-content:space-between;align-items:center;width:100%;padding:6px 9px;margin-bottom:2px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:5px;cursor:pointer;text-align:left;transition:.15s;}
+.cat-btn:hover{background:rgba(255,255,255,.06);}
+.cat-btn.on{background:rgba(59,130,246,.1);border-color:rgba(59,130,246,.25);}
+.cat-btn .cn{font-size:11.5px;color:var(--text2);}.cat-btn.on .cn{color:#93c5fd;}
+.cat-btn .cp{font-family:var(--mono);font-size:9.5px;color:var(--text3);flex-shrink:0;margin-left:6px;}.cat-btn.on .cp{color:#60a5fa;}
+.ss{display:flex;align-items:center;gap:6px;background:rgba(59,130,246,.07);border:1px solid rgba(59,130,246,.18);border-radius:5px;padding:4px 8px;margin-bottom:2px;}
+.ss .sn{font-size:11px;color:#93c5fd;flex:1;line-height:1.3;}
+.ss input{width:74px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:4px;padding:2px 5px;color:var(--text);font-family:var(--mono);font-size:10px;text-align:right;outline:none;}
+.ss .rm{background:none;border:none;color:var(--text3);cursor:pointer;font-size:14px;padding:0 2px;line-height:1;flex-shrink:0;}.ss .rm:hover{color:#f87171;}
+.dsc-row{display:flex;align-items:center;gap:8px;margin-top:6px;padding:5px 9px;background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:5px;}
+.dsc-row label{font-family:var(--mono);font-size:9px;color:var(--text3);white-space:nowrap;}
+.dsc-row input{width:52px;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:3px;padding:2px 5px;color:var(--text);font-family:var(--mono);font-size:10px;outline:none;text-align:right;}
+.lf{padding:10px 16px;border-top:1px solid var(--border);flex-shrink:0;}
+.btn-g{width:100%;padding:11px;background:var(--accent);border:none;border-radius:7px;color:#fff;font-family:var(--body);font-size:14px;font-weight:500;cursor:pointer;transition:.15s;margin-bottom:4px;display:flex;align-items:center;justify-content:center;gap:8px;}
+.btn-g:hover{background:#2563eb;}
+.btn-g:disabled{opacity:.4;cursor:not-allowed;}
+.spinner{width:13px;height:13px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;display:none;}
+.btn-g.loading .spinner{display:block;}
+.btn-g.loading .blbl{opacity:.6;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.lf-row{display:flex;gap:6px;}
+.btn-sm{flex:1;padding:7px;background:transparent;border:1px solid var(--border);border-radius:6px;color:var(--text2);font-family:var(--body);font-size:11.5px;cursor:pointer;transition:.15s;}
+.btn-sm:hover{background:rgba(255,255,255,.05);color:var(--text);}
+.tip{font-family:var(--mono);font-size:8.5px;color:var(--text3);text-align:center;margin-top:5px;}
+#right{flex:1;overflow-y:auto;background:#c8cbd1;padding:20px;}
+#right::-webkit-scrollbar{width:5px;}#right::-webkit-scrollbar-thumb{background:rgba(0,0,0,.18);}
+.doc{background:#fff;max-width:660px;margin:0 auto;padding:28px 32px;box-shadow:0 4px 24px rgba(0,0,0,.15);color:#111;font-family:Arial,Helvetica,sans-serif;font-size:11px;line-height:1.6;}
+.doc-hdr{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:2.5px solid #111;padding-bottom:10px;margin-bottom:12px;}
+.doc-title{font-family:'Arial Black',Arial,sans-serif;font-size:20px;font-weight:900;line-height:1;letter-spacing:-.02em;}
+.doc-subtipo{font-size:10.5px;font-weight:700;color:#555;letter-spacing:.05em;margin-top:3px;}
+.doc-brand{text-align:right;}
+.doc-brand b{font-size:12.5px;font-weight:900;display:block;}
+.doc-brand small{font-size:8px;color:#888;letter-spacing:.07em;text-transform:uppercase;display:block;margin-top:1px;}
+.doc-brand .doc-contact{font-size:8px;color:#999;margin-top:1px;}
+.doc-meta{margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid #ddd;}
+.doc-ot{font-weight:700;font-size:12px;margin-bottom:6px;}
+.dm{font-size:10.5px;margin-bottom:2px;}
+.dm b{font-weight:700;}
+.dm-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px 16px;margin:3px 0;}
+.dm-grid .dm{margin-bottom:1px;}
+.doc-sh{font-weight:700;font-size:11px;border-bottom:1px solid #ccc;padding-bottom:2px;margin:11px 0 5px;}
+.doc-sb{font-family:Georgia,serif;font-size:10.5px;line-height:1.68;text-align:justify;white-space:pre-line;}
+.doc-sb[contenteditable=true]:focus{outline:1px dashed #93c5fd;border-radius:2px;background:#f8fbff;}
+.doc-ph{font-family:Arial,sans-serif;font-size:10px;color:#bbb;font-style:italic;}
+.edit-hint{font-family:'Courier New',monospace;font-size:8px;color:#93c5fd;letter-spacing:.06em;text-transform:uppercase;margin-bottom:3px;display:none;}
+table.ct{width:100%;border-collapse:collapse;font-size:10px;margin-bottom:4px;}
+table.ct th{background:#f1f5f9;border:1px solid #ccc;padding:4px 7px;text-align:left;font-weight:700;}
+table.ct td{border:1px solid #ccc;padding:4px 7px;vertical-align:top;line-height:1.45;}
+table.ct .tot td{background:#f1f5f9;font-weight:700;}
+table.ct .dscrow td{background:#f0fdf4;color:#166534;font-size:9.5px;}
+.doc-cond{font-size:9.5px;color:#333;line-height:1.6;margin-top:9px;padding-top:7px;border-top:1px solid #eee;}
+.doc-pago{font-size:9.5px;color:#333;line-height:1.6;margin-top:5px;}
+.doc-firma{margin-top:9px;padding-top:7px;border-top:1px solid #ccc;font-size:10.5px;}
+.pbar{display:flex;justify-content:center;gap:8px;margin-top:14px;flex-wrap:wrap;}
+.btn-p{padding:8px 16px;border:none;border-radius:6px;cursor:pointer;font-size:12px;font-family:var(--body);transition:.15s;}
+.btn-p.dark{background:#334155;color:#fff;}.btn-p.dark:hover{background:#1e293b;}
+.btn-p.blue{background:rgba(59,130,246,.15);color:#93c5fd;border:1px solid rgba(59,130,246,.25);}.btn-p.blue:hover{background:rgba(59,130,246,.28);}
+.btn-p.amber{background:rgba(255,255,255,.08);color:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.1);font-size:11px;}.btn-p.amber:hover{background:rgba(255,255,255,.12);}
+@page{size:A4 portrait;margin:13mm 15mm;}
+@media print{
+  #left,.pbar,.edit-hint{display:none!important;}
+  body{background:#fff;display:block;}
+  #right{background:#fff;padding:0;overflow:visible;}
+  .doc{box-shadow:none;padding:0;max-width:100%;margin:0;}
+  .doc-sb{outline:none!important;background:transparent!important;}
+}
+@media(max-width:860px){
+  body{display:block;height:auto;overflow:auto;}
+  #left,#right{width:100%;height:auto;overflow:visible;border:none;}
+  #left{border-bottom:1px solid var(--border);}
+  .tab-bar{display:flex!important;}
+  #left{display:none;}
+  #right{display:none;background:var(--bg);padding:10px 0 0;}
+  #left.tab-active{display:flex;}
+  #right.tab-active{display:block;}
+  .doc{padding:18px 16px;max-width:100%;box-shadow:none;margin:0;}
+  .pbar{flex-direction:column;padding:12px;}
+  .btn-p{width:100%;}
+  .lf{position:sticky;bottom:0;z-index:10;background:var(--bg2);box-shadow:0 -1px 0 var(--border);}
+}
+.tab-bar{display:none;background:var(--bg2);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:20;}
+.tab-btn{flex:1;padding:13px 8px;border:none;background:none;color:var(--text2);font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;border-bottom:2px solid transparent;transition:.15s;}
+.tab-btn.active{color:var(--accent);border-bottom-color:var(--accent);}
+@media print{.tab-bar{display:none!important;}#right{display:block!important;}}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#1e293b;color:var(--text);font-family:var(--mono);font-size:11px;padding:8px 16px;border-radius:6px;border:1px solid var(--border);pointer-events:none;opacity:0;transition:opacity .25s;z-index:999;white-space:nowrap;}
+.toast.show{opacity:1;}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:200;display:flex;align-items:center;justify-content:center;}
+.modal-box{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:24px;width:300px;box-shadow:0 8px 32px rgba(0,0,0,.4);}
+.modal-title{font-family:var(--cond);font-size:16px;font-weight:700;margin-bottom:4px;}
+.modal-sub{font-size:12px;color:var(--text3);margin-bottom:16px;line-height:1.5;}
+.modal-label{font-family:var(--mono);font-size:9px;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px;}
+.modal-input{width:100%;background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:6px;padding:10px 12px;color:var(--text);font-family:var(--mono);font-size:16px;outline:none;margin-bottom:8px;transition:.15s;}
+.modal-input:focus{border-color:rgba(59,130,246,.4);}
+.modal-calc{font-family:var(--mono);font-size:11px;color:var(--text2);margin-bottom:16px;padding:8px 10px;background:rgba(59,130,246,.08);border-radius:5px;border:1px solid rgba(59,130,246,.15);}
+.modal-calc span{color:#93c5fd;font-weight:500;}
+.modal-btns{display:flex;gap:8px;}
+.modal-ok{flex:1;padding:10px;background:var(--accent);border:none;border-radius:6px;color:#fff;font-family:var(--body);font-size:13px;font-weight:500;cursor:pointer;}
+.modal-ok:hover{background:#2563eb;}
+.modal-cancel{padding:10px 14px;background:transparent;border:1px solid var(--border);border-radius:6px;color:var(--text2);font-family:var(--body);font-size:13px;cursor:pointer;}
+.modal-cancel:hover{background:rgba(255,255,255,.05);}
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+</head>
+<body>
+
+<div class="tab-bar" id="tab-bar">
+  <button class="tab-btn active" id="tab-form" onclick="switchTab('form')">Formulario</button>
+  <button class="tab-btn" id="tab-prev" onclick="switchTab('prev')">Vista previa</button>
+</div>
+
+<div id="left" class="tab-active">
+  <div class="lh">
+    <div class="lh-left">
+      <div class="tag">TANTECNO</div>
+      <div class="brand">Generador</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:7px;">
+      <div class="ot-pill">IT N° <input id="f-ot" value="2371" maxlength="6"></div>
+      <button class="btn-exit" onclick="logout()">salir</button>
+    </div>
+  </div>
+
+  <div class="api-row">
+    <div class="api-dot" id="api-dot"></div>
+    <input id="api-key" type="password" placeholder="API key Anthropic (sk-ant-…)" autocomplete="off">
+    <button class="api-save" onclick="saveApiKey()">Guardar</button>
+  </div>
+
+  <div class="mode-bar" style="margin-bottom:8px;">
+    <button class="mode-btn on" id="m-ia" onclick="setMode('ia')">✦ Texto libre (IA)</button>
+    <button class="mode-btn" id="m-rap" onclick="setMode('rap')">☰ Modo rápido</button>
+  </div>
+
+  <div class="lb">
+
+    <div id="panel-ia">
+      <div class="ia-label">Describe el trabajo</div>
+      <div class="ia-hint">Cliente, equipo, problema, hallazgos y precios. Sin orden.</div>
+      <textarea class="ia-textarea" id="f-texto" rows="8" placeholder="Ej: Luis Arce, Acer Nitro 5, Windows 10, SSD riesgoso, pantalla quebrada. Reemplazo pantalla 85.000, SSD 240GB + Win11 65.000, limpieza térmica 20.000."></textarea>
+      <div class="ia-bar">
+        <button class="btn-mic" id="btn-mic" onclick="toggleMic()">
+          <div class="mic-dot"></div>
+          <span id="mic-label">Dictar</span>
+        </button>
+        <span class="mic-status" id="mic-status">Clic para activar mic</span>
+        <button onclick="document.getElementById('f-texto').value=';" style="background:none;border:none;color:var(--text3);font-family:var(--mono);font-size:9px;cursor:pointer;padding:4px 6px;" onmouseover="this.style.color='var(--text2)'" onmouseout="this.style.color='var(--text3)'">limpiar</button>
+      </div>
+    </div>
+
+    <div id="panel-rapido">
+      <div class="r2">
+        <div class="rf"><label>Cliente</label><input id="r-cliente" placeholder="Nombre completo"></div>
+        <div class="rf"><label>Equipo</label><input id="r-equipo" placeholder="Marca y modelo"></div>
+      </div>
+      <div class="r2">
+        <div class="rf"><label>Recepción</label><input type="date" id="r-frecep"></div>
+        <div class="rf"><label>Informe</label><input type="date" id="r-finf"></div>
+      </div>
+      <div class="rf"><label>Problema reportado</label><textarea id="r-problema" rows="2" placeholder="Equipo lento, pantalla quebrada…"></textarea></div>
+      <div class="rf"><label>Estado físico</label>
+        <select id="r-estado">
+          <option>Buen estado general, sin daños visibles</option>
+          <option>Funcional, desgaste normal por uso</option>
+          <option>Desgaste en bisagra (estructura comprometida)</option>
+          <option>Daños menores en carcasa</option>
+          <option>Pantalla con daños</option>
+        </select>
+      </div>
+      <div class="rf"><label>Accesorios</label><input id="r-acc" value="Solo cargador"></div>
+      <div id="hall-wrap"></div>
+    </div>
+
+    <div class="sec-sep">Servicios — clic para agregar</div>
+    <div class="svc-sel-wrap" id="svc-sel"><div class="no-svc">Ninguno agregado aún</div></div>
+    <div class="dsc-row" style="margin-bottom:8px;">
+      <label>Descuento</label>
+      <input type="number" id="f-dsc" value="0" min="0" max="100">
+      <span style="font-family:var(--mono);font-size:10px;color:var(--accent);">%</span>
+    </div>
+    <div id="cat-wrap"></div>
+
+  </div>
+
+  <div class="lf">
+    <button class="btn-g" id="btn-gen" onclick="generar()">
+      <div class="spinner" id="spinner"></div>
+      <span class="blbl" id="blbl">Generar informe</span>
+    </button>
+    <div class="lf-row" style="margin-top:5px;">
+      <button class="btn-sm" onclick="limpiar()">↺ Nuevo</button>
+      <button class="btn-sm" onclick="savePDF()">⬇ Guardar PDF</button>
+    </div>
+    <div class="tip" id="tip-ia">✦ IA activa</div>
+  </div>
+</div>
+
+<div id="right">
+  <div class="doc" id="doc">
+    <div class="doc-hdr">
+      <div>
+        <div class="doc-title">INFORME TÉCNICO</div>
+        <div class="doc-subtipo" id="p-subtipo">COTIZACIÓN</div>
+      </div>
+      <div class="doc-brand">
+        <b>TANTECNO</b>
+        <small>Optimización de Equipos Computacionales</small>
+        <div class="doc-contact"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="5c3f3332283d3f28331c283d3228393f3233723f30">[email&#160;protected]</a> · +56 9 7103 6909 · Machalí</div>
+      </div>
+    </div>
+
+    <div class="doc-meta">
+      <div class="doc-ot">Informe Técnico N° <span id="p-ot">____</span></div>
+      <div class="dm"><b>Cliente:</b> <span id="p-cliente">_______________</span></div>
+      <div class="dm"><b>Equipo:</b> <span id="p-equipo">_______________</span></div>
+      <div class="dm-grid">
+        <div class="dm"><b>Fecha recepción:</b> <span id="p-frecep">—</span></div>
+        <div class="dm"><b>Fecha informe:</b> <span id="p-finf">—</span></div>
+        <div class="dm"><b>Estado físico:</b> <span id="p-estado">—</span></div>
+        <div class="dm"><b>Accesorios:</b> <span id="p-acc">—</span></div>
+      </div>
+      <div class="dm"><b>Encargado técnico:</b> Cristián Martínez – Tantecno</div>
+    </div>
+
+    <div class="doc-sh">Descripción del problema e intervención</div>
+    <div class="edit-hint" id="hint1">editable — clic para modificar</div>
+    <div class="doc-sb" id="p-s1"><span class="doc-ph">Completa el formulario y genera el informe.</span></div>
+
+    <div class="doc-sh">Resultado y validación operativa</div>
+    <div class="edit-hint" id="hint2">editable — clic para modificar</div>
+    <div class="doc-sb" id="p-s2"><span class="doc-ph">Esta sección se completará automáticamente.</span></div>
+
+    <div id="p-svc-wrap" style="display:none;">
+      <div class="doc-sh">Valores del servicio</div>
+      <table class="ct">
+        <thead><tr><th style="width:32%;">Servicio</th><th>Descripción</th><th style="width:72px;text-align:right;">Valor</th></tr></thead>
+        <tbody id="p-svc-body"></tbody>
+      </table>
+    </div>
+
+    <div class="doc-cond"><b>Condiciones:</b> Los trabajos se ejecutarán únicamente una vez aprobada la cotización. Plazo estimado: 24 a 48 horas hábiles. Todo equipo no retirado en 6 meses será dado de baja sin derecho a reclamo. En caso de requerir documento tributario, se emite boleta de honorarios — el valor indicado corresponde al monto neto más la retención legal vigente.</div>
+
+    <div class="doc-pago"><b>Pago (100% al aprobar):</b> TANTECNO CHILE SpA · RUT 77.356.819-7 · Mercado Pago · Cuenta Vista N° 1009023876 · <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="85e6f7ecf6f1ece4ebabe8e4f7f1ecebe0ffabe1f7eae2f0e0f1f1c5e2e8e4ece9abe6eae8">[email&#160;protected]</a></div>
+
+    <div class="doc-firma"><b>Atentamente,</b><br>Cristián Martínez Droguett<br>TANTECNO – Optimización de Equipos Computacionales</div>
+  </div>
+
+  <div class="pbar">
+    <button class="btn-p dark" onclick="savePDF()">⬇ Guardar PDF</button>
+    <button class="btn-p blue" id="btn-cierre" onclick="convertirCierre()" style="display:none;">✓ Convertir a informe de cierre</button>
+    <button class="btn-p amber" onclick="limpiar()">↺ Nuevo informe</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+<div class="modal-overlay" id="modal-insumo" style="display:none;">
+  <div class="modal-box">
+    <div class="modal-title" id="modal-title">Pantalla 14" HD</div>
+    <div class="modal-sub">Ingresa el costo del panel para calcular el precio final con tu margen.</div>
+    <div class="modal-label">Costo del panel (lo que pagas tú)</div>
+    <input class="modal-input" id="modal-costo" type="number" placeholder="Ej: 65000" min="0" step="1000" oninput="calcModal()">
+    <div class="modal-calc" id="modal-result">Ingresa el costo para ver el precio final</div>
+    <div class="modal-btns">
+      <button class="modal-cancel" onclick="cerrarModal()">Cancelar</button>
+      <button class="modal-ok" id="modal-ok" onclick="confirmarModal()">Agregar a cotización</button>
+    </div>
+  </div>
+</div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+const CAT=[
+  {id:"diag",n:"Diagnóstico técnico",d:"Evaluación completa del equipo. Se descuenta del total si el cliente aprueba la intervención",p:15000},
+  {id:"fmt",n:"Formateo Windows 11",d:"Instalación limpia SO, drivers, Chrome, PDF Reader, antivirus Windows Defender. Respaldo completo de información local incluido (excluye archivos solo en nube sin copia local)",p:45000},
+  {id:"fmt_rb_extra",n:"Respaldo adicional sobre 30 GB",d:"Por cada 30 GB adicionales de respaldo que superen la capacidad del equipo",p:5000},
+  {id:"mant_normal",n:"Limpieza interna + pasta térmica",d:"Notebook o PC normal: limpieza interna completa, cambio pasta disipadora CPU, reapriete de placa",p:25000},
+  {id:"mant_gamer",n:"Limpieza interna + pasta térmica + thermal pads (gamer)",d:"Equipos de alto rendimiento: limpieza completa, pasta CPU y GPU, thermal pads",p:40000},
+  {id:"ssd_s240",n:"SSD SATA 240 GB + Windows 11",d:"SSD nuevo + instalación limpia SO, drivers, Chrome, PDF Reader, antivirus. Plazo 3-5 días hábiles, sujeto a disponibilidad",p:110000},
+  {id:"ssd_s500",n:"SSD SATA 500 GB + Windows 11",d:"SSD nuevo + instalación limpia SO, drivers, Chrome, PDF Reader, antivirus. Plazo 3-5 días hábiles, sujeto a disponibilidad",p:135000},
+  {id:"ssd_s1tb",n:"SSD SATA 1 TB + Windows 11",d:"SSD nuevo + instalación limpia SO, drivers, Chrome, PDF Reader, antivirus. Plazo 3-5 días hábiles, sujeto a disponibilidad",p:205000},
+  {id:"nvme_256",n:"NVMe 256 GB + Windows 11",d:"NVMe nuevo + instalación limpia SO, drivers, Chrome, PDF Reader, antivirus. Plazo 3-5 días hábiles, sujeto a disponibilidad",p:115000},
+  {id:"nvme_500",n:"NVMe 500 GB + Windows 11",d:"NVMe nuevo + instalación limpia SO, drivers, Chrome, PDF Reader, antivirus. Plazo 3-5 días hábiles, sujeto a disponibilidad",p:140000},
+  {id:"nvme_1tb",n:"NVMe 1 TB + Windows 11",d:"NVMe nuevo + instalación limpia SO, drivers, Chrome, PDF Reader, antivirus. Plazo 3-5 días hábiles, sujeto a disponibilidad",p:205000},
+  {id:"ssd_s240_mig",n:"SSD SATA 240 GB + migración",d:"SSD nuevo + clonación conservando configuración actual. Recomendado HDD a SSD. Plazo 3-5 días hábiles",p:125000},
+  {id:"ssd_s500_mig",n:"SSD SATA 500 GB + migración",d:"SSD nuevo + clonación conservando configuración actual. Plazo 3-5 días hábiles",p:150000},
+  {id:"ssd_s1tb_mig",n:"SSD SATA 1 TB + migración",d:"SSD nuevo + clonación conservando configuración actual. Plazo 3-5 días hábiles",p:220000},
+  {id:"nvme_256_mig",n:"NVMe 256 GB + migración",d:"NVMe nuevo + clonación conservando configuración actual. Plazo 3-5 días hábiles",p:130000},
+  {id:"nvme_500_mig",n:"NVMe 500 GB + migración",d:"NVMe nuevo + clonación conservando configuración actual. Plazo 3-5 días hábiles",p:155000},
+  {id:"nvme_1tb_mig",n:"NVMe 1 TB + migración",d:"NVMe nuevo + clonación conservando configuración actual. Plazo 3-5 días hábiles",p:220000},
+  {id:"ram_4gb",n:"Módulo RAM 4 GB DDR4",d:"RAM 4 GB DDR4 3200 MHz + instalación. Suma a slot libre o reemplaza según equipo. Plazo 3-5 días hábiles",p:55000},
+  {id:"ram_8gb",n:"Módulo RAM 8 GB DDR4",d:"RAM 8 GB DDR4 3200 MHz + instalación. Suma a slot libre o reemplaza según equipo. Plazo 3-5 días hábiles",p:100000},
+  {id:"ram_16gb",n:"Módulo RAM 16 GB DDR4",d:"RAM 16 GB DDR4 3200 MHz + instalación. Suma a slot libre o reemplaza según equipo. Plazo 3-5 días hábiles",p:180000},
+  {id:"macos_inst",n:"Reinstalación macOS",d:"Última versión macOS compatible con el equipo + respaldo completo información local",p:55000},
+  {id:"macos_rb",n:"Reinstalación macOS con respaldo extendido",d:"Última versión macOS compatible + respaldo completo hasta 30 GB información local",p:65000},
+  {id:"pantalla_hd",n:"Pantalla 14\" HD + instalación",d:"Panel HD nuevo instalado. Incluye insumo y mano de obra",p:105000,insumo:true},
+  {id:"pantalla_fhd",n:"Pantalla 14\" Full HD + instalación",d:"Panel Full HD nuevo instalado. Incluye insumo y mano de obra",p:115000,insumo:true},
+  {id:"pantalla_fhd_premium",n:"Pantalla 14\" Full HD alta gama + instalación",d:"Panel Full HD alta gama instalado. Incluye insumo y mano de obra",p:145000,insumo:true},
+  {id:"pantalla_156_hd",n:"Pantalla 15.6\" HD + instalación",d:"Panel HD nuevo instalado. Valor incluye insumo y mano de obra",p:110000},
+  {id:"pantalla_156_fhd",n:"Pantalla 15.6\" Full HD + instalación",d:"Panel Full HD nuevo instalado. Valor incluye insumo y mano de obra",p:120000},
+  {id:"pantalla_156_premium",n:"Pantalla 15.6\" Full HD alta gama + instalación",d:"Panel Full HD alta gama instalado. Valor incluye insumo y mano de obra",p:150000},
+  {id:"bisagra_rep",n:"Reparación bisagra",d:"Adhesivo epóxico de alta resistencia — solución estructural funcional, no estética. Se advierte uso cuidadoso posterior",p:25000},
+  {id:"testeo",n:"Testeo exhaustivo completo",d:"AIDA64 estrés térmico, MemTest64 RAM, CrystalDiskMark almacenamiento, benchmark gráfico, monitoreo HWMonitor",p:70000},
+]
+const HALL=[
+  {g:"Refrigeración",items:[{id:"polvo",t:"Polvo en sistema de ventilación"},{id:"pasta_deg",t:"Pasta térmica degradada (CPU/GPU)"},{id:"pasta_seca",t:"Pasta disipadora completamente seca"},{id:"tpads",t:"Thermal pads deteriorados"},{id:"throttle",t:"Thermal throttling bajo carga"}]},
+  {g:"RAM",items:[{id:"single",t:"Single channel (slot libre)"},{id:"ram_4gb",t:"4 GB — insuficiente para Win 11"},{id:"ram_low",t:"RAM insuficiente para el uso declarado"}]},
+  {g:"Almacenamiento",items:[{id:"hdd_sec",t:"HDD con sectores defectuosos"},{id:"ssd_deg",t:"SSD en estado riesgoso"},{id:"ssd_low",t:"SSD con salud baja (reemplazo recomendado)"},{id:"hdd_slow",t:"HDD mecánico — cuello de botella"}]},
+  {g:"Sistema operativo",items:[{id:"win10",t:"Windows 10 sin soporte"},{id:"migracion",t:"Windows migrado (no instalación limpia)"},{id:"bsod",t:"Pantallazos azules (BSOD)"},{id:"drivers",t:"Drivers en conflicto"},{id:"malware",t:"Malware detectado"}]},
+  {g:"Hardware físico",items:[{id:"bisagra",t:"Bisagra dañada / despegada"},{id:"pantalla",t:"Pantalla quebrada o dañada"},{id:"touchpad",t:"Touchpad con falla"}]},
+  {g:"Estado general",items:[{id:"sin_hw",t:"Sin fallas de hardware"},{id:"placa_ok",t:"Placa madre en buen estado"}]},
+]
+
+let selH=new Set(),selS=[],modo='ia'
+const fmt=n=>'$'+n.toLocaleString('es-CL')
+const fdate=v=>{if(!v)return'—';try{return new Date(v+'T12:00:00').toLocaleDateString('es-CL',{day:'2-digit',month:'long',year:'numeric'})}catch(e){return v}}
+const toast=msg=>{const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2800)}
+const getOT=()=>parseInt(localStorage.getItem('tantecno_ot')||'2371')
+const saveOT=n=>localStorage.setItem('tantecno_ot',String(n))
+
+function saveApiKey(){
+  const v=document.getElementById('api-key').value.trim()
+  if(!v){toast('Ingresa una API key primero');return}
+  localStorage.setItem('tantecno_apikey',v)
+  refreshApiStatus()
+  toast('API key guardada ✓')
+}
+function refreshApiStatus(){
+  const k=localStorage.getItem('tantecno_apikey')||''
+  const dot=document.getElementById('api-dot')
+  const tip=document.getElementById('tip-ia')
+  if(k.startsWith('sk-')){dot.classList.add('ok');document.getElementById('api-key').value='sk-ant-···';tip.textContent='✦ IA activa'}
+  else{dot.classList.remove('ok');tip.textContent='⚠ Sin API key — usa modo rápido'}
+}
+
+function setMode(m){
+  modo=m
+  document.getElementById('m-ia').classList.toggle('on',m==='ia')
+  document.getElementById('m-rap').classList.toggle('on',m==='rap')
+  document.getElementById('panel-ia').style.display=m==='ia'?'block':'none'
+  document.getElementById('panel-rapido').style.display=m==='rap'?'block':'none'
+}
+
+async function generar(){
+  const apiKey=localStorage.getItem('tantecno_apikey')||''
+  const tieneIA=apiKey.startsWith('sk-')
+  if(modo==='ia'){
+    const txt=document.getElementById('f-texto').value.trim()
+    if(!txt){toast('Escribe el trabajo primero');return}
+    if(!tieneIA){toast('Agrega tu API key para usar IA');return}
+    await genIA(txt,apiKey)
+  } else {
+    const c=document.getElementById('r-cliente').value.trim()
+    const e=document.getElementById('r-equipo').value.trim()
+    if(!c||!e){toast('Completa Cliente y Equipo');return}
+    genPatrones()
+  }
+}
+
+async function genIA(txt,apiKey){
+  const btn=document.getElementById('btn-gen')
+  btn.classList.add('loading');btn.disabled=true
+  document.getElementById('blbl').textContent='Generando…'
+  const svcExtra=selS.length?'\n\nServicios ya en la cotización:\n'+selS.map(s=>`- ${s.n}: ${fmt(s.pe)}`).join('\n'):''
+  const SYSTEM=`Eres el generador de informes técnicos de TANTECNO, empresa de Cristián Martínez Droguett, Machalí, Chile.
+
+Analiza el texto libre y devuelve un JSON para generar el informe.
+
+REGLAS DE ESTILO:
+- Redacción formal técnica en español
+- Detecta género por nombre: mujeres → "La clienta indica..." / hombres → "El cliente indica..."
+- Usa siempre: pasta disipadora, thermal pads, thermal throttling, instalación limpia, CrystalDiskInfo, sectores reasignados, BSOD, single channel, dual channel
+- Sin frases de marketing ni "estimado"
+- Párrafos corridos, sin listas ni viñetas
+- Para cotización: termina s2 con "El presente documento corresponde al análisis técnico preliminar y a la cotización formal, quedando todo trabajo sujeto a la aprobación del cliente."
+- Para post: termina s2 con "El equipo queda totalmente operativo, optimizado y con rendimiento estable. Se recomienda mantención preventiva cada 10-12 meses."
+- Para no reparable: termina s2 con "El equipo se declara no reparable, quedando sin posibilidad de recuperación mediante intervención técnica convencional."
+
+CATÁLOGO DE SERVICIOS (usa estos precios exactos al detectar servicios en el texto):
+- Diagnóstico técnico: $15.000 (descontable si aprueba)
+- Formateo Windows 11 (respaldo completo incluido): $45.000
+- Respaldo adicional sobre 30 GB (por tramo): $5.000
+- Limpieza interna + pasta térmica (normal): $25.000
+- Limpieza interna + pasta térmica + thermal pads (gamer): $40.000
+- SSD SATA 240 GB + Windows 11: $110.000
+- SSD SATA 500 GB + Windows 11: $135.000
+- SSD SATA 1 TB + Windows 11: $205.000
+- NVMe 256 GB + Windows 11: $115.000
+- NVMe 500 GB + Windows 11: $140.000
+- NVMe 1 TB + Windows 11: $205.000
+- SSD SATA 240 GB + migración: $125.000
+- SSD SATA 500 GB + migración: $150.000
+- SSD SATA 1 TB + migración: $220.000
+- NVMe 256 GB + migración: $130.000
+- NVMe 500 GB + migración: $155.000
+- NVMe 1 TB + migración: $220.000
+- Módulo RAM 4 GB DDR4: $55.000
+- Módulo RAM 8 GB DDR4: $100.000
+- Módulo RAM 16 GB DDR4: $180.000
+- Reinstalación macOS: $55.000
+- Reinstalación macOS con respaldo extendido: $65.000
+- Pantalla 14" HD + instalación: $105.000
+- Pantalla 14" Full HD + instalación: $115.000
+- Pantalla 14" Full HD alta gama + instalación: $145.000
+- Pantalla 15.6" HD + instalación: $110.000
+- Pantalla 15.6" Full HD + instalación: $120.000
+- Pantalla 15.6" Full HD alta gama + instalación: $150.000
+- Reparación bisagra: $25.000
+- Diagnóstico avanzado con testeo de hardware: $70.000
+
+REGLAS DE SERVICIOS:
+- Detecta servicios mencionados en el texto y usa el precio exacto del catálogo anterior
+- Si el cliente menciona un precio distinto al catálogo, usa el precio mencionado por el cliente
+- El testeo exhaustivo (AIDA64, MemTest64, etc.) SOLO se incluye como "Diagnóstico avanzado con testeo de hardware" cuando el caso lo justifica: equipos con BSOD recurrentes, fallas intermitentes graves, o cuando el técnico menciona explícitamente que realizó testeo prolongado. No lo incluyas en casos simples de formateo o mantención
+- Servicios con componentes (SSD, RAM) llevan siempre en la descripción: "Sujeto a disponibilidad — plazo estimado 3 a 5 días hábiles"
+- El diagnóstico técnico de $15.000 se descuenta del total si el cliente aprueba el trabajo — mencionarlo en la descripción
+
+Devuelve SOLO JSON válido sin markdown:
+{"cliente":"","equipo":"","fecha_recep":"DD-MM-YYYY o vacio","fecha_inf":"DD-MM-YYYY o vacio","estado":"","accesorios":"","tipo":"cot|post|nr","s1":"","s2":"","servicios":[{"nombre":"nombre del servicio","valor":35000,"descripcion":"detalle breve"}]}`
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1500,system:SYSTEM,messages:[{role:'user',content:txt+svcExtra}]})
+    })
+    const data=await res.json()
+    if(!res.ok)throw new Error(data.error?.message||'Error API '+res.status)
+    const raw=data.content.map(c=>c.text||'').join('')
+    aplicar(JSON.parse(raw.replace(/```json|```/g,'').trim()))
+  }catch(e){toast('Error: '+e.message);console.error(e)}
+  finally{btn.classList.remove('loading');btn.disabled=false;document.getElementById('blbl').textContent='Generar informe'}
+}
+
+function genPatrones(){
+  const c=document.getElementById('r-cliente').value.trim()
+  const e=document.getElementById('r-equipo').value.trim()
+  const p=document.getElementById('r-problema').value.trim()
+  const fr=document.getElementById('r-frecep').value
+  const fi=document.getElementById('r-finf').value
+  const est=document.getElementById('r-estado').value
+  const acc=document.getElementById('r-acc').value
+  const has=id=>selH.has(id)
+  const fem=/^(martina|valentina|carolina|patricia|andrea|camila|josefa|daniela|isidora|francisca|javiera|paula|constanza|sofia|maría|maria|ana|laura|claudia|bárbara|barbara|verónica|veronica|isabel|alejandra|beatriz|silvia|rosa|monica|viviana|lorena|natalia|gabriela|paola|elizabeth|carmen|amanda)/i.test(c.split(' ')[0])
+  const art=fem?'La clienta':'El cliente'
+  let s1=`${art} indica que el equipo presenta ${p||'disminución de rendimiento general'}.`
+  if(has('win10'))s1+=` Se constata que el sistema operativo corresponde a Windows 10, en etapa de obsolescencia y sin soporte oficial de Microsoft. Se recomienda migración a Windows 11.`
+  if(has('migracion'))s1+=` Se determina que el sistema fue migrado desde versión anterior, arrastrando configuraciones residuales que afectan el rendimiento. Se recomienda instalación limpia.`
+  if(has('bsod'))s1+=` ${art} reporta pantallazos azules (BSOD) recurrentes, asociados a conflictos de controladores o corrupción del sistema.`
+  s1+=` Se procede a la apertura del equipo y revisión interna completa.`
+  const refs=[]
+  if(has('polvo'))refs.push('acumulación de polvo en el sistema de ventilación')
+  if(has('pasta_deg'))refs.push('pasta térmica degradada en CPU y/o GPU')
+  if(has('pasta_seca'))refs.push('pasta disipadora completamente seca')
+  if(has('tpads'))refs.push('thermal pads deteriorados')
+  if(refs.length){s1+=`\n\nEn la inspección interna se detecta ${refs.join('; ')}.`;if(has('throttle'))s1+=` Estas condiciones activan thermal throttling bajo carga.`}
+  if(has('ram_4gb'))s1+=`\n\nEl equipo cuenta con 4 GB de RAM, insuficiente para Windows 11. Se recomienda ampliar a 8 GB.`
+  if(has('ssd_deg')||has('hdd_sec'))s1+=`\n\nEl análisis con CrystalDiskInfo determina que la unidad de almacenamiento presenta ${has('hdd_sec')?'sectores defectuosos con riesgo de pérdida de información':'estado riesgoso con desgaste avanzado'}.`
+  if(has('bisagra'))s1+=`\n\nEl equipo ingresa con bisagra dañada. Se realiza reparación estructural con adhesivo epóxico de alta resistencia.`
+  if(has('pantalla'))s1+=`\n\nSe constata pantalla con daño físico que compromete la funcionalidad visual del equipo.`
+  let s2='El presente documento corresponde al análisis técnico preliminar y a la cotización formal, quedando todo trabajo sujeto a la aprobación del cliente. Una vez autorizado, se procederá con las intervenciones descritas y certificación operativa según estándares internos Tantecno.'
+  if(has('sin_hw'))s2='No se detectan fallas de hardware en placa madre, procesador ni componentes electrónicos. '+s2
+  aplicar({cliente:c,equipo:e,fecha_recep:fr,fecha_inf:fi,estado:est,accesorios:acc,tipo:'cot',s1,s2})
+}
+
+function aplicar(j){
+  // Auto-incrementar IT N° al generar
+  const currentIT=getOT()
+  const newIT=currentIT+1
+  saveOT(newIT)
+  document.getElementById('f-ot').value=String(newIT)
+  document.getElementById('p-ot').textContent=String(newIT)
+  document.getElementById('p-cliente').textContent=j.cliente||'—'
+  document.getElementById('p-equipo').textContent=j.equipo||'—'
+  const todayStr=new Date().toISOString().split('T')[0]
+  document.getElementById('p-frecep').textContent=j.fecha_recep?fdate(j.fecha_recep):fdate(todayStr)
+  document.getElementById('p-finf').textContent=j.fecha_inf?fdate(j.fecha_inf):fdate(todayStr)
+  document.getElementById('p-estado').textContent=j.estado||'—'
+  document.getElementById('p-acc').textContent=j.accesorios||'—'
+  const subtipos={cot:'COTIZACIÓN',post:'POST-INTERVENCIÓN',nr:'DIAGNÓSTICO — NO REPARABLE'}
+  document.getElementById('p-subtipo').textContent=subtipos[j.tipo]||'COTIZACIÓN'
+  const s1=document.getElementById('p-s1'),s2=document.getElementById('p-s2')
+  s1.textContent=j.s1||'';s2.textContent=j.s2||''
+  s1.contentEditable='true';s2.contentEditable='true'
+  document.getElementById('hint1').style.display='block'
+  document.getElementById('hint2').style.display='block'
+  // Auto-agregar servicios detectados por IA
+  if(j.servicios&&j.servicios.length){
+    j.servicios.forEach(svc=>{
+      const match=CAT.find(c=>c.n.toLowerCase().includes(svc.id||'')||svc.nombre&&c.n.toLowerCase().includes(svc.nombre.toLowerCase().slice(0,8)))
+      if(match&&!selS.find(s=>s.id===match.id)){
+        selS.push({...match,pe:svc.valor||match.p})
+      } else if(!match&&svc.nombre&&svc.valor){
+        const customId='custom_'+Date.now()+'_'+Math.random().toString(36).slice(2,5)
+        if(!selS.find(s=>s.nombre===svc.nombre)){
+          selS.push({id:customId,n:svc.nombre,d:svc.descripcion||svc.nombre,p:svc.valor,pe:svc.valor})
+        }
+      }
+    })
+    renderCat();renderSelSvc()
+  }
+  renderPrevSvc()
+  document.getElementById('btn-cierre').style.display=j.tipo==='cot'?'inline-block':'none'
+  if(window.innerWidth<=860)switchTab('prev')
+  toast('Informe generado ✓')
+}
+
+async function convertirCierre(){
+  const apiKey=localStorage.getItem('tantecno_apikey')||''
+  const s1=document.getElementById('p-s1').textContent
+  if(apiKey.startsWith('sk-')){
+    const btn=document.getElementById('btn-gen')
+    btn.classList.add('loading');btn.disabled=true
+    document.getElementById('blbl').textContent='Convirtiendo…'
+    try{
+      const res=await fetch('https://api.anthropic.com/v1/messages',{
+        method:'POST',
+        headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+        body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:600,messages:[{role:'user',content:`Basándote en esta sección 1 de un informe Tantecno, genera SOLO el texto de "Resultado y validación operativa" en modo post-intervención. Incluye las pruebas realizadas (AIDA64 si hay mantención térmica, CrystalDiskMark si hay SSD, PCMark), y termina con "El equipo queda totalmente operativo, optimizado y con rendimiento estable. Se recomienda mantención preventiva cada 10-12 meses." Solo el texto, sin títulos, sin JSON.\n\nSección 1: ${s1}`}]})
+      })
+      const data=await res.json()
+      document.getElementById('p-s2').textContent=data.content.map(c=>c.text||'').join('')
+    }catch(e){toast('Error: '+e.message)}
+    finally{btn.classList.remove('loading');btn.disabled=false;document.getElementById('blbl').textContent='Generar informe'}
+  } else {
+    document.getElementById('p-s2').textContent='Tras la aprobación del servicio y ejecución completa de las tareas descritas, el equipo fue sometido a pruebas de validación: test de estrés térmico (AIDA64 / 20 minutos), test de rendimiento de almacenamiento (CrystalDiskMark) y validación de estabilidad general del sistema. 0 fallos, 0 reinicios inesperados durante el proceso.\n\nEl equipo queda totalmente operativo, optimizado y con rendimiento estable. Se recomienda mantención preventiva cada 10–12 meses para conservar el rendimiento térmico logrado.'
+  }
+  document.getElementById('p-subtipo').textContent='POST-INTERVENCIÓN'
+  document.getElementById('btn-cierre').style.display='none'
+  toast('Convertido a informe de cierre ✓')
+}
+
+function renderHall(){
+  const c=document.getElementById('hall-wrap');c.innerHTML=''
+  HALL.forEach(g=>{
+    const l=document.createElement('div');l.className='glbl';l.textContent=g.g;c.appendChild(l)
+    g.items.forEach(item=>{
+      const el=document.createElement('label');el.className='ci'+(selH.has(item.id)?' sel':'')
+      el.innerHTML=`<input type="checkbox" ${selH.has(item.id)?'checked':''}><span>${item.t}</span>`
+      el.querySelector('input').onchange=()=>{selH.has(item.id)?selH.delete(item.id):selH.add(item.id);renderHall()}
+      c.appendChild(el)
+    })
+  })
+}
+let _modalItem=null
+function renderCat(){
+  const c=document.getElementById('cat-wrap');c.innerHTML=''
+  CAT.forEach(item=>{
+    const on=selS.find(s=>s.id===item.id)
+    const btn=document.createElement('button');btn.className='cat-btn'+(on?' on':'')
+    btn.innerHTML=`<span class="cn">${item.n}</span><span class="cp">${item.insumo?'+ insumo':fmt(item.p)}</span>`
+    btn.onclick=()=>{
+      if(on) return
+      if(item.insumo){
+        abrirModal(item)
+      } else {
+        selS.push({...item,pe:item.p});renderCat();renderSelSvc();renderPrevSvc()
+      }
+    }
+    c.appendChild(btn)
+  })
+}
+function abrirModal(item){
+  _modalItem=item
+  document.getElementById('modal-title').textContent=item.n
+  document.getElementById('modal-costo').value=''
+  document.getElementById('modal-result').innerHTML='Ingresa el costo para ver el precio final'
+  document.getElementById('modal-insumo').style.display='flex'
+  setTimeout(()=>document.getElementById('modal-costo').focus(),100)
+}
+function cerrarModal(){
+  document.getElementById('modal-insumo').style.display='none'
+  _modalItem=null
+}
+function calcModal(){
+  const costo=parseInt(document.getElementById('modal-costo').value)||0
+  if(!costo){document.getElementById('modal-result').innerHTML='Ingresa el costo para ver el precio final';return}
+  const margen=Math.round(costo*0.30)
+  const instalacion=25000
+  const total=costo+margen+instalacion
+  document.getElementById('modal-result').innerHTML=
+    `<b>Costo panel:</b> <span>${fmt(costo)}</span> + margen 30%: <span>${fmt(margen)}</span> + instalación: <span>${fmt(instalacion)}</span><br><b>Precio final: <span style="font-size:13px;">${fmt(total)}</span></b>`
+}
+function confirmarModal(){
+  const costo=parseInt(document.getElementById('modal-costo').value)||0
+  if(!costo){toast('Ingresa el costo del panel');return}
+  if(!_modalItem) return
+  const margen=Math.round(costo*0.30)
+  const total=costo+margen+25000
+  const item={..._modalItem, pe:total, d:_modalItem.d+' · Costo panel: '+fmt(costo)}
+  selS.push(item)
+  cerrarModal()
+  renderCat();renderSelSvc();renderPrevSvc()
+  toast('Pantalla agregada — precio calculado ✓')
+}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')cerrarModal()})
+function renderSelSvc(){
+  const c=document.getElementById('svc-sel')
+  if(!selS.length){c.innerHTML='<div class="no-svc">Ninguno agregado aún</div>';return}
+  c.innerHTML=''
+  selS.forEach((s,i)=>{
+    const d=document.createElement('div');d.className='ss'
+    d.innerHTML=`<span class="sn">${s.n}</span><input type="number" value="${s.pe}" min="0" step="1000"><button class="rm">×</button>`
+    d.querySelector('input').oninput=e=>{selS[i].pe=parseInt(e.target.value)||0;renderPrevSvc()}
+    d.querySelector('button').onclick=()=>{selS.splice(i,1);renderCat();renderSelSvc();renderPrevSvc()}
+    c.appendChild(d)
+  })
+}
+function renderPrevSvc(){
+  const wrap=document.getElementById('p-svc-wrap'),tb=document.getElementById('p-svc-body')
+  if(!selS.length){wrap.style.display='none';return}
+  wrap.style.display='block';tb.innerHTML='';let sub=0
+  selS.forEach(s=>{sub+=s.pe||0;tb.insertAdjacentHTML('beforeend',`<tr><td><b>${s.n}</b></td><td>${s.d}</td><td style="text-align:right;font-family:monospace;white-space:nowrap;">${fmt(s.pe)}</td></tr>`)})
+  const dsc=parseFloat(document.getElementById('f-dsc').value)||0
+  if(dsc>0){
+    const d=Math.round(sub*dsc/100),tot=sub-d
+    tb.insertAdjacentHTML('beforeend',`<tr class="dscrow"><td colspan="2" style="text-align:right;">Descuento ${dsc}%:</td><td style="text-align:right;font-family:monospace;">– ${fmt(d)}</td></tr>`)
+    tb.insertAdjacentHTML('beforeend',`<tr class="tot"><td colspan="2" style="text-align:right;">Total general:</td><td style="text-align:right;font-family:monospace;">${fmt(tot)}</td></tr>`)
+  } else {
+    tb.insertAdjacentHTML('beforeend',`<tr class="tot"><td colspan="2" style="text-align:right;">Total general:</td><td style="text-align:right;font-family:monospace;">${fmt(sub)}</td></tr>`)
+  }
+}
+function limpiar(){
+  if(!confirm('¿Nuevo informe? Se perderán los datos actuales.'))return
+  const n=getOT()
+  document.getElementById('f-ot').value=String(n)
+  document.getElementById('f-texto').value=''
+  document.getElementById('r-cliente').value=''
+  document.getElementById('r-equipo').value=''
+  document.getElementById('r-problema').value=''
+  document.getElementById('r-acc').value='Solo cargador'
+  document.getElementById('f-dsc').value='0'
+  const today=new Date().toISOString().split('T')[0]
+  document.getElementById('r-frecep').value=today
+  document.getElementById('r-finf').value=today
+  selH.clear();selS=[];renderHall();renderCat();renderSelSvc();renderPrevSvc()
+  document.getElementById('p-ot').textContent=n
+  document.getElementById('p-cliente').textContent='_______________'
+  document.getElementById('p-equipo').textContent='_______________'
+  document.getElementById('p-frecep').textContent='—'
+  document.getElementById('p-finf').textContent='—'
+  document.getElementById('p-estado').textContent='—'
+  document.getElementById('p-acc').textContent='—'
+  document.getElementById('p-subtipo').textContent='COTIZACIÓN'
+  document.getElementById('p-s1').innerHTML='<span class="doc-ph">Completa el formulario y genera el informe.</span>'
+  document.getElementById('p-s2').innerHTML='<span class="doc-ph">Esta sección se completará automáticamente.</span>'
+  document.getElementById('p-s1').contentEditable='false'
+  document.getElementById('p-s2').contentEditable='false'
+  document.getElementById('hint1').style.display='none'
+  document.getElementById('hint2').style.display='none'
+  document.getElementById('btn-cierre').style.display='none'
+}
+function switchTab(t){
+  const l=document.getElementById('left'),r=document.getElementById('right')
+  const tf=document.getElementById('tab-form'),tp=document.getElementById('tab-prev')
+  if(t==='form'){l.classList.add('tab-active');r.classList.remove('tab-active');tf.classList.add('active');tp.classList.remove('active')}
+  else{r.classList.add('tab-active');l.classList.remove('tab-active');tp.classList.add('active');tf.classList.remove('active');window.scrollTo(0,0)}
+}
+function logout(){localStorage.removeItem('tantecno_auth');window.location.href='login.html';}
+document.getElementById('f-ot').value=String(getOT())
+document.getElementById('f-ot').addEventListener('change',function(){saveOT(parseInt(this.value)||getOT())})
+document.getElementById('f-dsc').addEventListener('input',renderPrevSvc)
+const today=new Date().toISOString().split('T')[0]
+document.getElementById('r-frecep').value=today
+document.getElementById('r-finf').value=today
+refreshApiStatus();renderHall();renderCat()
+
+// ═══ GUARDAR PDF ═══
+function savePDF(){
+  const cliente=document.getElementById('p-cliente').textContent.trim()
+  const nit=document.getElementById('p-ot').textContent.trim()
+  const s1=document.getElementById('p-s1').textContent.trim()
+  if(!s1||document.getElementById('p-s1').querySelector('.doc-ph')){
+    toast('Genera el informe primero');return
+  }
+  const hoy=new Date()
+  const dd=String(hoy.getDate()).padStart(2,'0')
+  const mm=String(hoy.getMonth()+1).padStart(2,'0')
+  const aaaa=hoy.getFullYear()
+  const fechaStr=dd+'-'+mm+'-'+aaaa
+  const clienteLimpio=cliente.replace(/[^a-zA-ZáéíóúÁÉÍÓÚüÜñÑ\s]/g,'').trim()||'Cliente'
+  const filename=fechaStr+' - Informe Técnico N°'+nit+' - '+clienteLimpio+'.pdf'
+  const el=document.getElementById('doc')
+  const opt={
+    margin:[13,15,13,15],
+    filename:filename,
+    image:{type:'jpeg',quality:0.98},
+    html2canvas:{scale:2,useCORS:true,letterRendering:true},
+    jsPDF:{unit:'mm',format:'a4',orientation:'portrait'}
+  }
+  toast('Generando PDF…')
+  html2pdf().set(opt).from(el).save().then(()=>toast('PDF guardado ✓'))
+}
+
+// ═══ MICRÓFONO ═══
+let recognition=null,isRecording=false
+function initMic(){
+  const SpeechRec=window.SpeechRecognition||window.webkitSpeechRecognition
+  if(!SpeechRec)return null
+  const r=new SpeechRec()
+  r.lang="es-CL"
+  r.continuous=true
+  r.interimResults=true
+  r.onresult=e=>{
+    let final=""
+    for(let i=e.resultIndex;i<e.results.length;i++){
+      if(e.results[i].isFinal)final+=e.results[i][0].transcript
+    }
+    if(final){
+      const ta=document.getElementById("f-texto")
+      const sep=ta.value.trim()&&!ta.value.trim().endsWith(",")&&!ta.value.trim().endsWith(".")?" ":""
+      ta.value=ta.value+(ta.value.trim()?sep:"")+final
+    }
+  }
+  r.onerror=e=>{
+    if(e.error!=="no-speech"){setMicOff();document.getElementById("mic-status").textContent="Error: "+e.error}
+  }
+  r.onend=()=>{if(isRecording)r.start()}
+  return r
+}
+function toggleMic(){
+  if(!isRecording){startMic()}else{stopMic()}
+}
+function startMic(){
+  if(!recognition)recognition=initMic()
+  if(!recognition){document.getElementById("mic-status").textContent="Micrófono no disponible en este navegador";return}
+  recognition.start()
+  isRecording=true
+  document.getElementById("btn-mic").classList.add("recording")
+  document.getElementById("mic-label").textContent="Detener"
+  document.getElementById("mic-status").textC
