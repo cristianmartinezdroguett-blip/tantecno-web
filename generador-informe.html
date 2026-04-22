@@ -56,6 +56,8 @@ body{font-family:var(--body);background:var(--bg);color:var(--text);display:flex
 @keyframes pulse-border{0%,100%{border-color:rgba(239,68,68,.35);}50%{border-color:rgba(239,68,68,.7);}}
 .mic-dot{width:8px;height:8px;border-radius:50%;background:currentColor;flex-shrink:0;}
 .btn-mic.recording .mic-dot{animation:blink .8s ease-in-out infinite;}
+.btn-diag{display:flex;align-items:center;gap:6px;padding:7px 12px;background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.25);border-radius:6px;cursor:pointer;font-family:var(--mono);font-size:10px;color:#93c5fd;letter-spacing:.05em;transition:.15s;flex-shrink:0;}
+.btn-diag:hover{background:rgba(59,130,246,.16);border-color:rgba(59,130,246,.4);}
 @keyframes blink{0%,100%{opacity:1;}50%{opacity:.2;}}
 .mic-status{font-family:var(--mono);font-size:9px;color:var(--text3);flex:1;}
 #panel-rapido{display:none;}
@@ -219,7 +221,14 @@ table.ct .dscrow td{background:#f0fdf4;color:#166534;font-size:9.5px;}
           <span id="mic-label">Dictar</span>
         </button>
         <span class="mic-status" id="mic-status">Clic para activar mic</span>
-        <button onclick="document.getElementById('f-texto').value=';" style="background:none;border:none;color:var(--text3);font-family:var(--mono);font-size:9px;cursor:pointer;padding:4px 6px;" onmouseover="this.style.color='var(--text2)'" onmouseout="this.style.color='var(--text3)'">limpiar</button>
+        <button class="btn-diag" id="btn-diag" onclick="document.getElementById('f-diag').click()" title="Cargar reporte .txt o .html exportado por test-tantecno.ps1">
+          <span>⎙</span><span>Diagnóstico</span>
+        </button>
+        <input type="file" id="f-diag" accept=".txt,.html,.htm" style="display:none" onchange="cargarDiagnostico(event)">
+        <button onclick="document.getElementById('f-texto').value='';document.getElementById('diag-badge').style.display='none'" style="background:none;border:none;color:var(--text3);font-family:var(--mono);font-size:9px;cursor:pointer;padding:4px 6px;" onmouseover="this.style.color='var(--text2)'" onmouseout="this.style.color='var(--text3)'">limpiar</button>
+      </div>
+      <div id="diag-badge" style="display:none;margin-top:5px;padding:5px 9px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.22);border-radius:5px;font-family:var(--mono);font-size:9.5px;color:#86efac;display:none;align-items:center;gap:6px;">
+        <span>✓</span><span id="diag-badge-txt">Diagnóstico cargado</span>
       </div>
     </div>
 
@@ -280,7 +289,7 @@ table.ct .dscrow td{background:#f0fdf4;color:#166534;font-size:9.5px;}
       <div class="doc-brand">
         <b>TANTECNO</b>
         <small>Optimización de Equipos Computacionales</small>
-        <div class="doc-contact"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="cdaea2a3b9acaeb9a28db9aca3b9a8aea3a2e3aea1">[email&#160;protected]</a> · +56 9 7103 6909 · Machalí</div>
+        <div class="doc-contact"><a href="mailto:contacto@tantecno.cl" style="color:inherit;text-decoration:none;">contacto@tantecno.cl</a> · +56 9 7103 6909 · Machalí</div>
       </div>
     </div>
 
@@ -294,7 +303,7 @@ table.ct .dscrow td{background:#f0fdf4;color:#166534;font-size:9.5px;}
         <div class="dm"><b>Estado físico:</b> <span id="p-estado">—</span></div>
         <div class="dm"><b>Accesorios:</b> <span id="p-acc">—</span></div>
       </div>
-      <div class="dm"><b>Encargado técnico:</b> Cristián Martínez – Tantecno</div>
+      <div class="dm"><b>Encargado técnico:</b> Cristián Martínez — TANTECNO</div>
     </div>
 
     <div class="doc-sh">Descripción del problema e intervención</div>
@@ -313,11 +322,11 @@ table.ct .dscrow td{background:#f0fdf4;color:#166534;font-size:9.5px;}
       </table>
     </div>
 
-    <div class="doc-cond"><b>Condiciones:</b> Los trabajos se ejecutarán únicamente una vez aprobada la cotización. Plazo estimado: 24 a 48 horas hábiles. Todo equipo no retirado en 6 meses será dado de baja sin derecho a reclamo. En caso de requerir documento tributario, se emite boleta de honorarios — el valor indicado corresponde al monto neto más la retención legal vigente.</div>
+    <div class="doc-cond"><b>Condiciones:</b> Los trabajos se ejecutarán únicamente una vez aprobada la cotización. Plazo estimado: 24 a 48 horas hábiles. Todo equipo no retirado en 6 meses se entenderá en abandono. En caso de requerir documento tributario, se emite boleta de honorarios — el valor indicado corresponde al monto neto más la retención legal vigente.</div>
 
-    <div class="doc-pago"><b>Pago (100% al aprobar):</b> TANTECNO CHILE SpA · RUT 77.356.819-7 · Mercado Pago · Cuenta Vista N° 1009023876 · <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="d3b0a1baa0a7bab2bdfdbeb2a1a7babdb6a9fdb7a1bcb4a6b6a7a793b4beb2babffdb0bcbe">[email&#160;protected]</a></div>
+    <div class="doc-pago"><b>Pago (100% al aprobar):</b> TANTECNO CHILE SpA · RUT 77.356.819-7 · Mercado Pago · Cuenta Vista N° 1009023876 · <a href="mailto:cristian.martinez.droguett@gmail.com" style="color:inherit;text-decoration:none;">cristian.martinez.droguett@gmail.com</a></div>
 
-    <div class="doc-firma"><b>Atentamente,</b><br>Cristián Martínez Droguett<br>TANTECNO – Optimización de Equipos Computacionales</div>
+    <div class="doc-firma"><b>Atentamente,</b><br>Cristián Martínez Droguett<br>TANTECNO — Optimización de Equipos Computacionales</div>
   </div>
 
   <div class="pbar">
@@ -342,12 +351,12 @@ table.ct .dscrow td{background:#f0fdf4;color:#166534;font-size:9.5px;}
   </div>
 </div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
 const CAT=[
-  {id:"diag",n:"Diagnóstico técnico",d:"Evaluación completa del equipo. Se descuenta del total si el cliente aprueba la intervención",p:15000},
-  {id:"fmt",n:"Formateo Windows 11",d:"Instalación limpia SO, drivers, Chrome, PDF Reader, antivirus Windows Defender. Respaldo completo de información local incluido (excluye archivos solo en nube sin copia local)",p:45000},
-  {id:"fmt_rb_extra",n:"Respaldo adicional sobre 30 GB",d:"Por cada 30 GB adicionales de respaldo que superen la capacidad del equipo",p:5000},
-  {id:"mant_normal",n:"Limpieza interna + pasta térmica",d:"Notebook o PC normal: limpieza interna completa, cambio pasta disipadora CPU, reapriete de placa",p:25000},
+  {id:"diag",n:"Diagnóstico técnico",aiNota:"descontable si aprueba",d:"Evaluación completa del equipo. Se descuenta del total si el cliente aprueba la intervención",p:15000},
+  {id:"fmt",n:"Formateo Windows 11",aiNota:"respaldo completo incluido",d:"Instalación limpia SO, drivers, Chrome, PDF Reader, antivirus Windows Defender. Respaldo completo de información local incluido (excluye archivos solo en nube sin copia local)",p:45000},
+  {id:"fmt_rb_extra",n:"Respaldo adicional sobre 30 GB",aiNota:"por tramo",d:"Por cada 30 GB adicionales de respaldo que superen la capacidad del equipo",p:5000},
+  {id:"mant_normal",n:"Limpieza interna + pasta térmica",aiNota:"normal",d:"Notebook o PC normal: limpieza interna completa, cambio pasta disipadora CPU, reapriete de placa",p:25000},
   {id:"mant_gamer",n:"Limpieza interna + pasta térmica + thermal pads (gamer)",d:"Equipos de alto rendimiento: limpieza completa, pasta CPU y GPU, thermal pads",p:40000},
   {id:"ssd_s240",n:"SSD SATA 240 GB + Windows 11",d:"SSD nuevo + instalación limpia SO, drivers, Chrome, PDF Reader, antivirus. Plazo 3-5 días hábiles, sujeto a disponibilidad",p:110000},
   {id:"ssd_s500",n:"SSD SATA 500 GB + Windows 11",d:"SSD nuevo + instalación limpia SO, drivers, Chrome, PDF Reader, antivirus. Plazo 3-5 días hábiles, sujeto a disponibilidad",p:135000},
@@ -373,7 +382,7 @@ const CAT=[
   {id:"pantalla_156_fhd",n:"Pantalla 15.6\" Full HD + instalación",d:"Panel Full HD nuevo instalado. Valor incluye insumo y mano de obra",p:120000},
   {id:"pantalla_156_premium",n:"Pantalla 15.6\" Full HD alta gama + instalación",d:"Panel Full HD alta gama instalado. Valor incluye insumo y mano de obra",p:150000},
   {id:"bisagra_rep",n:"Reparación bisagra",d:"Adhesivo epóxico de alta resistencia — solución estructural funcional, no estética. Se advierte uso cuidadoso posterior",p:25000},
-  {id:"testeo",n:"Testeo exhaustivo completo",d:"AIDA64 estrés térmico, MemTest64 RAM, CrystalDiskMark almacenamiento, benchmark gráfico, monitoreo HWMonitor",p:70000},
+  {id:"testeo",n:"Testeo exhaustivo completo",aiNombre:"Diagnóstico avanzado con testeo de hardware",d:"AIDA64 estrés térmico, MemTest64 RAM, CrystalDiskMark almacenamiento, benchmark gráfico, monitoreo HWMonitor",p:70000},
 ]
 const HALL=[
   {g:"Refrigeración",items:[{id:"polvo",t:"Polvo en sistema de ventilación"},{id:"pasta_deg",t:"Pasta térmica degradada (CPU/GPU)"},{id:"pasta_seca",t:"Pasta disipadora completamente seca"},{id:"tpads",t:"Thermal pads deteriorados"},{id:"throttle",t:"Thermal throttling bajo carga"}]},
@@ -384,19 +393,48 @@ const HALL=[
   {g:"Estado general",items:[{id:"sin_hw",t:"Sin fallas de hardware"},{id:"placa_ok",t:"Placa madre en buen estado"}]},
 ]
 
+// Genera la lista de servicios para el system prompt de la IA a partir de CAT.
+// Única fuente de verdad: CAT. Si un servicio tiene aiNombre, se usa ese en lugar del n público.
+// Si tiene aiNota, se agrega entre paréntesis después del nombre para darle contexto a la IA.
+function buildCatalogoPrompt(){
+  return CAT.map(s=>{
+    const nombre=s.aiNombre||s.n
+    const nota=s.aiNota?` (${s.aiNota})`:''
+    const precio='$'+s.p.toLocaleString('es-CL')
+    return `- ${nombre}${nota}: ${precio}`
+  }).join('\n')
+}
+
 let selH=new Set(),selS=[],modo='ia'
+let folioConfirmado=null  // Guarda el folio usado en el último savePDF exitoso. null = aún no guardado.
 const fmt=n=>'$'+n.toLocaleString('es-CL')
 const fdate=v=>{if(!v)return'—';try{return new Date(v+'T12:00:00').toLocaleDateString('es-CL',{day:'2-digit',month:'long',year:'numeric'})}catch(e){return v}}
 const toast=msg=>{const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2800)}
 const getOT=()=>parseInt(localStorage.getItem('tantecno_ot')||'2371')
 const saveOT=n=>localStorage.setItem('tantecno_ot',String(n))
 
-function saveApiKey(){
+async function saveApiKey(){
   const v=document.getElementById('api-key').value.trim()
   if(!v){toast('Ingresa una API key primero');return}
-  localStorage.setItem('tantecno_apikey',v)
-  refreshApiStatus()
-  toast('API key guardada ✓')
+  if(!v.startsWith('sk-')){toast('Formato inválido: debe empezar con sk-');return}
+  toast('Validando API key…')
+  try{
+    // Prueba mínima: 1 token, mensaje trivial, solo para verificar que la key autentica.
+    const res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','x-api-key':v,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+      body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:1,messages:[{role:'user',content:'hi'}]})
+    })
+    if(res.status===401){toast('API key inválida (401) — no se guardó');return}
+    if(res.status===403){toast('API key sin permisos (403) — no se guardó');return}
+    if(!res.ok){toast(`Error ${res.status} al validar — no se guardó`);return}
+    localStorage.setItem('tantecno_apikey',v)
+    refreshApiStatus()
+    toast('API key válida y guardada ✓')
+  }catch(e){
+    toast('Error de red al validar: '+e.message)
+    console.error(e)
+  }
 }
 function refreshApiStatus(){
   const k=localStorage.getItem('tantecno_apikey')||''
@@ -441,45 +479,37 @@ Analiza el texto libre y devuelve un JSON para generar el informe.
 
 REGLAS DE ESTILO:
 - Redacción formal técnica en español
-- Detecta género por nombre: mujeres → "La clienta indica..." / hombres → "El cliente indica..."
+- Usa forma neutra sin artículo: "Cliente indica...", "Cliente reporta..." (no uses "El cliente" ni "La clienta")
 - Usa siempre: pasta disipadora, thermal pads, thermal throttling, instalación limpia, CrystalDiskInfo, sectores reasignados, BSOD, single channel, dual channel
 - Sin frases de marketing ni "estimado"
 - Párrafos corridos, sin listas ni viñetas
-- Para cotización: termina s2 con "El presente documento corresponde al análisis técnico preliminar y a la cotización formal, quedando todo trabajo sujeto a la aprobación del cliente."
-- Para post: termina s2 con "El equipo queda totalmente operativo, optimizado y con rendimiento estable. Se recomienda mantención preventiva cada 10-12 meses."
-- Para no reparable: termina s2 con "El equipo se declara no reparable, quedando sin posibilidad de recuperación mediante intervención técnica convencional."
+
+REPORTE DE DIAGNÓSTICO (si aparece):
+Si el texto del usuario contiene un bloque delimitado por "--- REPORTE DIAGNÓSTICO TANTECNO ---" y "--- FIN REPORTE ---", trátalo como FUENTE TÉCNICA AUTORITATIVA del script test-tantecno.ps1. Reglas:
+- Los datos técnicos del reporte (salud de SSD, hallazgos, scoring, eventos de sistema, RAM, SO, etc.) son la verdad. Si hay conflicto entre lo que dice el técnico y el reporte, prioriza el reporte.
+- Integra lo que dice el técnico ARRIBA del bloque: el técnico aporta contexto que el script no ve (observación física, pantalla quebrada, bisagra, batería hinchada, lo que cliente reporta verbalmente) y precios ofrecidos.
+- NO dupliques información: si el técnico dijo "polvo en ventilador" y el reporte dice "acumulación de polvo en sistema de ventilación", mencionarlo UNA vez con la terminología técnica del reporte.
+- NO copies el reporte al informe. Extrae datos relevantes y redáctalos en tu estilo técnico formal.
+- NO incluyas timestamps, nombres de fases, output bruto del script, ni detalles irrelevantes para el cliente (uso exacto de CPU en %, PIDs, etc.). Traduce solo hallazgos que justifiquen servicios cotizados.
+
+REGLAS POR TIPO DE INFORME (CRÍTICAS — respetar tiempos verbales):
+
+Tipo "cot" (COTIZACIÓN — aún NO se ejecuta nada):
+  s1: describe lo que cliente reporta, lo detectado en el diagnóstico (en pasado: "se detecta", "se constata", "se evidencia"), y PROPONE las intervenciones en tiempo futuro o condicional ("se propone", "se recomienda", "requiere"). PROHIBIDO usar "se procede", "se ejecuta", "se aplica", "se instaló" — nada del trabajo fue ejecutado aún.
+  s2: describe las intervenciones PROPUESTAS y las validaciones que SE REALIZARÁN al finalizar (ej: "Una vez aprobada la cotización, se procederá con las intervenciones descritas. Al finalizar se realizarán pruebas de validación: estrés térmico, rendimiento de almacenamiento y estabilidad del sistema."). Termina exactamente con: "El presente documento corresponde al análisis técnico preliminar y a la cotización formal, quedando todo trabajo sujeto a la aprobación del cliente."
+
+Tipo "post" (POST-INTERVENCIÓN — trabajo YA ejecutado):
+  s1: usa pasado ("se procedió", "se ejecutó", "se aplicó", "se reemplazó") para describir lo que SÍ se hizo.
+  s2: describe los resultados reales y pruebas ejecutadas. Termina exactamente con: "El equipo queda totalmente operativo, optimizado y con rendimiento estable. Se recomienda mantención preventiva cada 10-12 meses."
+
+Tipo "nr" (NO REPARABLE — diagnóstico negativo):
+  s1: describe las fallas detectadas y explica por qué no es técnicamente viable recuperar el equipo.
+  s2: justifica la decisión técnica de declararlo no reparable. Termina exactamente con: "El equipo se declara no reparable, quedando sin posibilidad de recuperación mediante intervención técnica convencional."
+
+IMPORTANTE: si el texto no aclara el tipo, asume "cot" (cotización) por defecto — es el caso más común.
 
 CATÁLOGO DE SERVICIOS (usa estos precios exactos al detectar servicios en el texto):
-- Diagnóstico técnico: $15.000 (descontable si aprueba)
-- Formateo Windows 11 (respaldo completo incluido): $45.000
-- Respaldo adicional sobre 30 GB (por tramo): $5.000
-- Limpieza interna + pasta térmica (normal): $25.000
-- Limpieza interna + pasta térmica + thermal pads (gamer): $40.000
-- SSD SATA 240 GB + Windows 11: $110.000
-- SSD SATA 500 GB + Windows 11: $135.000
-- SSD SATA 1 TB + Windows 11: $205.000
-- NVMe 256 GB + Windows 11: $115.000
-- NVMe 500 GB + Windows 11: $140.000
-- NVMe 1 TB + Windows 11: $205.000
-- SSD SATA 240 GB + migración: $125.000
-- SSD SATA 500 GB + migración: $150.000
-- SSD SATA 1 TB + migración: $220.000
-- NVMe 256 GB + migración: $130.000
-- NVMe 500 GB + migración: $155.000
-- NVMe 1 TB + migración: $220.000
-- Módulo RAM 4 GB DDR4: $55.000
-- Módulo RAM 8 GB DDR4: $100.000
-- Módulo RAM 16 GB DDR4: $180.000
-- Reinstalación macOS: $55.000
-- Reinstalación macOS con respaldo extendido: $65.000
-- Pantalla 14" HD + instalación: $105.000
-- Pantalla 14" Full HD + instalación: $115.000
-- Pantalla 14" Full HD alta gama + instalación: $145.000
-- Pantalla 15.6" HD + instalación: $110.000
-- Pantalla 15.6" Full HD + instalación: $120.000
-- Pantalla 15.6" Full HD alta gama + instalación: $150.000
-- Reparación bisagra: $25.000
-- Diagnóstico avanzado con testeo de hardware: $70.000
+${buildCatalogoPrompt()}
 
 REGLAS DE SERVICIOS:
 - Detecta servicios mencionados en el texto y usa el precio exacto del catálogo anterior
@@ -494,12 +524,19 @@ Devuelve SOLO JSON válido sin markdown:
     const res=await fetch('https://api.anthropic.com/v1/messages',{
       method:'POST',
       headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
-      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1500,system:SYSTEM,messages:[{role:'user',content:txt+svcExtra}]})
+      body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:1500,system:SYSTEM,messages:[{role:'user',content:txt+svcExtra}]})
     })
     const data=await res.json()
     if(!res.ok)throw new Error(data.error?.message||'Error API '+res.status)
     const raw=data.content.map(c=>c.text||'').join('')
-    aplicar(JSON.parse(raw.replace(/```json|```/g,'').trim()))
+    const clean=raw.replace(/```json|```/g,'').trim()
+    try{
+      aplicar(JSON.parse(clean))
+    }catch(parseErr){
+      console.error('[TANTECNO] JSON inválido recibido de la IA. Texto crudo:',raw)
+      console.error('[TANTECNO] Texto limpio intentado parsear:',clean)
+      throw new Error('La IA devolvió un formato inválido. Revisa la consola (F12) para ver qué respondió.')
+    }
   }catch(e){toast('Error: '+e.message);console.error(e)}
   finally{btn.classList.remove('loading');btn.disabled=false;document.getElementById('blbl').textContent='Generar informe'}
 }
@@ -513,13 +550,11 @@ function genPatrones(){
   const est=document.getElementById('r-estado').value
   const acc=document.getElementById('r-acc').value
   const has=id=>selH.has(id)
-  const fem=/^(martina|valentina|carolina|patricia|andrea|camila|josefa|daniela|isidora|francisca|javiera|paula|constanza|sofia|maría|maria|ana|laura|claudia|bárbara|barbara|verónica|veronica|isabel|alejandra|beatriz|silvia|rosa|monica|viviana|lorena|natalia|gabriela|paola|elizabeth|carmen|amanda)/i.test(c.split(' ')[0])
-  const art=fem?'La clienta':'El cliente'
-  let s1=`${art} indica que el equipo presenta ${p||'disminución de rendimiento general'}.`
+  let s1=`Cliente indica que el equipo presenta ${p||'disminución de rendimiento general'}.`
   if(has('win10'))s1+=` Se constata que el sistema operativo corresponde a Windows 10, en etapa de obsolescencia y sin soporte oficial de Microsoft. Se recomienda migración a Windows 11.`
   if(has('migracion'))s1+=` Se determina que el sistema fue migrado desde versión anterior, arrastrando configuraciones residuales que afectan el rendimiento. Se recomienda instalación limpia.`
-  if(has('bsod'))s1+=` ${art} reporta pantallazos azules (BSOD) recurrentes, asociados a conflictos de controladores o corrupción del sistema.`
-  s1+=` Se procede a la apertura del equipo y revisión interna completa.`
+  if(has('bsod'))s1+=` Cliente reporta pantallazos azules (BSOD) recurrentes, asociados a conflictos de controladores o corrupción del sistema.`
+  s1+=` Se propone realizar apertura del equipo para revisión interna completa.`
   const refs=[]
   if(has('polvo'))refs.push('acumulación de polvo en el sistema de ventilación')
   if(has('pasta_deg'))refs.push('pasta térmica degradada en CPU y/o GPU')
@@ -528,20 +563,18 @@ function genPatrones(){
   if(refs.length){s1+=`\n\nEn la inspección interna se detecta ${refs.join('; ')}.`;if(has('throttle'))s1+=` Estas condiciones activan thermal throttling bajo carga.`}
   if(has('ram_4gb'))s1+=`\n\nEl equipo cuenta con 4 GB de RAM, insuficiente para Windows 11. Se recomienda ampliar a 8 GB.`
   if(has('ssd_deg')||has('hdd_sec'))s1+=`\n\nEl análisis con CrystalDiskInfo determina que la unidad de almacenamiento presenta ${has('hdd_sec')?'sectores defectuosos con riesgo de pérdida de información':'estado riesgoso con desgaste avanzado'}.`
-  if(has('bisagra'))s1+=`\n\nEl equipo ingresa con bisagra dañada. Se realiza reparación estructural con adhesivo epóxico de alta resistencia.`
+  if(has('bisagra'))s1+=`\n\nEl equipo ingresa con bisagra dañada. Se propone reparación estructural con adhesivo epóxico de alta resistencia.`
   if(has('pantalla'))s1+=`\n\nSe constata pantalla con daño físico que compromete la funcionalidad visual del equipo.`
-  let s2='El presente documento corresponde al análisis técnico preliminar y a la cotización formal, quedando todo trabajo sujeto a la aprobación del cliente. Una vez autorizado, se procederá con las intervenciones descritas y certificación operativa según estándares internos Tantecno.'
+  let s2='El presente documento corresponde al análisis técnico preliminar y a la cotización formal, quedando todo trabajo sujeto a la aprobación del cliente. Una vez autorizado, se procederá con las intervenciones descritas y certificación operativa según estándares internos TANTECNO.'
   if(has('sin_hw'))s2='No se detectan fallas de hardware en placa madre, procesador ni componentes electrónicos. '+s2
   aplicar({cliente:c,equipo:e,fecha_recep:fr,fecha_inf:fi,estado:est,accesorios:acc,tipo:'cot',s1,s2})
 }
 
 function aplicar(j){
-  // Auto-incrementar IT N° al generar
-  const currentIT=getOT()
-  const newIT=currentIT+1
-  saveOT(newIT)
-  document.getElementById('f-ot').value=String(newIT)
-  document.getElementById('p-ot').textContent=String(newIT)
+  // El folio NO se incrementa al generar: solo se incrementa al guardar PDF (savePDF).
+  // Esto evita consumir folios en borradores, regeneraciones o pruebas.
+  const folioActual=parseInt(document.getElementById('f-ot').value)||getOT()
+  document.getElementById('p-ot').textContent=String(folioActual)
   document.getElementById('p-cliente').textContent=j.cliente||'—'
   document.getElementById('p-equipo').textContent=j.equipo||'—'
   const todayStr=new Date().toISOString().split('T')[0]
@@ -588,7 +621,7 @@ async function convertirCierre(){
       const res=await fetch('https://api.anthropic.com/v1/messages',{
         method:'POST',
         headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
-        body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:600,messages:[{role:'user',content:`Basándote en esta sección 1 de un informe Tantecno, genera SOLO el texto de "Resultado y validación operativa" en modo post-intervención. Incluye las pruebas realizadas (AIDA64 si hay mantención térmica, CrystalDiskMark si hay SSD, PCMark), y termina con "El equipo queda totalmente operativo, optimizado y con rendimiento estable. Se recomienda mantención preventiva cada 10-12 meses." Solo el texto, sin títulos, sin JSON.\n\nSección 1: ${s1}`}]})
+        body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:600,messages:[{role:'user',content:`Basándote en esta sección 1 de un informe Tantecno, genera SOLO el texto de "Resultado y validación operativa" en modo post-intervención. Incluye las pruebas realizadas (AIDA64 si hay mantención térmica, CrystalDiskMark si hay SSD, PCMark), y termina con "El equipo queda totalmente operativo, optimizado y con rendimiento estable. Se recomienda mantención preventiva cada 10-12 meses." Solo el texto, sin títulos, sin JSON.\n\nSección 1: ${s1}`}]})
       })
       const data=await res.json()
       document.getElementById('p-s2').textContent=data.content.map(c=>c.text||'').join('')
@@ -694,9 +727,12 @@ function renderPrevSvc(){
 }
 function limpiar(){
   if(!confirm('¿Nuevo informe? Se perderán los datos actuales.'))return
+  folioConfirmado=null  // Permite que el próximo informe consuma un folio nuevo al guardar.
   const n=getOT()
   document.getElementById('f-ot').value=String(n)
   document.getElementById('f-texto').value=''
+  const badge=document.getElementById('diag-badge')
+  if(badge)badge.style.display='none'
   document.getElementById('r-cliente').value=''
   document.getElementById('r-equipo').value=''
   document.getElementById('r-problema').value=''
@@ -739,12 +775,21 @@ refreshApiStatus();renderHall();renderCat()
 
 // ═══ GUARDAR PDF ═══
 function savePDF(){
-  const cliente=document.getElementById('p-cliente').textContent.trim()
-  const nit=document.getElementById('p-ot').textContent.trim()
   const s1=document.getElementById('p-s1').textContent.trim()
   if(!s1||document.getElementById('p-s1').querySelector('.doc-ph')){
     toast('Genera el informe primero');return
   }
+  // Confirmar el folio solo la PRIMERA vez que se guarda este informe.
+  // Si el usuario guarda el mismo informe dos veces (corrigió algo), usa el mismo folio.
+  if(folioConfirmado===null){
+    const folioActual=parseInt(document.getElementById('f-ot').value)||getOT()
+    folioConfirmado=folioActual
+    // Avanza el contador para que el PRÓXIMO informe use el siguiente número.
+    saveOT(folioActual+1)
+    document.getElementById('p-ot').textContent=String(folioActual)
+  }
+  const cliente=document.getElementById('p-cliente').textContent.trim()
+  const nit=String(folioConfirmado)
   const hoy=new Date()
   const dd=String(hoy.getDate()).padStart(2,'0')
   const mm=String(hoy.getMonth()+1).padStart(2,'0')
@@ -800,4 +845,69 @@ function startMic(){
   isRecording=true
   document.getElementById("btn-mic").classList.add("recording")
   document.getElementById("mic-label").textContent="Detener"
-  document.getElementById("mic-status").textC
+  document.getElementById("mic-status").textContent="Escuchando…"
+}
+function stopMic(){
+  if(recognition)recognition.stop()
+  setMicOff()
+}
+function setMicOff(){
+  isRecording=false
+  document.getElementById("btn-mic").classList.remove("recording")
+  document.getElementById("mic-label").textContent="Dictar"
+  document.getElementById("mic-status").textContent="Clic para activar mic"
+}
+
+// ═══ CARGAR DIAGNÓSTICO (Fase B) ═══
+// Lee un .txt o .html exportado por test-tantecno.ps1 y lo anexa al textarea
+// entre marcadores, para que la IA lo identifique como fuente técnica autoritativa.
+function cargarDiagnostico(evt){
+  const file=evt.target.files[0]
+  if(!file)return
+  const maxBytes=500*1024  // 500 KB — un reporte típico pesa 30-80 KB
+  if(file.size>maxBytes){
+    toast('Archivo muy grande: '+(file.size/1024|0)+' KB (máx 500 KB)')
+    evt.target.value=''
+    return
+  }
+  const reader=new FileReader()
+  reader.onload=e=>{
+    let contenido=e.target.result
+    // Si es HTML, extraer solo texto visible para no meter tags al prompt
+    if(/\.html?$/i.test(file.name)){
+      const parser=new DOMParser()
+      const doc=parser.parseFromString(contenido,'text/html')
+      // Remover elementos que no aportan: scripts, estilos, botones, inputs
+      doc.querySelectorAll('script,style,button,input,nav,.btn,.hidden').forEach(el=>el.remove())
+      contenido=doc.body?doc.body.innerText:doc.documentElement.innerText
+      contenido=contenido.replace(/\n{3,}/g,'\n\n').trim()
+    }
+    // Limitar a 50 KB de texto plano — protege el presupuesto de tokens
+    const maxChars=50000
+    if(contenido.length>maxChars){
+      contenido=contenido.slice(0,maxChars)+'\n\n[contenido truncado por exceder 50.000 caracteres]'
+    }
+    const ta=document.getElementById('f-texto')
+    const textoActual=ta.value.trim()
+    // Eliminar bloque de diagnóstico previo si existe (permite recargar sin acumular)
+    const rx=/\n*--- REPORTE DIAGNÓSTICO TANTECNO ---[\s\S]*?--- FIN REPORTE ---\n*/g
+    const textoSinReporte=textoActual.replace(rx,'').trim()
+    const bloque=`--- REPORTE DIAGNÓSTICO TANTECNO ---\n${contenido}\n--- FIN REPORTE ---`
+    ta.value=textoSinReporte?`${textoSinReporte}\n\n${bloque}`:bloque
+    // Badge visual
+    const badge=document.getElementById('diag-badge')
+    const txt=document.getElementById('diag-badge-txt')
+    const kb=(file.size/1024).toFixed(1)
+    txt.textContent=`Diagnóstico cargado · ${file.name} · ${kb} KB`
+    badge.style.display='flex'
+    toast('Diagnóstico cargado ✓')
+    evt.target.value=''  // permite cargar el mismo archivo de nuevo si hace falta
+  }
+  reader.onerror=()=>toast('Error leyendo el archivo')
+  reader.readAsText(file,'UTF-8')
+}
+</script>
+
+</body>
+</html>
+
