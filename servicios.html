@@ -2,570 +2,544 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="description" content="Optimización de computadores en Machalí. Diagnóstico técnico remoto avanzado $29.900 para definir si tu equipo mejora con SSD, RAM, mantención interna y puesta a punto profesional.">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Optimización de Computadores · TANTECNO">
-<meta property="og:description" content="Evaluamos si tu computador vale la pena y definimos la optimización correcta. Diagnóstico técnico remoto avanzado $29.900.">
-<meta property="og:url" content="https://tantecno-web.vercel.app/servicios.html">
-<meta property="og:locale" content="es_CL">
-<meta name="robots" content="index, follow">
-<link rel="canonical" href="https://tantecno-web.vercel.app/servicios.html">
-<meta name="theme-color" content="#06080f">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Optimización de Computadores · TANTECNO</title>
+<meta name="theme-color" content="#070b14">
+<meta name="description" content="Qué puede incluir una optimización bien definida.">
+<title>Optimización · TANTECNO</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Sora:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&family=Sora:wght@500;600;700;800&display=swap" rel="stylesheet">
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
+*{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#06080f;--bg2:#0b0f1a;--bg3:#0e1324;--bg4:#111730;
-  --glass:rgba(255,255,255,.025);--glass-h:rgba(255,255,255,.05);--glass-b:rgba(255,255,255,.06);
-  --border:rgba(255,255,255,.07);--border-h:rgba(255,255,255,.14);
-  --text:#f0f2f8;--text2:rgba(240,242,248,.62);--text3:rgba(240,242,248,.3);
-  --blue:#4f8fff;--blue-h:#3a7bff;--blue-dim:rgba(79,143,255,.1);--blue-b:rgba(79,143,255,.22);
-  --green:#00d4aa;--green-dim:rgba(0,212,170,.1);--green-b:rgba(0,212,170,.22);
-  --purple:#8b5cf6;--purple-dim:rgba(139,92,246,.08);--purple-b:rgba(139,92,246,.18);
-  --yellow:#f59e0b;
-  --r:10px;--rl:14px;
+  --bg:#070b14;
+  --bg2:#0d1322;
+  --card:rgba(255,255,255,.04);
+  --card2:rgba(255,255,255,.03);
+  --border:rgba(255,255,255,.09);
+  --text:#f5f7fb;
+  --muted:rgba(245,247,251,.68);
+  --soft:rgba(245,247,251,.36);
+  --blue:#4f8fff;
+  --blue2:#3a7bff;
+  --green:#00d4aa;
+  --green-bg:rgba(0,212,170,.10);
+  --blue-bg:rgba(79,143,255,.11);
+  --radius:18px;
   --font:'DM Sans',system-ui,sans-serif;
   --head:'Sora',system-ui,sans-serif;
-  --mono:'JetBrains Mono','IBM Plex Mono',monospace;
+  --mono:'JetBrains Mono',monospace;
 }
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;scroll-padding-top:84px}
-body{font-family:var(--font);color:var(--text);background:var(--bg);font-size:16px;line-height:1.7;overflow-x:hidden}
+body{
+  font-family:var(--font);
+  background:
+    radial-gradient(600px 600px at 0% 0%, rgba(79,143,255,.10), transparent 60%),
+    radial-gradient(500px 500px at 100% 0%, rgba(139,92,246,.08), transparent 50%),
+    linear-gradient(180deg,#070b14 0%, #0a1020 100%);
+  color:var(--text);
+  line-height:1.65;
+  overflow-x:hidden;
+}
+body::after{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  background:url("data:image/svg+xml,%3Csvg viewBox='0 0 220 220' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.02'/%3E%3C/svg%3E");
+  opacity:.5;
+}
+a{text-decoration:none;color:inherit}
 img{max-width:100%;display:block}
-a{color:inherit;text-decoration:none}
-::-webkit-scrollbar{width:5px;background:var(--bg)}
-::-webkit-scrollbar-thumb{background:rgba(255,255,255,.08);border-radius:3px}
-
-.bg-mesh{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
-.bg-orb{position:absolute;border-radius:50%;filter:blur(120px);opacity:.12;animation:orbFloat 20s ease-in-out infinite}
-.bg-orb:nth-child(1){width:600px;height:600px;background:var(--blue);top:-10%;left:-5%;animation-delay:0s}
-.bg-orb:nth-child(2){width:500px;height:500px;background:var(--purple);bottom:-15%;right:-10%;animation-delay:-7s}
-.bg-orb:nth-child(3){width:400px;height:400px;background:var(--green);top:40%;left:50%;animation-delay:-14s;opacity:.06}
-@keyframes orbFloat{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(30px,-40px) scale(1.1)}66%{transform:translate(-20px,30px) scale(.9)}}
-body::after{content:'';position:fixed;inset:0;background:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.025'/%3E%3C/svg%3E");pointer-events:none;z-index:1;opacity:.5}
-
-.nav{position:sticky;top:0;z-index:100;background:rgba(6,8,15,.85);border-bottom:1px solid var(--border);backdrop-filter:blur(20px) saturate(1.4);-webkit-backdrop-filter:blur(20px) saturate(1.4)}
-.nav-inner{max-width:1100px;margin:0 auto;padding:0 28px;height:90px;display:flex;align-items:center;justify-content:space-between;gap:20px}
-.nav-logo{display:flex;align-items:center;text-decoration:none}
-.brand-wordmark{display:flex;flex-direction:column;line-height:1}
-.brand-wordmark strong{font-family:var(--head);font-size:22px;font-weight:700;letter-spacing:.14em;color:var(--text)}
-.brand-wordmark span{font-family:var(--mono);font-size:10px;color:var(--text3);letter-spacing:.12em;text-transform:uppercase;margin-top:6px}
-.footer-brand-mark{font-family:var(--head);font-size:24px;font-weight:700;letter-spacing:.14em;margin-bottom:10px}
-.nav-links{display:flex;align-items:center;gap:6px}
-.nav-links a{font-size:13px;font-weight:500;color:var(--text2);padding:7px 14px;border-radius:8px;transition:all .2s;letter-spacing:.01em}
-.nav-links a:hover,.nav-links a.active{color:var(--text);background:var(--glass-h)}
-.nav-actions{display:flex;gap:8px}
-.btn-wa{display:inline-flex;align-items:center;gap:6px;font-family:var(--font);font-size:13px;font-weight:500;padding:8px 16px;border-radius:8px;background:var(--green-dim);color:var(--green);border:1px solid var(--green-b);cursor:pointer;transition:all .2s}
-.btn-wa:hover{background:rgba(0,212,170,.18);box-shadow:0 0 20px rgba(0,212,170,.15)}
-.btn-cta{display:inline-flex;align-items:center;gap:6px;font-family:var(--font);font-size:13px;font-weight:600;padding:8px 18px;border-radius:8px;background:var(--blue);color:#fff;border:none;cursor:pointer;transition:all .2s}
-.btn-cta:hover{background:var(--blue-h);box-shadow:0 0 24px rgba(79,143,255,.3)}
-.btn-int{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:11px;letter-spacing:.04em;padding:6px 12px;border-radius:6px;background:var(--blue-dim);border:1px solid var(--blue-b);color:var(--blue);transition:all .2s}
-.btn-int:hover{background:rgba(79,143,255,.18)}
-.nav-hamburger{display:none;background:none;border:none;cursor:pointer;padding:8px}
-.nav-hamburger span{display:block;width:20px;height:2px;background:var(--text2);margin:4px 0;border-radius:1px;transition:all .2s}
-.mobile-nav{display:none;position:fixed;top:90px;left:0;right:0;background:rgba(6,8,15,.97);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);z-index:99;padding:16px 28px;flex-direction:column;gap:4px}
-.mobile-nav.open{display:flex}
-.mobile-nav a{font-size:14px;color:var(--text2);padding:10px 0;border-bottom:1px solid var(--border)}
-.mobile-nav a:last-child{border:none}
-
-.section{position:relative;z-index:2}
-.w{max-width:1100px;margin:0 auto;padding:80px 28px}
-.sec-tag{font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--blue);margin-bottom:24px;display:flex;align-items:center;gap:10px}
-.sec-tag::before{content:'';width:20px;height:1px;background:var(--blue)}
-.sec-h{font-family:var(--head);font-size:44px;font-weight:700;line-height:1.1;margin-bottom:12px;letter-spacing:-.02em}
-.sec-s{font-size:16px;color:var(--text2);margin-bottom:40px;max-width:640px;line-height:1.8}
-.g-card{background:var(--glass);border:1px solid var(--border);border-radius:var(--rl);padding:28px;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);transition:all .3s}
-.g-card:hover{border-color:var(--border-h);background:var(--glass-h);transform:translateY(-2px);box-shadow:0 12px 40px rgba(0,0,0,.3)}
-.sr{opacity:0;transform:translateY(24px);transition:all .7s cubic-bezier(.16,1,.3,1)}
-.sr.vis{opacity:1;transform:translateY(0)}
-
-.page-hdr{position:relative;z-index:2;border-bottom:1px solid var(--border);overflow:hidden}
-.page-hdr::before{content:'';position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1517430816045-df4b7de11d1d?auto=format&fit=crop&w=1600&q=80') center/cover;opacity:.05}
-.page-hdr-inner{max-width:1100px;margin:0 auto;padding:74px 28px 58px;position:relative;z-index:2}
-.breadcrumb{font-size:13px;color:var(--text3);margin-bottom:20px}
-.breadcrumb a{color:var(--text2)}
-.page-title{font-family:var(--head);font-size:56px;font-weight:800;line-height:1.05;letter-spacing:-.03em;max-width:820px;margin-bottom:18px}
-.page-title em{font-style:normal;background:linear-gradient(135deg,var(--blue),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.page-sub{font-size:17px;color:var(--text2);max-width:670px;line-height:1.8;margin-bottom:28px}
-.hero-points{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;max-width:850px}
-.hero-point{padding:14px 16px;border:1px solid var(--border);border-radius:12px;background:rgba(255,255,255,.025);backdrop-filter:blur(10px)}
-.hero-point-k{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--blue);margin-bottom:6px}
-.hero-point-v{font-size:13px;color:var(--text2);line-height:1.55}
-
-.quick-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
-.quick-card .label{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--blue);margin-bottom:12px}
-.quick-card .title{font-family:var(--head);font-size:22px;font-weight:700;line-height:1.1;margin-bottom:8px}
-.quick-card .desc{font-size:13px;color:var(--text2);line-height:1.7}
-.quick-card.highlight{border-color:var(--blue-b);background:var(--blue-dim)}
-
-.process-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
-.step-num{font-family:var(--head);font-size:34px;font-weight:800;color:var(--blue);line-height:1;margin-bottom:10px}
-.step-tag{font-family:var(--mono);font-size:10px;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px}
-.step-title{font-family:var(--head);font-size:18px;font-weight:600;margin-bottom:8px}
-.step-desc{font-size:13px;color:var(--text2);line-height:1.75}
-
-.service-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
-.service-card.featured{border-color:var(--blue-b);background:linear-gradient(180deg,rgba(79,143,255,.12),rgba(255,255,255,.025))}
-.service-badge{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--blue);background:var(--blue-dim);border:1px solid var(--blue-b);padding:5px 10px;border-radius:999px;margin-bottom:16px}
-.service-badge.alt{color:var(--purple);background:var(--purple-dim);border-color:var(--purple-b)}
-.service-name{font-family:var(--head);font-size:24px;font-weight:700;line-height:1.15;margin-bottom:10px}
-.service-desc{font-size:14px;color:var(--text2);line-height:1.8;margin-bottom:18px}
-.service-price{font-family:var(--head);font-size:34px;font-weight:800;line-height:1;margin-bottom:14px}
-.service-price small{font-size:.45em;font-weight:600;color:var(--text2)}
-.service-list{display:grid;gap:8px;margin-bottom:18px}
-.service-item{display:flex;gap:10px;align-items:flex-start;font-size:13px;color:var(--text2);line-height:1.7}
-.service-item svg{width:14px;height:14px;flex-shrink:0;margin-top:4px;color:var(--blue)}
-.service-note{font-size:12px;color:var(--text3);line-height:1.7;border-top:1px solid var(--border);padding-top:14px}
-
-.price-table{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
-.price-tier{padding:26px 24px;border-radius:16px;border:1px solid var(--border);background:var(--bg3)}
-.price-tier.recommended{border-color:var(--blue-b);background:rgba(79,143,255,.09)}
-.price-tier .tier-tag{font-family:var(--mono);font-size:10px;color:var(--blue);letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px}
-.price-tier .tier-name{font-family:var(--head);font-size:20px;font-weight:700;margin-bottom:8px}
-.price-tier .tier-price{font-family:var(--head);font-size:40px;font-weight:800;line-height:1;margin-bottom:12px}
-.price-tier .tier-copy{font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:14px}
-.tier-list{display:grid;gap:7px}
-.tier-list div{font-size:12px;color:var(--text2);line-height:1.6}
-
-.dual-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.info-box{background:var(--glass);border:1px solid var(--border);border-radius:var(--rl);padding:26px}
-.info-box.blue{background:var(--blue-dim);border-color:var(--blue-b)}
-.info-box h3{font-family:var(--head);font-size:22px;font-weight:700;margin-bottom:10px}
-.info-box p{font-size:14px;color:var(--text2);line-height:1.85}
-.info-list{display:grid;gap:9px;margin-top:16px}
-.info-list div{display:flex;gap:10px;align-items:flex-start;font-size:13px;color:var(--text2);line-height:1.7}
-.info-list svg{width:14px;height:14px;flex-shrink:0;margin-top:4px;color:var(--blue)}
-
-.viable-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
-.viable-card h3{font-family:var(--head);font-size:22px;font-weight:700;margin-bottom:10px}
-.viable-list{display:grid;gap:10px}
-.viable-item{display:flex;gap:10px;align-items:flex-start;font-size:13px;color:var(--text2);line-height:1.75}
-.viable-item svg{width:15px;height:15px;flex-shrink:0;margin-top:3px}
-.viable-card.good svg{color:var(--green)}
-.viable-card.bad svg{color:#ff6b6b}
-
-.cta-wrap{display:flex;justify-content:space-between;align-items:center;gap:28px;padding:32px;border-radius:18px;border:1px solid var(--blue-b);background:linear-gradient(180deg,rgba(79,143,255,.12),rgba(255,255,255,.025));flex-wrap:wrap}
-.cta-tag{font-family:var(--mono);font-size:11px;color:var(--blue);letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px}
-.cta-title{font-family:var(--head);font-size:30px;font-weight:700;line-height:1.15;margin-bottom:10px}
-.cta-copy{font-size:14px;color:var(--text2);line-height:1.8;max-width:560px}
-.cta-actions{display:flex;gap:12px;flex-wrap:wrap}
-.btn-main{display:inline-flex;align-items:center;gap:8px;font-family:var(--font);font-size:15px;font-weight:600;padding:14px 28px;border-radius:var(--r);background:var(--blue);color:#fff;transition:all .2s}
-.btn-main:hover{background:var(--blue-h);box-shadow:0 0 28px rgba(79,143,255,.3)}
-.btn-ghost{display:inline-flex;align-items:center;gap:8px;font-family:var(--font);font-size:15px;font-weight:500;padding:14px 28px;border-radius:var(--r);border:1px solid var(--border);color:var(--text2);transition:all .2s}
-.btn-ghost:hover{border-color:var(--border-h);color:var(--text);background:var(--glass)}
-
-.footer{border-top:1px solid var(--border);position:relative;z-index:2}
-.footer-inner{max-width:1100px;margin:0 auto;padding:48px 28px 32px;display:flex;justify-content:space-between;align-items:start;gap:40px;flex-wrap:wrap}
-.footer-brand{max-width:280px}
-.footer-brand p{font-size:13px;color:var(--text3);line-height:1.7}
-.footer-links{display:flex;gap:40px}
-.footer-col h4{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin-bottom:12px}
-.footer-col a{display:block;font-size:13px;color:var(--text2);padding:3px 0;transition:color .15s}
-.footer-col a:hover{color:var(--text)}
-.footer-copy{max-width:1100px;margin:0 auto;padding:16px 28px;border-top:1px solid var(--border);font-size:12px;color:var(--text3);text-align:center}
-
-.wa-float{position:fixed;bottom:24px;right:24px;z-index:999;width:60px;height:60px;border-radius:50%;background:#25d366;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(37,211,102,.4);transition:all .3s;cursor:pointer;text-decoration:none}
-.wa-float:hover{transform:scale(1.1);box-shadow:0 6px 24px rgba(37,211,102,.5)}
-.wa-float svg{width:32px;height:32px;fill:#fff}
-
-@media(max-width:1024px){
-  .nav-inner{padding:0 20px}
-  .w{padding:56px 24px}
-  .page-hdr-inner{padding:64px 24px 48px}
-  .page-title{font-size:48px}
-  .quick-grid{grid-template-columns:repeat(2,1fr)}
-  .process-grid{grid-template-columns:repeat(2,1fr)}
-  .price-table{grid-template-columns:1fr}
+.wrapper{max-width:1120px;margin:0 auto;padding:0 24px}
+.nav{
+  position:sticky;top:0;z-index:1000;
+  background:rgba(7,11,20,.82);
+  border-bottom:1px solid var(--border);
+  backdrop-filter:blur(18px);
 }
-@media(max-width:768px){
-  .nav-links,.nav-actions{display:none}
-  .nav-hamburger{display:block}
-  .nav-inner{height:70px;padding:0 16px}
-  .mobile-nav{top:70px;padding:12px 20px}
-  .brand-wordmark strong{font-size:18px}
-  .brand-wordmark span{font-size:9px}
-  .w{padding:40px 16px}
-  .page-hdr-inner{padding:44px 16px 36px}
-  .page-title{font-size:34px}
-  .page-sub{font-size:15px}
-  .hero-points{grid-template-columns:1fr}
-  .quick-grid,.process-grid,.service-grid,.dual-grid,.viable-grid{grid-template-columns:1fr}
-  .sec-h{font-size:30px}
-  .cta-wrap{padding:24px}
-  .cta-title{font-size:26px}
-  .footer-inner{flex-direction:column;gap:24px}
-  .footer-links{flex-direction:column;gap:20px}
+.nav-inner{
+  height:78px;
+  display:flex;align-items:center;justify-content:space-between;gap:18px;
 }
-@media(max-width:480px){
-  .nav-inner{height:60px;padding:0 12px}
-  .mobile-nav{top:60px}
-  .page-hdr-inner{padding:36px 12px 28px}
-  .page-title{font-size:28px}
-  .w{padding:28px 12px}
-  .sec-h{font-size:24px}
-  .g-card,.info-box,.price-tier{padding:20px}
-  .wa-float{bottom:16px;right:16px;width:52px;height:52px}
-  .wa-float svg{width:28px;height:28px}
+.brand{
+  display:flex;flex-direction:column;gap:4px;
 }
-
-/* MOBILE PASS FINAL */
-.mobile-cta-bar{display:none}
-@media(max-width:768px){
-  html{scroll-padding-top:72px}
-  .page-title,.sec-h,.cta-title{text-wrap:balance}
-  .page-sub,.sec-s,.cta-copy{max-width:none}
-  .hero-point,.g-card,.info-box,.price-tier{padding:20px}
-  .cta-actions{flex-direction:column;align-items:stretch}
-  .cta-actions a{width:100%;justify-content:center;min-height:50px}
+.brand strong{
+  font-family:var(--head);
+  font-size:22px;font-weight:800;letter-spacing:.14em;
 }
-@media(max-width:560px){
-  body{padding-bottom:96px}
-  .mobile-cta-bar{display:grid;grid-template-columns:1fr 1fr;gap:10px;position:fixed;left:12px;right:12px;bottom:12px;z-index:1001;padding:10px;border:1px solid var(--border);border-radius:16px;background:rgba(6,8,15,.94);backdrop-filter:blur(20px);box-shadow:0 12px 30px rgba(0,0,0,.35)}
-  .mobile-cta-bar a{display:flex;align-items:center;justify-content:center;min-height:46px;border-radius:12px;font-size:13px;font-weight:600}
-  .mobile-cta-bar .mobile-main{background:var(--blue);color:#fff}
-  .mobile-cta-bar .mobile-secondary{background:var(--green-dim);border:1px solid var(--green-b);color:var(--green)}
-  .wa-float{display:none!important}
+.brand span{
+  font-family:var(--mono);
+  font-size:10px;color:var(--soft);letter-spacing:.12em;text-transform:uppercase;
 }
-@media(max-width:480px){
-  .page-title{font-size:27px}
-  .page-sub,.sec-s,.step-desc,.info-list div,.service-desc,.service-item,.service-note,.viable-item,.cta-copy{font-size:13px}
-  .service-name{font-size:22px}
+.nav-links{display:flex;gap:6px;align-items:center}
+.nav-links a{
+  padding:10px 14px;
+  border-radius:10px;
+  color:var(--muted);
+  font-size:14px;font-weight:500;
 }
-
+.nav-links a:hover,.nav-links a.active{
+  background:var(--card);
+  color:var(--text);
+}
+.nav-cta{display:flex;gap:10px;align-items:center}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  min-height:48px;
+  padding:0 18px;
+  border-radius:12px;
+  font-size:15px;font-weight:700;
+  transition:.2s ease;
+  border:1px solid transparent;
+}
+.btn-primary{background:var(--blue);color:#fff}
+.btn-primary:hover{background:var(--blue2)}
+.btn-secondary{
+  background:transparent;
+  border-color:var(--border);
+  color:var(--text);
+}
+.btn-secondary:hover{background:var(--card)}
+.btn-whatsapp{
+  background:var(--green-bg);
+  border-color:rgba(0,212,170,.22);
+  color:var(--green);
+}
+.btn-whatsapp:hover{background:rgba(0,212,170,.16)}
+.menu-btn{
+  display:none;
+  width:44px;height:44px;
+  border:none;background:transparent;color:var(--text);
+}
+.menu-btn span{
+  display:block;width:22px;height:2px;background:var(--text);margin:4px auto;border-radius:2px;
+}
+.mobile-menu{
+  display:none;
+  border-bottom:1px solid var(--border);
+  background:rgba(7,11,20,.96);
+}
+.mobile-menu.open{display:block}
+.mobile-menu .wrapper{padding-top:10px;padding-bottom:12px}
+.mobile-menu a{
+  display:block;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.06);color:var(--muted);font-size:14px
+}
+.mobile-menu a:last-child{border-bottom:none}
+section{position:relative;z-index:2}
+.section{padding:86px 0}
+.section-tight{padding:66px 0}
+.eyebrow{
+  display:inline-flex;align-items:center;gap:10px;
+  font-family:var(--mono);
+  font-size:11px;color:var(--blue);letter-spacing:.12em;text-transform:uppercase;
+  margin-bottom:18px;
+}
+.eyebrow::before{
+  content:"";width:22px;height:1px;background:var(--blue);display:inline-block;
+}
+.hero{padding:74px 0 56px;border-bottom:1px solid var(--border)}
+.hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:28px;align-items:center}
+.hero h1{
+  font-family:var(--head);
+  font-size:clamp(34px,6vw,64px);
+  line-height:1.02;
+  letter-spacing:-.04em;
+  margin-bottom:16px;
+  max-width:760px;
+  text-wrap:balance;
+}
+.hero p.lead{
+  max-width:680px;
+  font-size:18px;
+  color:var(--muted);
+  margin-bottom:24px;
+}
+.actions{display:flex;gap:12px;flex-wrap:wrap}
+.chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+.chip{
+  min-height:38px;
+  display:inline-flex;align-items:center;
+  padding:0 14px;border-radius:999px;
+  background:var(--card2);
+  border:1px solid var(--border);
+  font-size:12px;font-weight:600;color:var(--muted);
+}
+.panel{
+  background:linear-gradient(180deg, rgba(79,143,255,.12), rgba(255,255,255,.03));
+  border:1px solid rgba(79,143,255,.18);
+  border-radius:24px;
+  padding:28px;
+}
+.panel h3{
+  font-family:var(--head);
+  font-size:24px;
+  line-height:1.15;
+  margin-bottom:12px;
+}
+.panel p{color:var(--muted);font-size:14px}
+.stack{display:grid;gap:12px;margin-top:18px}
+.stack-item{
+  background:rgba(255,255,255,.03);
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:14px 16px;
+  color:var(--muted);
+  font-size:14px;
+}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:24px;
+}
+.card h3,.card h4{
+  font-family:var(--head);
+  font-size:21px;
+  line-height:1.15;
+  margin-bottom:10px;
+  text-wrap:balance;
+}
+.card p{color:var(--muted);font-size:14px}
+.icon{
+  width:42px;height:42px;border-radius:12px;
+  display:flex;align-items:center;justify-content:center;
+  background:var(--blue-bg);
+  border:1px solid rgba(79,143,255,.22);
+  color:var(--blue);
+  font-family:var(--head);font-weight:800;
+  margin-bottom:14px;
+}
+.list{display:grid;gap:10px;margin-top:12px}
+.list div{
+  display:flex;gap:10px;align-items:flex-start;
+  color:var(--muted);font-size:14px
+}
+.list div::before{
+  content:"•";color:var(--blue);font-weight:900;line-height:1
+}
+.split{
+  display:grid;grid-template-columns:1fr .95fr;gap:24px;align-items:start;
+}
+.price-box{
+  background:linear-gradient(180deg, rgba(79,143,255,.12), rgba(255,255,255,.03));
+  border:1px solid rgba(79,143,255,.20);
+  border-radius:22px;
+  padding:28px;
+}
+.price{
+  font-family:var(--head);
+  font-size:48px;
+  line-height:1;
+  margin:10px 0 14px;
+}
+.price small{
+  font-size:.34em;color:var(--muted);font-weight:700
+}
+.kicker{
+  font-family:var(--mono);
+  font-size:10px;
+  text-transform:uppercase;
+  letter-spacing:.12em;
+  color:var(--blue);
+}
+.cta{
+  background:linear-gradient(180deg, rgba(79,143,255,.12), rgba(255,255,255,.03));
+  border:1px solid rgba(79,143,255,.20);
+  border-radius:24px;
+  padding:32px;
+}
+.cta h2{
+  font-family:var(--head);font-size:34px;line-height:1.08;letter-spacing:-.03em;margin-bottom:12px;text-wrap:balance
+}
+.cta p{color:var(--muted);max-width:620px;margin-bottom:20px}
+.contact-box{
+  display:grid;grid-template-columns:1fr .9fr;gap:22px;align-items:start;
+}
+.contact-lines{display:grid;gap:10px}
+.contact-line{
+  display:flex;justify-content:space-between;gap:16px;
+  padding:12px 0;border-bottom:1px solid rgba(255,255,255,.07);
+  color:var(--muted);font-size:14px
+}
+.contact-line strong{
+  color:var(--text);font-weight:700
+}
+.footer{
+  border-top:1px solid var(--border);
+  padding:40px 0 16px;
+  position:relative;z-index:2;
+}
+.footer-top{
+  display:grid;grid-template-columns:1.2fr .9fr .9fr;gap:24px;
+  margin-bottom:20px;
+}
+.footer h4{
+  font-family:var(--mono);
+  font-size:10px;text-transform:uppercase;letter-spacing:.12em;
+  color:var(--soft);margin-bottom:12px
+}
+.footer p,.footer a{color:var(--muted);font-size:14px}
+.footer-links{display:grid;gap:8px}
+.footer-bottom{
+  border-top:1px solid rgba(255,255,255,.07);
+  padding-top:16px;
+  color:var(--soft);
+  font-size:12px;
+}
+.wa-float{
+  position:fixed;right:18px;bottom:18px;z-index:998;
+  width:58px;height:58px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  background:#25d366;color:#fff;
+  box-shadow:0 14px 30px rgba(37,211,102,.28);
+}
+.muted{color:var(--muted)}
+.center{text-align:center}
+.mobile-only{display:none}
+.desktop-only{display:inline-flex}
+.access-note{
+  font-size:12px;color:var(--soft);margin-top:12px
+}
+.login-wrap{
+  min-height:100vh;display:grid;place-items:center;padding:28px
+}
+.login-card{
+  width:min(100%,420px);
+  background:rgba(255,255,255,.04);
+  border:1px solid var(--border);
+  border-radius:24px;
+  padding:34px;
+  position:relative;z-index:2;
+}
+.login-card h1{
+  font-family:var(--head);
+  font-size:34px;line-height:1.08;letter-spacing:-.03em;margin:10px 0 12px
+}
+.login-card p{color:var(--muted);font-size:14px}
+.form{display:grid;gap:14px;margin-top:22px}
+.field{display:grid;gap:6px}
+.field label{
+  font-family:var(--mono);
+  font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--soft)
+}
+.field input{
+  min-height:48px;padding:0 14px;border-radius:12px;border:1px solid var(--border);
+  background:rgba(255,255,255,.03);color:var(--text);font:inherit
+}
+.small-note{
+  margin-top:14px;font-size:12px;color:var(--soft);line-height:1.6
+}
+.tag{
+  display:inline-flex;align-items:center;min-height:34px;padding:0 12px;border-radius:999px;
+  background:var(--blue-bg);border:1px solid rgba(79,143,255,.22);
+  color:var(--blue);font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase
+}
+@media (max-width:980px){
+  .hero-grid,.split,.contact-box,.footer-top{grid-template-columns:1fr}
+  .grid-3{grid-template-columns:1fr}
+  .grid-4{grid-template-columns:repeat(2,1fr)}
+}
+@media (max-width:768px){
+  .nav-links,.nav-cta{display:none}
+  .menu-btn{display:block}
+  .wrapper{padding:0 16px}
+  .section{padding:68px 0}
+  .section-tight{padding:54px 0}
+  .hero{padding:54px 0 42px}
+  .actions{flex-direction:column;align-items:stretch}
+  .actions .btn{width:100%}
+  .grid-2,.grid-3,.grid-4{grid-template-columns:1fr}
+  .cta h2{font-size:28px}
+  .footer-top{gap:18px}
+  .mobile-only{display:inline-flex}
+  .desktop-only{display:none}
+}
+@media (max-width:560px){
+  body{padding-bottom:86px}
+  .mobile-bar{
+    position:fixed;left:12px;right:12px;bottom:12px;z-index:999;
+    display:grid;grid-template-columns:1fr 1fr;gap:10px;
+    padding:10px;border:1px solid var(--border);border-radius:18px;
+    background:rgba(7,11,20,.94);backdrop-filter:blur(20px)
+  }
+  .mobile-bar a{
+    min-height:46px;border-radius:12px;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center
+  }
+  .mobile-bar .main{background:var(--blue);color:#fff}
+  .mobile-bar .secondary{background:var(--green-bg);border:1px solid rgba(0,212,170,.22);color:var(--green)}
+  .wa-float{display:none}
+}
 </style>
 </head>
 <body>
-<div class="bg-mesh"><div class="bg-orb"></div><div class="bg-orb"></div><div class="bg-orb"></div></div>
 
 <nav class="nav">
-  <div class="nav-inner">
-    <a class="nav-logo" href="index.html" aria-label="TANTECNO"><div class="brand-wordmark"><strong>TANTECNO</strong><span>Soluciones computacionales</span></div></a>
+  <div class="wrapper nav-inner">
+    <a class="brand" href="index.html" aria-label="TANTECNO">
+      <strong>TANTECNO</strong>
+      <span>Optimización de computadores</span>
+    </a>
     <div class="nav-links">
-      <a href="index.html">Inicio</a>
-      <a href="servicios.html" class="active">Optimización</a>
-      <a href="asistencia.html">Asistencia remota</a>
-      <a href="index.html#contacto">Contacto</a>
+      <a href="index.html">Inicio</a><a href="servicios.html" class="active">Optimización</a><a href="asistencia.html">Diagnóstico remoto</a><a href="index.html#contacto">Contacto</a>
     </div>
-    <div class="nav-actions">
-      <a href="https://wa.me/56971036909?text=Hola%2C%20quiero%20consultar%20por%20la%20optimizaci%C3%B3n%20de%20mi%20computador." target="_blank" class="btn-wa">WhatsApp</a>
-      <a href="https://wa.me/56971036909?text=Hola%2C%20quiero%20evaluar%20mi%20computador%20para%20saber%20si%20vale%20la%20pena%20optimizarlo." target="_blank" class="btn-cta">Evaluar mi computador</a>
+    <div class="nav-cta">
+      <a href="https://wa.me/56971036909?text=Hola%2C%20quiero%20evaluar%20mi%20computador%20para%20saber%20si%20vale%20la%20pena%20optimizarlo." target="_blank" class="btn btn-whatsapp">WhatsApp</a>
+      <a href="https://wa.me/56971036909?text=Hola%2C%20quiero%20evaluar%20mi%20computador%20para%20saber%20si%20vale%20la%20pena%20optimizarlo." target="_blank" class="btn btn-primary">Evaluar mi computador</a>
     </div>
-    <button class="nav-hamburger" id="menuBtn" aria-label="Abrir menú"><span></span><span></span><span></span></button>
+    <button class="menu-btn" id="menuBtn" aria-label="Abrir menú">
+      <span></span><span></span><span></span>
+    </button>
   </div>
 </nav>
-
-<div class="mobile-nav" id="mobNav">
-  <a href="index.html">Inicio</a>
-  <a href="servicios.html">Optimización</a>
-  <a href="asistencia.html">Asistencia remota</a>
-  <a href="index.html#contacto">Contacto</a>
-  <a href="https://wa.me/56971036909?text=Hola%2C%20quiero%20consultar%20por%20la%20optimizaci%C3%B3n%20de%20mi%20computador." target="_blank" style="color:var(--green)">WhatsApp</a>
+<div class="mobile-menu" id="mobileMenu">
+  <div class="wrapper">
+    <a href="index.html">Inicio</a><a href="servicios.html" class="active">Optimización</a><a href="asistencia.html">Diagnóstico remoto</a><a href="index.html#contacto">Contacto</a><a href="login.html" style="color:var(--soft);font-size:12px">Acceso interno</a>
+  </div>
 </div>
 
-<header class="page-hdr">
-  <div class="page-hdr-inner">
-    <div class="breadcrumb"><a href="index.html">Inicio</a> / Optimización</div>
-    <h1 class="page-title">Optimización de computadores con <em>criterio técnico</em>, no con soluciones al lote.</h1>
-    <p class="page-sub">El foco de Tantecno es uno: optimizar computadores que todavía tienen vida útil real. Evaluamos si tu equipo mejora con cambio de HDD a SSD, aumento de RAM, mantención interna, reinstalación limpia y puesta a punto profesional. Si conviene, avanzamos. Si no conviene, te lo decimos igual.</p>
-    <div class="hero-points">
-      <div class="hero-point">
-        <div class="hero-point-k">Diagnóstico avanzado</div>
-        <div class="hero-point-v">$29.900 con evaluación remota y criterio técnico real.</div>
-      </div>
-      <div class="hero-point">
-        <div class="hero-point-k">Transparencia</div>
-        <div class="hero-point-v">Cotización formal antes de cualquier intervención.</div>
-      </div>
-      <div class="hero-point">
-        <div class="hero-point-k">Respaldo</div>
-        <div class="hero-point-v">Trabajo documentado y garantía escrita sobre la intervención.</div>
-      </div>
+
+<header class="hero">
+  <div class="wrapper">
+    <div class="eyebrow">Optimización</div>
+    <h1>Qué puede incluir una optimización bien definida.</h1>
+    <p class="lead">Esta página no es un catálogo. Es una guía corta para entender qué tipo de mejoras puede necesitar un computador cuando realmente vale la pena optimizarlo.</p>
+    <div class="actions">
+      <a href="https://wa.me/56971036909?text=Hola%2C%20quiero%20evaluar%20mi%20computador%20para%20saber%20si%20vale%20la%20pena%20optimizarlo." target="_blank" class="btn btn-primary">Evaluar mi computador</a>
+      <a href="asistencia.html" class="btn btn-secondary">Ver diagnóstico remoto</a>
+    </div>
+    <div class="chips">
+      <div class="chip">SSD</div>
+      <div class="chip">RAM</div>
+      <div class="chip">Mantención interna</div>
+      <div class="chip">Sistema limpio</div>
     </div>
   </div>
 </header>
 
-<section class="section" style="background:var(--bg2)">
-  <div class="w">
-    <div class="sec-tag sr">Lectura rápida</div>
-    <div class="sec-h sr">Qué hacemos realmente.</div>
-    <div class="sec-s sr">Si quieres entender Tantecno en 20 segundos, es esto: evaluamos equipos, filtramos los que sí vale la pena recuperar y ejecutamos solo intervenciones que cambian de verdad el rendimiento.</div>
-    <div class="quick-grid">
-      <div class="g-card quick-card sr highlight">
-        <div class="label">Paso 1</div>
-        <div class="title">Diagnóstico real</div>
-        <div class="desc">No partimos interviniendo. Primero revisamos si el equipo es técnica y económicamente viable.</div>
+<section class="section">
+  <div class="wrapper">
+    <div class="eyebrow">Qué hacemos</div>
+    <h2 class="sec-h">Optimizar no es una sola acción.</h2>
+    <p class="sec-s">La mejora correcta depende del cuello de botella del equipo. A veces basta con SSD. Otras veces hace falta RAM, mantención interna o una puesta a punto completa.</p>
+    <div class="grid-2">
+      <div class="card">
+        <div class="icon">SSD</div>
+        <h3>Cambio de HDD a SSD</h3>
+        <p>Es una de las mejoras más notorias en equipos antiguos o lentos. Reduce tiempos de arranque, carga y uso cotidiano.</p>
       </div>
-      <div class="g-card quick-card sr" style="transition-delay:.08s">
-        <div class="label">Paso 2</div>
-        <div class="title">Definición exacta</div>
-        <div class="desc">Te decimos si basta con software, si requiere SSD, o si derechamente no conviene meterle plata.</div>
+      <div class="card">
+        <div class="icon">RAM</div>
+        <h3>Aumento de RAM</h3>
+        <p>Sirve cuando el equipo sufre al abrir varias tareas o al trabajar con más carga de memoria.</p>
       </div>
-      <div class="g-card quick-card sr" style="transition-delay:.16s">
-        <div class="label">Paso 3</div>
-        <div class="title">Intervención con criterio</div>
-        <div class="desc">Formateo, upgrade SSD o configuración de estación de trabajo, según corresponda.</div>
+      <div class="card">
+        <div class="icon">MT</div>
+        <h3>Mantención interna</h3>
+        <p>Ayuda cuando el problema también pasa por temperatura, polvo acumulado o comportamiento inestable bajo uso.</p>
       </div>
-      <div class="g-card quick-card sr" style="transition-delay:.24s">
-        <div class="label">Paso 4</div>
-        <div class="title">Entrega documentada</div>
-        <div class="desc">Trabajo ejecutado, equipo operativo, explicación clara y garantía escrita de la intervención.</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="section" id="diagnostico">
-  <div class="w">
-    <div class="sec-tag sr">El primer filtro</div>
-    <div class="sec-h sr">Diagnóstico técnico remoto avanzado · $29.900</div>
-    <div class="sec-s sr">Este no es un diagnóstico superficial. Está pensado para determinar con criterio si el equipo vale la pena optimizarlo, qué combinación de mejoras necesita y cuál sería la intervención correcta antes de invertir dinero.</div>
-
-    <div class="dual-grid">
-      <div class="info-box blue sr">
-        <h3>Qué incluye</h3>
-        <p>Revisión de estado general, análisis del tipo de almacenamiento, memoria, sistema operativo, compatibilidad y proyección real de uso. La salida del diagnóstico no es ambigua: <strong style="color:var(--text)">sí conviene</strong>, <strong style="color:var(--text)">conviene con condiciones</strong> o <strong style="color:var(--text)">no conviene</strong>.</p>
-        <div class="info-list">
-          <div><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 8l3 3 7-7"/></svg>Evaluación técnica del equipo.</div>
-          <div><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 8l3 3 7-7"/></svg>Recomendación concreta de intervención.</div>
-          <div><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 8l3 3 7-7"/></svg>Cotización previa antes de cualquier trabajo.</div>
-          <div><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 8l3 3 7-7"/></svg>Descuento del diagnóstico si avanzas.</div>
-        </div>
-      </div>
-
-      <div class="info-box sr" style="transition-delay:.1s">
-        <h3>Cuándo pedirlo</h3>
-        <p>Cuando el equipo está lento, no sabes si cambiarle disco, no quieres comprar un notebook nuevo a ciegas, o necesitas una opinión técnica seria antes de meter dinero.</p>
-        <div class="info-list">
-          <div><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 8l3 3 7-7"/></svg>Notebook o PC que ya no rinde como antes.</div>
-          <div><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 8l3 3 7-7"/></svg>Duda real entre optimizar o reemplazar.</div>
-          <div><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 8l3 3 7-7"/></svg>Equipos de trabajo que no pueden quedar al azar.</div>
-          <div><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 8l3 3 7-7"/></svg>Evaluaciones individuales o por flota de oficina.</div>
-        </div>
+      <div class="card">
+        <div class="icon">SYS</div>
+        <h3>Sistema limpio</h3>
+        <p>Dejar el sistema bien instalado, configurado y validado es parte de una optimización bien hecha.</p>
       </div>
     </div>
   </div>
 </section>
 
-<section class="section" style="background:var(--bg3);position:relative;overflow:hidden">
-  <div style="position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1600&q=80') center/cover;opacity:.03;pointer-events:none"></div>
-  <div class="w" style="position:relative;z-index:2">
-    <div class="sec-tag sr">Proceso</div>
-    <div class="sec-h sr">Cómo trabajamos, sin vueltas.</div>
-    <div class="sec-s sr">La lógica es simple: filtrar bien antes de intervenir. Así evitamos venderte una solución incorrecta.</div>
-    <div class="process-grid">
-      <div class="g-card sr">
-        <div class="step-num">01</div>
-        <div class="step-tag">Ingreso</div>
-        <div class="step-title">Recibimos el caso</div>
-        <div class="step-desc">Nos cuentas qué equipo tienes, qué problema presenta y qué uso real necesita soportar.</div>
+<section class="section section-tight" style="background:rgba(255,255,255,.02);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
+  <div class="wrapper split">
+    <div class="card">
+      <h3>Cuándo sí suele convenir</h3>
+      <div class="list">
+        <div>La base del equipo todavía está sana.</div>
+        <div>El problema principal está en disco, memoria o sistema.</div>
+        <div>El uso esperado sigue siendo razonable para ese hardware.</div>
+        <div>La mejora justifica claramente la inversión.</div>
       </div>
-      <div class="g-card sr" style="transition-delay:.08s">
-        <div class="step-num">02</div>
-        <div class="step-tag">Filtro</div>
-        <div class="step-title">Determinamos viabilidad</div>
-        <div class="step-desc">Evaluamos si vale la pena optimizar, si requiere hardware o si simplemente no conviene avanzar.</div>
-      </div>
-      <div class="g-card sr" style="transition-delay:.16s">
-        <div class="step-num">03</div>
-        <div class="step-tag">Acción</div>
-        <div class="step-title">Ejecutamos la intervención</div>
-        <div class="step-desc">Solo una vez aprobada la cotización. Nada se hace “porque sí”.</div>
-      </div>
-      <div class="g-card sr" style="transition-delay:.24s">
-        <div class="step-num">04</div>
-        <div class="step-tag">Cierre</div>
-        <div class="step-title">Entregamos operativo</div>
-        <div class="step-desc">Equipo listo para trabajar, con explicación clara, respaldo y garantía escrita.</div>
+    </div>
+    <div class="card">
+      <h3>Cuándo no conviene</h3>
+      <div class="list">
+        <div>Hay daño mayor de placa o fallas estructurales serias.</div>
+        <div>El hardware ya quedó demasiado atrás para el uso que necesitas.</div>
+        <div>La inversión se acerca demasiado a un reemplazo razonable.</div>
+        <div>La mejora solo maquillaría el problema sin resolver el fondo.</div>
       </div>
     </div>
   </div>
 </section>
 
 <section class="section">
-  <div class="w">
-    <div class="sec-tag sr">Qué puede incluir la optimización</div>
-    <div class="sec-h sr">La intervención depende del equipo, no de una plantilla fija.</div>
-    <div class="sec-s sr">No trabajamos con servicios sueltos ni con soluciones genéricas. Definimos una optimización según lo que tu equipo realmente necesita, y estas son algunas de las intervenciones que pueden formar parte del trabajo, según lo que determine el diagnóstico.</div>
-
-    <div class="service-grid">
-      <div class="g-card service-card featured sr">
-        <div class="service-badge">Almacenamiento</div>
-        <div class="service-name">Cambio de HDD a SSD</div>
-        <div class="service-desc">Cuando el cuello de botella principal está en el disco, esta suele ser la mejora que más cambia la experiencia completa del equipo.</div>
-        <div class="service-price">Se define <small>tras diagnóstico</small></div>
-        <div class="service-list">
-          <div class="service-item"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 8l3 3 7-7"/></svg>Menor tiempo de arranque y carga.</div>
-          <div class="service-item"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 8l3 3 7-7"/></svg>Mayor fluidez en apertura de programas y uso diario.</div>
-          <div class="service-item"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 8l3 3 7-7"/></svg>Base ideal para una optimización integral.</div>
-          <div class="service-item"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 8l3 3 7-7"/></svg>Muy potente cuando el equipo aún tiene buena base de hardware.</div>
-        </div>
-        <div class="service-note">El cambio de disco no se vende por vender: se propone cuando realmente es la mejora que desbloquea el rendimiento del equipo.</div>
-      </div>
-
-      <div class="g-card service-card sr" style="transition-delay:.1s">
-        <div class="service-badge">Remoto</div>
-        <div class="service-name">Diagnóstico remoto</div>
-        <div class="service-desc">Para evaluar equipos sin moverlos físicamente. Muy útil cuando necesitas definir con criterio si conviene optimizar, qué cambio priorizar y cuál es la ruta correcta antes de intervenir.</div>
-        <div class="service-price">$29.900 <small>diagnóstico avanzado</small></div>
-        <div class="service-list">
-          <div class="service-item"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 8l3 3 7-7"/></svg>Sesión remota segura mediante Quick Assist o AnyDesk.</div>
-          <div class="service-item"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 8l3 3 7-7"/></svg>Diagnóstico en tiempo real del estado general.</div>
-          <div class="service-item"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 8l3 3 7-7"/></svg>Descontable si luego se aprueba el servicio.</div>
-          <div class="service-item"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 8l3 3 7-7"/></svg>Ideal para equipos lentos o con dudas de viabilidad.</div>
-        </div>
-        <div class="service-note"><a href="asistencia.html" style="color:var(--blue)">Ir a asistencia remota →</a></div>
-      </div>
-
-      <div class="g-card service-card sr" style="transition-delay:.16s">
-        <div class="service-badge alt">Memoria</div>
-        <div class="service-name">Aumento de RAM</div>
-        <div class="service-desc">Cuando el equipo se queda corto al trabajar con varias tareas, el aumento de memoria puede devolver soltura real y estabilidad.</div>
-        <div class="service-price">Se define <small>tras diagnóstico</small></div>
-        <div class="service-list">
-          <div class="service-item"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 8l3 3 7-7"/></svg>Mejor multitarea y menor saturación.</div>
-          <div class="service-item"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 8l3 3 7-7"/></svg>Más estabilidad bajo carga cotidiana.</div>
-          <div class="service-item"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 8l3 3 7-7"/></svg>Muy útil cuando el disco ya no es el único cuello de botella.</div>
-          <div class="service-item"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 8l3 3 7-7"/></svg>Se propone solo cuando realmente cambia el comportamiento del equipo.</div>
-        </div>
-        <div class="service-note">La RAM no se ofrece “por vender”. Se sugiere cuando realmente mejora la experiencia final.</div>
-      </div>
-
-      <div class="g-card service-card sr" style="transition-delay:.24s">
-        <div class="service-badge alt">Mantención</div>
-        <div class="service-name">Mantención interna y puesta a punto</div>
-        <div class="service-desc">La optimización bien hecha también considera temperatura, limpieza interna y una instalación limpia cuando el sistema lo pide.</div>
-        <div class="service-price">Se define <small>tras diagnóstico</small></div>
-        <div class="service-list">
-          <div class="service-item"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 8l3 3 7-7"/></svg>Limpieza interna técnica cuando corresponde.</div>
-          <div class="service-item"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 8l3 3 7-7"/></svg>Ayuda a controlar temperatura y evitar degradación por polvo.</div>
-          <div class="service-item"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 8l3 3 7-7"/></svg>Puede incluir reinstalación y configuración final del sistema.</div>
-        </div>
-        <div class="service-note">El objetivo final no es “dejarlo prendiendo”: es dejarlo rápido, estable y listo para trabajar.</div>
+  <div class="wrapper">
+    <div class="cta">
+      <div class="eyebrow">Diagnóstico</div>
+      <h2>Todo parte por una evaluación correcta.</h2>
+      <p>Antes de cambiar piezas o formatear, lo importante es saber si tu computador vale la pena y qué mejora tiene sentido real. Ese diagnóstico cuesta $29.900.</p>
+      <div class="actions">
+        <a href="https://mpago.la/2nr3BK8" target="_blank" class="btn btn-primary">Pagar diagnóstico $29.900</a>
+        <a href="https://wa.me/56971036909?text=Hola%2C%20quiero%20agendar%20un%20diagn%C3%B3stico%20t%C3%A9cnico%20remoto%20avanzado%20para%20evaluar%20mi%20computador." target="_blank" class="btn btn-secondary">Agendar por WhatsApp</a>
       </div>
     </div>
   </div>
 </section>
 
-<section class="section" style="background:var(--bg2)">
-  <div class="w">
-    <div class="sec-tag sr">Resultado esperado</div>
-    <div class="sec-h sr">Qué cambia en la práctica cuando la optimización está bien hecha.</div>
-    <div class="sec-s sr">La propuesta de valor no es solo técnica. Es operativa. El cliente lo siente en tiempos, respuesta, estabilidad y sensación de equipo recuperado.</div>
-
-    <div class="dual-grid">
-      <div class="info-box blue sr">
-        <h3>Lo que normalmente mejora</h3>
-        <div class="info-list">
-          <div><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 8l3 3 7-7"/></svg>Menor tiempo de inicio y apertura de programas.</div>
-          <div><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 8l3 3 7-7"/></svg>Mayor fluidez en multitarea y uso diario.</div>
-          <div><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 8l3 3 7-7"/></svg>Mejor estabilidad cuando el sistema queda bien configurado.</div>
-          <div><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 8l3 3 7-7"/></svg>Más vida útil aprovechable antes de pensar en reemplazo.</div>
-        </div>
-      </div>
-
-      <div class="info-box sr" style="transition-delay:.1s">
-        <h3>Qué se define después del diagnóstico</h3>
-        <div class="info-list">
-          <div><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 8l3 3 7-7"/></svg>Si el salto correcto pasa por SSD, RAM o una combinación.</div>
-          <div><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 8l3 3 7-7"/></svg>Si además conviene mantención interna o reinstalación limpia.</div>
-          <div><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 8l3 3 7-7"/></svg>Cuánto sentido tiene la inversión frente al uso real del equipo.</div>
-          <div><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 8l3 3 7-7"/></svg>La cotización exacta solo una vez definida la intervención correcta.</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="section">
-  <div class="w">
-    <div class="sec-tag sr">Criterio técnico</div>
-    <div class="sec-h sr">Cuándo sí conviene y cuándo no.</div>
-    <div class="sec-s sr">No todo equipo merece intervención. Esta parte es importante porque separa el discurso comercial del criterio técnico real.</div>
-
-    <div class="viable-grid">
-      <div class="g-card viable-card good sr">
-        <h3>Sí conviene intervenir cuando...</h3>
-        <div class="viable-list">
-          <div class="viable-item"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 8l3 3 7-7"/></svg>La placa y componentes principales están sanos.</div>
-          <div class="viable-item"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 8l3 3 7-7"/></svg>El equipo tiene uso real proyectable por varios años más.</div>
-          <div class="viable-item"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 8l3 3 7-7"/></svg>El salto de rendimiento justifica la inversión.</div>
-          <div class="viable-item"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 8l3 3 7-7"/></svg>La alternativa nueva costaría mucho más por un resultado parecido.</div>
-        </div>
-      </div>
-
-      <div class="g-card viable-card bad sr" style="transition-delay:.1s">
-        <h3>No conviene intervenir cuando...</h3>
-        <div class="viable-list">
-          <div class="viable-item"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 3l10 10M13 3L3 13"/></svg>Hay daño mayor en placa, corrosión o fallas estructurales serias.</div>
-          <div class="viable-item"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 3l10 10M13 3L3 13"/></svg>El costo se acerca demasiado al de un equipo nuevo equivalente.</div>
-          <div class="viable-item"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 3l10 10M13 3L3 13"/></svg>El hardware de base ya quedó demasiado atrás para el uso que necesitas.</div>
-          <div class="viable-item"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 3l10 10M13 3L3 13"/></svg>La intervención solo maquillaría el problema, pero no lo resolvería.</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="section" style="background:var(--bg3)">
-  <div class="w">
-    <div class="cta-wrap sr">
-      <div>
-        <div class="cta-tag">Siguiente paso</div>
-        <div class="cta-title">Evalúa tu computador y define con certeza.</div>
-        <div class="cta-copy">Si tu equipo conviene, avanzamos. Si no conviene, te lo diremos igual. Esa es precisamente la gracia del proceso.</div>
-      </div>
-      <div class="cta-actions">
-        <a href="https://mpago.la/2nr3BK8" target="_blank" class="btn-main">Pagar diagnóstico $29.900 →</a>
-        <a href="https://wa.me/56971036909?text=Hola%2C%20quiero%20agendar%20un%20diagn%C3%B3stico%20para%20evaluar%20mi%20equipo." target="_blank" class="btn-ghost">Consultar por WhatsApp</a>
-      </div>
-    </div>
-  </div>
-</section>
-
-<footer class="footer">
-  <div class="footer-inner">
-    <div class="footer-brand">
-      <div class="footer-brand-mark">TANTECNO</div>
-      <p>Optimización de computadores. Machalí, Región de O'Higgins, Chile.</p>
-    </div>
-    <div class="footer-links">
-      <div class="footer-col">
-        <h4>Navegación</h4>
-        <a href="index.html">Inicio</a>
-        <a href="servicios.html">Optimización</a>
-        <a href="asistencia.html">Asistencia remota</a>
-      </div>
-      <div class="footer-col">
-        <h4>Contacto</h4>
-        <a href="https://wa.me/56971036909" target="_blank">+56 9 7103 6909</a>
-        <a href="mailto:contacto@tantecno.cl">contacto@tantecno.cl</a>
-        <a>Lun–Vie 8:30–19:00 · Sáb 8:30–13:00</a>
-      </div>
-    </div>
-  </div>
-  <div class="footer-copy">© 2026 Tantecno · Machalí, Chile</div>
-</footer>
-
-
-<div class="mobile-cta-bar" aria-label="Acciones rápidas móviles">
-  <a href="https://wa.me/56971036909?text=Hola%2C%20quiero%20evaluar%20mi%20computador%20para%20saber%20si%20vale%20la%20pena%20optimizarlo." target="_blank" class="mobile-main">Evaluar</a>
-  <a href="https://wa.me/56971036909?text=Hola%2C%20quiero%20consultar%20por%20la%20optimizaci%C3%B3n%20de%20mi%20computador." target="_blank" class="mobile-secondary">WhatsApp</a>
+<div class="mobile-bar">
+  <a href="https://wa.me/56971036909?text=Hola%2C%20quiero%20evaluar%20mi%20computador%20para%20saber%20si%20vale%20la%20pena%20optimizarlo." target="_blank" class="main">Evaluar</a>
+  <a href="https://mpago.la/2nr3BK8" target="_blank" class="secondary">Diagnóstico</a>
 </div>
 
-<a href="https://wa.me/56971036909?text=Hola%2C%20quiero%20consultar%20por%20la%20optimizaci%C3%B3n%20de%20mi%20computador." target="_blank" class="wa-float" aria-label="WhatsApp">
-  <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.115.548 4.103 1.509 5.833L.057 24l6.305-1.654A11.954 11.954 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.007-1.374l-.359-.213-3.722.976.993-3.625-.234-.373A9.818 9.818 0 012.182 12c0-5.42 4.398-9.818 9.818-9.818 5.42 0 9.818 4.398 9.818 9.818 0 5.42-4.398 9.818-9.818 9.818z"/></svg>
+
+<footer class="footer">
+  <div class="wrapper">
+    <div class="footer-top">
+      <div>
+        <div class="brand" style="margin-bottom:12px">
+          <strong style="font-size:20px">TANTECNO</strong>
+          <span>Optimización de computadores</span>
+        </div>
+        <p>Evaluamos si tu computador vale la pena y definimos la optimización correcta antes de que gastes plata a ciegas.</p>
+      </div>
+      <div>
+        <h4>Navegación</h4>
+        <div class="footer-links">
+          <a href="index.html">Inicio</a>
+          <a href="servicios.html">Optimización</a>
+          <a href="asistencia.html">Diagnóstico remoto</a>
+          <a href="index.html#contacto">Contacto</a>
+        </div>
+      </div>
+      <div>
+        <h4>Contacto</h4>
+        <div class="footer-links">
+          <a href="https://wa.me/56971036909" target="_blank">+56 9 7103 6909</a>
+          <a href="mailto:contacto@tantecno.cl">contacto@tantecno.cl</a>
+          <a href="login.html">Acceso interno</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">© 2026 Tantecno · Machalí, Chile</div>
+  </div>
+</footer>
+<a class="wa-float" href="https://wa.me/56971036909?text=Hola%2C%20quiero%20evaluar%20mi%20computador%20para%20saber%20si%20vale%20la%20pena%20optimizarlo." target="_blank" aria-label="WhatsApp">
+  <svg width="30" height="30" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+    <path d="M12 0C5.373 0 0 5.373 0 12c0 2.115.548 4.103 1.509 5.833L.057 24l6.305-1.654A11.954 11.954 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.007-1.374l-.359-.213-3.722.976.993-3.625-.234-.373A9.818 9.818 0 012.182 12c0-5.42 4.398-9.818 9.818-9.818 5.42 0 9.818 4.398 9.818 9.818 0 5.42-4.398 9.818-9.818 9.818z"/>
+  </svg>
 </a>
 
-<script>
-const obs=new IntersectionObserver((entries)=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('vis');obs.unobserve(e.target)}})},{threshold:.1,rootMargin:'0px 0px -40px 0px'});
-document.querySelectorAll('.sr').forEach(el=>obs.observe(el));
 
-const menuBtn=document.getElementById('menuBtn');
-const mobNav=document.getElementById('mobNav');
-if(menuBtn&&mobNav){menuBtn.addEventListener('click',()=>mobNav.classList.toggle('open'));}
+<script>
+const menuBtn = document.getElementById('menuBtn');
+const mobileMenu = document.getElementById('mobileMenu');
+if(menuBtn && mobileMenu){
+  menuBtn.addEventListener('click', ()=> mobileMenu.classList.toggle('open'));
+}
 </script>
+
 </body>
 </html>

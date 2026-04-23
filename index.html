@@ -2,652 +2,627 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-  <meta name="description" content="Optimización de computadores en Machalí. Evaluamos si tu equipo vale la pena y definimos la optimización correcta. Diagnóstico técnico remoto avanzado $29.900.">
-  <meta property="og:type" content="website">
-  <meta property="og:title" content="TANTECNO · Optimización de computadores">
-  <meta property="og:description" content="Evaluamos si tu computador vale la pena y definimos la optimización correcta. Diagnóstico técnico remoto avanzado $29.900. Machalí, Chile.">
-  <meta property="og:url" content="https://tantecno-web.vercel.app/">
-  <meta property="og:locale" content="es_CL">
-  <meta name="robots" content="index, follow">
-  <link rel="canonical" href="https://tantecno-web.vercel.app/">
-<meta name="theme-color" content="#06080f">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#070b14">
+<meta name="description" content="Evaluamos si tu computador vale la pena y definimos la optimización correcta.">
 <title>TANTECNO · Optimización de computadores</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Sora:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&family=Sora:wght@500;600;700;800&display=swap" rel="stylesheet">
 <style>
-
-*{margin:0;padding:0;box-sizing:border-box}
+*{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#06080f;--bg2:#0b0f1a;--bg3:#0e1324;--bg4:#111730;
-  --glass:rgba(255,255,255,.025);--glass-h:rgba(255,255,255,.05);--glass-b:rgba(255,255,255,.06);
-  --border:rgba(255,255,255,.07);--border-h:rgba(255,255,255,.14);
-  --text:#f0f2f8;--text2:rgba(240,242,248,.55);--text3:rgba(240,242,248,.28);
-  --blue:#4f8fff;--blue-h:#3a7bff;--blue-dim:rgba(79,143,255,.1);--blue-b:rgba(79,143,255,.22);
-  --green:#00d4aa;--green-dim:rgba(0,212,170,.1);--green-b:rgba(0,212,170,.22);
-  --purple:#8b5cf6;--purple-dim:rgba(139,92,246,.08);
-  --yellow:#f59e0b;--red:#ef4444;
-  --r:10px;--rl:14px;
+  --bg:#070b14;
+  --bg2:#0d1322;
+  --card:rgba(255,255,255,.04);
+  --card2:rgba(255,255,255,.03);
+  --border:rgba(255,255,255,.09);
+  --text:#f5f7fb;
+  --muted:rgba(245,247,251,.68);
+  --soft:rgba(245,247,251,.36);
+  --blue:#4f8fff;
+  --blue2:#3a7bff;
+  --green:#00d4aa;
+  --green-bg:rgba(0,212,170,.10);
+  --blue-bg:rgba(79,143,255,.11);
+  --radius:18px;
   --font:'DM Sans',system-ui,sans-serif;
   --head:'Sora',system-ui,sans-serif;
-  --mono:'JetBrains Mono','IBM Plex Mono',monospace;
+  --mono:'JetBrains Mono',monospace;
 }
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;scroll-padding-top:84px}
-body{font-family:var(--font);color:var(--text);background:var(--bg);font-size:16px;line-height:1.7;overflow-x:hidden}
-::-webkit-scrollbar{width:5px;background:var(--bg)}
-::-webkit-scrollbar-thumb{background:rgba(255,255,255,.08);border-radius:3px}
+body{
+  font-family:var(--font);
+  background:
+    radial-gradient(600px 600px at 0% 0%, rgba(79,143,255,.10), transparent 60%),
+    radial-gradient(500px 500px at 100% 0%, rgba(139,92,246,.08), transparent 50%),
+    linear-gradient(180deg,#070b14 0%, #0a1020 100%);
+  color:var(--text);
+  line-height:1.65;
+  overflow-x:hidden;
+}
+body::after{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  background:url("data:image/svg+xml,%3Csvg viewBox='0 0 220 220' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.02'/%3E%3C/svg%3E");
+  opacity:.5;
+}
+a{text-decoration:none;color:inherit}
 img{max-width:100%;display:block}
-a{color:inherit;text-decoration:none}
-
-/* ANIMATED BG */
-.bg-mesh{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
-.bg-orb{position:absolute;border-radius:50%;filter:blur(120px);opacity:.12;animation:orbFloat 20s ease-in-out infinite}
-.bg-orb:nth-child(1){width:600px;height:600px;background:var(--blue);top:-10%;left:-5%;animation-delay:0s}
-.bg-orb:nth-child(2){width:500px;height:500px;background:var(--purple);bottom:-15%;right:-10%;animation-delay:-7s}
-.bg-orb:nth-child(3){width:400px;height:400px;background:var(--green);top:40%;left:50%;animation-delay:-14s;opacity:.06}
-@keyframes orbFloat{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(30px,-40px) scale(1.1)}66%{transform:translate(-20px,30px) scale(.9)}}
-
-/* NOISE */
-body::after{content:'';position:fixed;inset:0;background:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.025'/%3E%3C/svg%3E");pointer-events:none;z-index:1;opacity:.5}
-
-/* NAV */
-.nav{position:sticky;top:0;z-index:100;background:rgba(6,8,15,.85);border-bottom:1px solid var(--border);backdrop-filter:blur(20px) saturate(1.4);-webkit-backdrop-filter:blur(20px) saturate(1.4)}
-.nav-inner{max-width:1100px;margin:0 auto;padding:0 28px;height:90px;display:flex;align-items:center;justify-content:space-between;gap:20px}
-.nav-logo{display:flex;align-items:center;text-decoration:none}
-.nav-logo img{display:none}
-.brand-wordmark{display:flex;flex-direction:column;line-height:1}
-.brand-wordmark strong{font-family:var(--head);font-size:22px;font-weight:700;letter-spacing:.14em;color:var(--text)}
-.brand-wordmark span{font-family:var(--mono);font-size:10px;color:var(--text3);letter-spacing:.12em;text-transform:uppercase;margin-top:6px}
-.footer-brand-mark{font-family:var(--head);font-size:24px;font-weight:700;letter-spacing:.14em;margin-bottom:10px}
-
-
-.nav-links{display:flex;align-items:center;gap:6px}
-.nav-links a{font-size:13px;font-weight:500;color:var(--text2);padding:7px 14px;border-radius:8px;transition:all .2s;letter-spacing:.01em}
-.nav-links a:hover,.nav-links a.active{color:var(--text);background:var(--glass-h)}
-.nav-actions{display:flex;gap:8px}
-.btn-wa{display:inline-flex;align-items:center;gap:6px;font-family:var(--font);font-size:13px;font-weight:500;padding:8px 16px;border-radius:8px;background:var(--green-dim);color:var(--green);border:1px solid var(--green-b);cursor:pointer;transition:all .2s}
-.btn-wa:hover{background:rgba(0,212,170,.18);box-shadow:0 0 20px rgba(0,212,170,.15)}
-.btn-cta{display:inline-flex;align-items:center;gap:6px;font-family:var(--font);font-size:13px;font-weight:600;padding:8px 18px;border-radius:8px;background:var(--blue);color:#fff;border:none;cursor:pointer;transition:all .2s}
-.btn-cta:hover{background:var(--blue-h);box-shadow:0 0 24px rgba(79,143,255,.3)}
-.btn-int{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:11px;letter-spacing:.04em;padding:6px 12px;border-radius:6px;background:var(--blue-dim);border:1px solid var(--blue-b);color:var(--blue);transition:all .2s}
-.btn-int:hover{background:rgba(79,143,255,.18)}
-
-/* SECTIONS */
-.section{position:relative;z-index:2}
-.w{max-width:1100px;margin:0 auto;padding:80px 28px}
-.sec-tag{font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--blue);margin-bottom:24px;display:flex;align-items:center;gap:10px}
-.sec-tag::before{content:'';width:20px;height:1px;background:var(--blue)}
-.sec-h{font-family:var(--head);font-size:44px;font-weight:700;line-height:1.1;margin-bottom:12px;letter-spacing:-.02em}
-.sec-s{font-size:16px;color:var(--text2);margin-bottom:40px;max-width:580px;line-height:1.8}
-
-/* GLASS CARD */
-.g-card{background:var(--glass);border:1px solid var(--border);border-radius:var(--rl);padding:28px;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);transition:all .3s}
-.g-card:hover{border-color:var(--border-h);background:var(--glass-h);transform:translateY(-2px);box-shadow:0 12px 40px rgba(0,0,0,.3)}
-
-/* FOOTER */
-.footer{border-top:1px solid var(--border);position:relative;z-index:2}
-.footer-inner{max-width:1100px;margin:0 auto;padding:48px 28px 32px;display:flex;justify-content:space-between;align-items:start;gap:40px;flex-wrap:wrap}
-.footer-brand{max-width:280px}
-.footer-brand img{height:60px;opacity:.85;margin-bottom:12px}
-.footer-brand p{font-size:13px;color:var(--text3);line-height:1.7}
-.footer-links{display:flex;gap:40px}
-.footer-col h4{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin-bottom:12px}
-.footer-col a{display:block;font-size:13px;color:var(--text2);padding:3px 0;transition:color .15s}
-.footer-col a:hover{color:var(--text)}
-.footer-copy{max-width:1100px;margin:0 auto;padding:16px 28px;border-top:1px solid var(--border);font-size:12px;color:var(--text3);text-align:center}
-
-/* SCROLL REVEAL */
-.sr{opacity:0;transform:translateY(24px);transition:all .7s cubic-bezier(.16,1,.3,1)}
-.sr.vis{opacity:1;transform:translateY(0)}
-
-/* RESPONSIVE */
-.nav-hamburger{display:none;background:none;border:none;cursor:pointer;padding:8px}
-.nav-hamburger span{display:block;width:20px;height:2px;background:var(--text2);margin:4px 0;border-radius:1px;transition:all .2s}
-.mobile-nav{display:none;position:fixed;top:90px;left:0;right:0;background:rgba(6,8,15,.97);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);z-index:99;padding:16px 28px;flex-direction:column;gap:4px}
-.mobile-nav.open{display:flex}
-.mobile-nav a{font-size:14px;color:var(--text2);padding:10px 0;border-bottom:1px solid var(--border)}
-.mobile-nav a:last-child{border:none}
-@media(max-width:768px){
-  .nav-links,.nav-actions{display:none}
-  .nav-hamburger{display:block}
-  
-  .w{padding:48px 20px}
-  .sec-h{font-size:32px}
-  .footer-inner{flex-direction:column}
+.wrapper{max-width:1120px;margin:0 auto;padding:0 24px}
+.nav{
+  position:sticky;top:0;z-index:1000;
+  background:rgba(7,11,20,.82);
+  border-bottom:1px solid var(--border);
+  backdrop-filter:blur(18px);
 }
-
-
-/* HERO */
-.hero{position:relative;z-index:2;overflow:hidden;border-bottom:1px solid var(--border)}
-.hero-inner{max-width:1100px;margin:0 auto;padding:100px 28px 80px;position:relative}
-.hero-tag{font-family:var(--mono);font-size:11px;color:var(--blue);letter-spacing:.1em;text-transform:uppercase;margin-bottom:28px;opacity:.8}
-.hero h1{font-family:var(--head);font-size:64px;font-weight:800;line-height:1.05;letter-spacing:-.03em;margin-bottom:20px}
-.hero h1 em{font-style:normal;background:linear-gradient(135deg,var(--blue),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.hero-sub{font-size:17px;color:var(--text2);max-width:540px;line-height:1.8;margin-bottom:36px}
-.hero-btns{display:flex;gap:12px;flex-wrap:wrap}
-.hero-trust{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:22px;max-width:760px}
-.hero-trust-item{padding:12px 14px;border:1px solid var(--border);border-radius:12px;background:rgba(255,255,255,.025);backdrop-filter:blur(10px)}
-.hero-trust-k{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--blue);margin-bottom:6px}
-.hero-trust-v{font-size:13px;color:var(--text2);line-height:1.5}
-.btn-hp{display:inline-flex;align-items:center;gap:8px;font-family:var(--font);font-size:15px;font-weight:600;padding:14px 28px;border-radius:var(--r);background:var(--blue);color:#fff;transition:all .2s}
-.btn-hp:hover{background:var(--blue-h);box-shadow:0 0 30px rgba(79,143,255,.35);transform:translateY(-1px)}
-.btn-hs{display:inline-flex;align-items:center;gap:8px;font-family:var(--font);font-size:15px;font-weight:500;padding:14px 28px;border-radius:var(--r);color:var(--text2);border:1px solid var(--border);transition:all .2s}
-.btn-hs:hover{border-color:var(--border-h);color:var(--text);background:var(--glass)}
-.hero-glow{position:absolute;top:0;right:-100px;width:500px;height:500px;background:radial-gradient(circle,rgba(79,143,255,.08),transparent 70%);pointer-events:none}
-@media(max-width:768px){.hero h1{font-size:40px}.hero-inner{padding:60px 20px 50px}.hero-trust{grid-template-columns:1fr}}
-
-/* STATS */
-.stats{background:var(--bg2);border-top:1px solid var(--blue-b);border-bottom:1px solid var(--border);position:relative;z-index:2}
-.stats-inner{max-width:1100px;margin:0 auto;padding:40px 28px;display:grid;grid-template-columns:repeat(4,1fr);gap:24px}
-.stat{text-align:center;padding:8px 0}
-.stat-num{font-family:var(--head);font-size:48px;font-weight:800;line-height:1;letter-spacing:-.02em}
-.stat-num span{color:var(--blue)}
-.stat-label{font-family:var(--mono);font-size:10px;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;margin-top:8px;line-height:1.6}
-@media(max-width:768px){.stats-inner{grid-template-columns:repeat(2,1fr)}.stat-num{font-size:36px}}
-
-/* PILARES */
-.pilares{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
-.pilar-icon{width:40px;height:40px;border-radius:10px;background:var(--blue-dim);border:1px solid var(--blue-b);display:flex;align-items:center;justify-content:center;margin-bottom:16px}
-.pilar-title{font-family:var(--head);font-size:20px;font-weight:600;margin-bottom:8px;letter-spacing:-.01em}
-.pilar-desc{font-size:14px;color:var(--text2);line-height:1.75}
-@media(max-width:768px){.pilares{grid-template-columns:1fr}}
-
-/* PHOTO STRIP */
-.photo-strip{position:relative;z-index:2;overflow:hidden;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
-.photo-strip img{width:100%;height:380px;object-fit:cover;object-position:center 35%;display:block;opacity:.15}
-.photo-overlay{position:absolute;inset:0;background:linear-gradient(110deg,rgba(6,8,15,.98) 30%,rgba(6,8,15,.5) 65%,rgba(6,8,15,.92));display:flex;align-items:center;padding:0 max(28px,calc(50% - 550px))}
-.photo-h{font-family:var(--head);font-size:48px;font-weight:800;line-height:1.05;letter-spacing:-.02em;margin-bottom:18px;max-width:560px}
-.photo-h span{color:var(--blue)}
-@media(max-width:768px){.photo-h{font-size:32px}.photo-strip img{height:320px}}
-
-/* SVC GRID */
-.svc-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
-.svc-card{cursor:pointer;display:block}
-.svc-badge{display:inline-block;font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--blue);background:var(--blue-dim);border:1px solid var(--blue-b);padding:4px 10px;border-radius:99px;margin-bottom:14px}
-.svc-name{font-family:var(--head);font-size:18px;font-weight:600;margin-bottom:6px;letter-spacing:-.01em}
-.svc-desc{font-size:13px;color:var(--text2);line-height:1.75;margin-bottom:12px}
-.svc-arrow{font-family:var(--mono);font-size:12px;color:var(--blue);opacity:.7;transition:opacity .2s}
-.svc-card:hover .svc-arrow{opacity:1}
-@media(max-width:768px){.svc-grid{grid-template-columns:1fr}}
-
-/* TESTIMONIOS */
-.testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
-.testi-stars{display:flex;gap:2px;margin-bottom:12px}
-.testi-star{color:#f59e0b;font-size:12px}
-.testi-quote{font-size:13px;color:var(--text2);line-height:1.8;flex:1;margin-bottom:16px}
-.testi-author{display:flex;align-items:center;gap:10px;padding-top:14px;border-top:1px solid var(--border)}
-.testi-av{width:34px;height:34px;border-radius:50%;background:var(--blue-dim);border:1px solid var(--blue-b);display:flex;align-items:center;justify-content:center;font-family:var(--head);font-weight:700;color:var(--blue);font-size:12px;flex-shrink:0}
-.testi-name{font-weight:600;font-size:13px}
-.testi-role{font-size:11px;color:var(--text3);font-family:var(--mono);margin-top:1px}
-@media(max-width:768px){.testi-grid{grid-template-columns:1fr}}
-
-/* CONTACT */
-.contact{background:var(--bg2);border-top:1px solid var(--blue-b);position:relative;z-index:2}
-.contact-inner{max-width:1100px;margin:0 auto;padding:72px 28px;display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:start}
-.info-row{display:flex;justify-content:space-between;align-items:baseline;padding:10px 0;border-bottom:1px solid var(--border);font-size:14px}
-.info-lbl{color:var(--text3);font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase}
-.info-val a{color:var(--blue);transition:color .15s}
-.info-val a:hover{color:var(--text)}
-.wa-big{display:inline-flex;align-items:center;gap:10px;margin-top:24px;padding:14px 28px;border-radius:var(--r);background:var(--green-dim);border:1px solid var(--green-b);color:var(--green);font-weight:600;font-size:15px;transition:all .2s}
-.wa-big:hover{background:rgba(0,212,170,.18);box-shadow:0 0 24px rgba(0,212,170,.15)}
-.form-card{background:var(--glass);border:1px solid var(--border);border-radius:var(--rl);padding:28px;backdrop-filter:blur(12px)}
-.form-title{font-family:var(--head);font-size:18px;font-weight:600;margin-bottom:4px}
-.form-sub{font-size:13px;color:var(--text3);margin-bottom:20px}
-.fg{margin-bottom:12px}
-.fg label{display:block;font-family:var(--mono);font-size:10px;color:var(--text3);letter-spacing:.06em;text-transform:uppercase;margin-bottom:5px}
-.fg input,.fg select,.fg textarea{width:100%;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:7px;padding:10px 12px;color:var(--text);font-family:var(--font);font-size:14px;outline:none;transition:border-color .15s}
-.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--blue-b)}
-.fg select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%234f8fff' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;background-color:#111730}
-.fg select option{background:#111730;color:#f0f2f8;padding:8px}
-.fg select option:checked{background:#1a2440}
-.fg textarea{resize:vertical;min-height:80px}
-.btn-form{width:100%;padding:12px;background:var(--blue);border:none;border-radius:8px;color:#fff;font-family:var(--font);font-size:14px;font-weight:600;cursor:pointer;margin-top:4px;transition:all .2s}
-.btn-form:hover{background:var(--blue-h);box-shadow:0 0 20px rgba(79,143,255,.3)}
-@media(max-width:768px){.contact-inner{grid-template-columns:1fr}}
-
-
-
-.hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center}
-.hero-logo-big{display:flex;align-items:center;justify-content:center}
-.hero-mark{width:100%;max-width:460px;padding:42px 34px;border:1px solid var(--border);border-radius:24px;background:linear-gradient(180deg,rgba(79,143,255,.12),rgba(255,255,255,.025));backdrop-filter:blur(14px);box-shadow:0 20px 60px rgba(0,0,0,.28);animation:heroLogoFloat 6s ease-in-out infinite}
-.hero-mark-title{font-family:var(--head);font-size:42px;font-weight:800;letter-spacing:.18em;text-align:center;margin-bottom:14px}
-.hero-mark-sub{font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--text2);text-align:center;margin-bottom:26px}
-.hero-mark-list{display:grid;gap:12px}
-.hero-mark-item{padding:12px 14px;border:1px solid var(--border);border-radius:12px;background:rgba(255,255,255,.025);font-size:14px;color:var(--text2);text-align:center}
-@keyframes heroLogoFloat{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-12px) scale(1.02)}}
-@media(max-width:768px){.hero-grid{grid-template-columns:1fr}.hero-logo-big{order:-1}.hero-mark{max-width:100%;padding:28px 20px}.hero-mark-title{font-size:28px}.hero-mark-sub{font-size:10px}.hero-mark-item{font-size:13px}}
-
-/* IMAGE SECTIONS */
-.img-hero{position:relative;overflow:hidden}
-.img-hero::before{content:'';position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1558618666-fcd25c85f82e?auto=format&fit=crop&w=1600&q=80') center/cover no-repeat;opacity:.08;z-index:0}
-.img-section{position:relative;overflow:hidden}
-.img-section::before{content:'';position:absolute;inset:0;background-size:cover;background-position:center;opacity:.04;z-index:0;pointer-events:none}
-.img-divider{position:relative;z-index:2;overflow:hidden;border-top:1px solid var(--border);border-bottom:1px solid var(--border);height:200px}
-.img-divider img{width:100%;height:100%;object-fit:cover;opacity:.12;display:block}
-.img-divider-overlay{position:absolute;inset:0;background:linear-gradient(90deg,var(--bg) 0%,transparent 20%,transparent 80%,var(--bg) 100%)}
-.img-card-bg{position:relative;overflow:hidden;border-radius:var(--rl)}
-.img-card-bg::before{content:'';position:absolute;top:0;right:0;width:40%;height:100%;background-size:cover;background-position:center;opacity:.06;pointer-events:none;border-radius:0 var(--rl) var(--rl) 0}
-.img-float{position:absolute;border-radius:var(--rl);overflow:hidden;opacity:.08;pointer-events:none;z-index:0}
-.img-float img{width:100%;height:100%;object-fit:cover}
-@media(max-width:768px){.img-divider{height:120px}.img-float{display:none}}
-
-
-/* ========== RESPONSIVE OPTIMIZATION ========== */
-
-/* --- TABLET (769px - 1024px) --- */
-@media(max-width:1024px){
-  .nav-inner{padding:0 20px}
-  .nav-actions .btn-wa:first-child{display:none}
-  .w{padding:48px 24px}
-  .hero-inner{padding:80px 24px 60px}
-  .hero h1{font-size:52px}
-  .hero-grid{gap:24px}
-  .hero-mark{max-width:360px}
-.hero-mark-title{font-size:34px}
-  .sec-h{font-size:38px}
-  .stats-inner{grid-template-columns:repeat(2,1fr)}
-  .pilares{grid-template-columns:repeat(2,1fr)}
-  .svc-grid{grid-template-columns:1fr}
-  .testi-grid{grid-template-columns:1fr 1fr}
-  .contact-inner{gap:40px}
-  .footer-inner{flex-wrap:wrap;gap:32px}
+.nav-inner{
+  height:78px;
+  display:flex;align-items:center;justify-content:space-between;gap:18px;
 }
-
-/* --- MOBILE (max 768px) - Overrides --- */
-@media(max-width:768px){
-  .nav-inner{height:70px;padding:0 16px}
-  .nav-logo img{display:none}
-  .brand-wordmark strong{font-size:18px}
-  .brand-wordmark span{font-size:9px}
-  .mobile-nav{top:70px;padding:12px 20px}
-  .hero-inner{padding:48px 16px 40px}
-  .hero h1{font-size:34px;margin-bottom:14px}
-  .hero-tag{font-size:10px;margin-bottom:18px;letter-spacing:.06em}
-  .hero-sub{font-size:15px;line-height:1.7}
-  .hero-btns{flex-direction:column;gap:10px}
-  .hero-btns a{text-align:center}
-  .hero-grid{grid-template-columns:1fr;gap:24px}
-  .hero-logo-big{order:2;margin-top:8px}
-  .hero-mark{max-width:100%;padding:24px 18px}
-.hero-mark-title{font-size:24px}
-.hero-mark-sub{font-size:9px;margin-bottom:18px}
-  .w{padding:36px 16px}
-  .sec-tag{font-size:10px}
-  .sec-h{font-size:28px}
-  .sec-s{font-size:14px}
-  .stats-inner{grid-template-columns:1fr 1fr;gap:16px}
-  .stat-num{font-size:32px}
-  .stat-label{font-size:11px}
-  .pilares{grid-template-columns:1fr}
-  .photo-strip{margin:0 -16px}
-  .photo-strip img{height:260px}
-  .photo-h{font-size:26px}
-  .svc-grid{grid-template-columns:1fr}
-  .testi-grid{grid-template-columns:1fr}
-  .contact-inner{grid-template-columns:1fr;gap:32px}
-  .contact-info{order:2}
-  .footer-inner{flex-direction:column;gap:24px;text-align:center}
-  .footer-brand{align-items:center}
-  .footer-links{flex-direction:column;gap:20px;align-items:center}
-  .footer-col{text-align:center}
-  .footer-copy{text-align:center}
-  .img-divider{height:100px}
-  .img-float{display:none}
-  .page-hdr-inner{padding:40px 16px 32px}
-  .page-title{font-size:30px}
-  .breadcrumb{font-size:11px}
+.brand{
+  display:flex;flex-direction:column;gap:4px;
 }
-
-/* --- SMALL MOBILE (max 480px) --- */
-@media(max-width:480px){
-  .nav-inner{height:60px;padding:0 12px}
-  .nav-logo img{display:none}
-  .brand-wordmark strong{font-size:16px}
-  .brand-wordmark span{font-size:8px}
-  .mobile-nav{top:60px}
-  .hero-inner{padding:36px 12px 32px}
-  .hero h1{font-size:28px}
-  .hero-sub{font-size:14px}
-  .hero-mark-title{font-size:20px}
-  .w{padding:28px 12px}
-  .sec-h{font-size:24px}
-  .stats-inner{grid-template-columns:1fr 1fr;gap:12px}
-  .stat-num{font-size:28px}
-  .g-card{padding:20px}
-  .btn-hp,.btn-hs{font-size:14px;padding:14px 24px}
-  .page-hdr-inner{padding:32px 12px 24px}
-  .page-title{font-size:24px}
-  .contact-form{padding:24px 16px}
-  .img-divider{height:70px}
+.brand strong{
+  font-family:var(--head);
+  font-size:22px;font-weight:800;letter-spacing:.14em;
 }
-
-.wa-float{position:fixed;bottom:24px;right:24px;z-index:999;width:60px;height:60px;border-radius:50%;background:#25d366;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(37,211,102,.4);transition:all .3s;cursor:pointer;text-decoration:none}.wa-float:hover{transform:scale(1.1);box-shadow:0 6px 24px rgba(37,211,102,.5)}.wa-float svg{width:32px;height:32px;fill:#fff}@media(max-width:480px){.wa-float{bottom:16px;right:16px;width:52px;height:52px}.wa-float svg{width:28px;height:28px}}
-
-/* MOBILE PASS FINAL */
-.mobile-cta-bar{display:none}
-@media(max-width:768px){
-  html{scroll-padding-top:72px}
-  .hero h1,.sec-h,.photo-h{text-wrap:balance}
-  .hero-sub,.sec-s{max-width:none}
-  .hero-btns{flex-direction:column;align-items:stretch}
-  .hero-btns a,.wa-big,.btn-form,.contact .btn-hs,.form-card a[href*="mpago"]{width:100%;justify-content:center;min-height:50px;text-align:center}
-  .hero-mark-list{gap:10px}
-  .hero-mark-item,.hero-trust-item,.g-card,.form-card{padding:18px}
-  .contact-inner{gap:28px}
+.brand span{
+  font-family:var(--mono);
+  font-size:10px;color:var(--soft);letter-spacing:.12em;text-transform:uppercase;
 }
-@media(max-width:560px){
-  body{padding-bottom:96px}
-  .mobile-cta-bar{display:grid;grid-template-columns:1fr 1fr;gap:10px;position:fixed;left:12px;right:12px;bottom:12px;z-index:1001;padding:10px;border:1px solid var(--border);border-radius:16px;background:rgba(6,8,15,.94);backdrop-filter:blur(20px);box-shadow:0 12px 30px rgba(0,0,0,.35)}
-  .mobile-cta-bar a{display:flex;align-items:center;justify-content:center;min-height:46px;border-radius:12px;font-size:13px;font-weight:600}
-  .mobile-cta-bar .mobile-main{background:var(--blue);color:#fff}
-  .mobile-cta-bar .mobile-secondary{background:var(--green-dim);border:1px solid var(--green-b);color:var(--green)}
-  .wa-float{display:none!important}
+.nav-links{display:flex;gap:6px;align-items:center}
+.nav-links a{
+  padding:10px 14px;
+  border-radius:10px;
+  color:var(--muted);
+  font-size:14px;font-weight:500;
 }
-@media(max-width:480px){
-  .page-title,.photo-h{font-size:26px}
-  .hero h1{font-size:28px}
-  .hero-sub,.sec-s,.pilar-desc,.svc-desc,.testi-quote,.info-val,.form-sub{font-size:14px}
-  .hero-mark-title{font-size:22px}
-  .hero-mark-sub{font-size:9px}
-  .hero-mark-item{font-size:12px}
+.nav-links a:hover,.nav-links a.active{
+  background:var(--card);
+  color:var(--text);
 }
-
-</style>
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "LocalBusiness",
-    "name": "TANTECNO",
-    "description": "Optimización de computadores en Machalí. Evaluamos si tu equipo vale la pena y definimos la optimización correcta.",
-    "url": "https://tantecno-web.vercel.app/",
-    "telephone": "+56971036909",
-    "email": "contacto@tantecno.cl",
-    "address": {
-      "@type": "PostalAddress",
-      "addressLocality": "Machalí",
-      "addressRegion": "Región de O'Higgins",
-      "addressCountry": "CL"
-    },
-    "openingHours": ["Mo-Fr 08:30-19:00", "Sa 08:30-13:00"],
-    "priceRange": "$$"
+.nav-cta{display:flex;gap:10px;align-items:center}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  min-height:48px;
+  padding:0 18px;
+  border-radius:12px;
+  font-size:15px;font-weight:700;
+  transition:.2s ease;
+  border:1px solid transparent;
+}
+.btn-primary{background:var(--blue);color:#fff}
+.btn-primary:hover{background:var(--blue2)}
+.btn-secondary{
+  background:transparent;
+  border-color:var(--border);
+  color:var(--text);
+}
+.btn-secondary:hover{background:var(--card)}
+.btn-whatsapp{
+  background:var(--green-bg);
+  border-color:rgba(0,212,170,.22);
+  color:var(--green);
+}
+.btn-whatsapp:hover{background:rgba(0,212,170,.16)}
+.menu-btn{
+  display:none;
+  width:44px;height:44px;
+  border:none;background:transparent;color:var(--text);
+}
+.menu-btn span{
+  display:block;width:22px;height:2px;background:var(--text);margin:4px auto;border-radius:2px;
+}
+.mobile-menu{
+  display:none;
+  border-bottom:1px solid var(--border);
+  background:rgba(7,11,20,.96);
+}
+.mobile-menu.open{display:block}
+.mobile-menu .wrapper{padding-top:10px;padding-bottom:12px}
+.mobile-menu a{
+  display:block;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.06);color:var(--muted);font-size:14px
+}
+.mobile-menu a:last-child{border-bottom:none}
+section{position:relative;z-index:2}
+.section{padding:86px 0}
+.section-tight{padding:66px 0}
+.eyebrow{
+  display:inline-flex;align-items:center;gap:10px;
+  font-family:var(--mono);
+  font-size:11px;color:var(--blue);letter-spacing:.12em;text-transform:uppercase;
+  margin-bottom:18px;
+}
+.eyebrow::before{
+  content:"";width:22px;height:1px;background:var(--blue);display:inline-block;
+}
+.hero{padding:74px 0 56px;border-bottom:1px solid var(--border)}
+.hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:28px;align-items:center}
+.hero h1{
+  font-family:var(--head);
+  font-size:clamp(34px,6vw,64px);
+  line-height:1.02;
+  letter-spacing:-.04em;
+  margin-bottom:16px;
+  max-width:760px;
+  text-wrap:balance;
+}
+.hero p.lead{
+  max-width:680px;
+  font-size:18px;
+  color:var(--muted);
+  margin-bottom:24px;
+}
+.actions{display:flex;gap:12px;flex-wrap:wrap}
+.chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+.chip{
+  min-height:38px;
+  display:inline-flex;align-items:center;
+  padding:0 14px;border-radius:999px;
+  background:var(--card2);
+  border:1px solid var(--border);
+  font-size:12px;font-weight:600;color:var(--muted);
+}
+.panel{
+  background:linear-gradient(180deg, rgba(79,143,255,.12), rgba(255,255,255,.03));
+  border:1px solid rgba(79,143,255,.18);
+  border-radius:24px;
+  padding:28px;
+}
+.panel h3{
+  font-family:var(--head);
+  font-size:24px;
+  line-height:1.15;
+  margin-bottom:12px;
+}
+.panel p{color:var(--muted);font-size:14px}
+.stack{display:grid;gap:12px;margin-top:18px}
+.stack-item{
+  background:rgba(255,255,255,.03);
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:14px 16px;
+  color:var(--muted);
+  font-size:14px;
+}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:24px;
+}
+.card h3,.card h4{
+  font-family:var(--head);
+  font-size:21px;
+  line-height:1.15;
+  margin-bottom:10px;
+  text-wrap:balance;
+}
+.card p{color:var(--muted);font-size:14px}
+.icon{
+  width:42px;height:42px;border-radius:12px;
+  display:flex;align-items:center;justify-content:center;
+  background:var(--blue-bg);
+  border:1px solid rgba(79,143,255,.22);
+  color:var(--blue);
+  font-family:var(--head);font-weight:800;
+  margin-bottom:14px;
+}
+.list{display:grid;gap:10px;margin-top:12px}
+.list div{
+  display:flex;gap:10px;align-items:flex-start;
+  color:var(--muted);font-size:14px
+}
+.list div::before{
+  content:"•";color:var(--blue);font-weight:900;line-height:1
+}
+.split{
+  display:grid;grid-template-columns:1fr .95fr;gap:24px;align-items:start;
+}
+.price-box{
+  background:linear-gradient(180deg, rgba(79,143,255,.12), rgba(255,255,255,.03));
+  border:1px solid rgba(79,143,255,.20);
+  border-radius:22px;
+  padding:28px;
+}
+.price{
+  font-family:var(--head);
+  font-size:48px;
+  line-height:1;
+  margin:10px 0 14px;
+}
+.price small{
+  font-size:.34em;color:var(--muted);font-weight:700
+}
+.kicker{
+  font-family:var(--mono);
+  font-size:10px;
+  text-transform:uppercase;
+  letter-spacing:.12em;
+  color:var(--blue);
+}
+.cta{
+  background:linear-gradient(180deg, rgba(79,143,255,.12), rgba(255,255,255,.03));
+  border:1px solid rgba(79,143,255,.20);
+  border-radius:24px;
+  padding:32px;
+}
+.cta h2{
+  font-family:var(--head);font-size:34px;line-height:1.08;letter-spacing:-.03em;margin-bottom:12px;text-wrap:balance
+}
+.cta p{color:var(--muted);max-width:620px;margin-bottom:20px}
+.contact-box{
+  display:grid;grid-template-columns:1fr .9fr;gap:22px;align-items:start;
+}
+.contact-lines{display:grid;gap:10px}
+.contact-line{
+  display:flex;justify-content:space-between;gap:16px;
+  padding:12px 0;border-bottom:1px solid rgba(255,255,255,.07);
+  color:var(--muted);font-size:14px
+}
+.contact-line strong{
+  color:var(--text);font-weight:700
+}
+.footer{
+  border-top:1px solid var(--border);
+  padding:40px 0 16px;
+  position:relative;z-index:2;
+}
+.footer-top{
+  display:grid;grid-template-columns:1.2fr .9fr .9fr;gap:24px;
+  margin-bottom:20px;
+}
+.footer h4{
+  font-family:var(--mono);
+  font-size:10px;text-transform:uppercase;letter-spacing:.12em;
+  color:var(--soft);margin-bottom:12px
+}
+.footer p,.footer a{color:var(--muted);font-size:14px}
+.footer-links{display:grid;gap:8px}
+.footer-bottom{
+  border-top:1px solid rgba(255,255,255,.07);
+  padding-top:16px;
+  color:var(--soft);
+  font-size:12px;
+}
+.wa-float{
+  position:fixed;right:18px;bottom:18px;z-index:998;
+  width:58px;height:58px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  background:#25d366;color:#fff;
+  box-shadow:0 14px 30px rgba(37,211,102,.28);
+}
+.muted{color:var(--muted)}
+.center{text-align:center}
+.mobile-only{display:none}
+.desktop-only{display:inline-flex}
+.access-note{
+  font-size:12px;color:var(--soft);margin-top:12px
+}
+.login-wrap{
+  min-height:100vh;display:grid;place-items:center;padding:28px
+}
+.login-card{
+  width:min(100%,420px);
+  background:rgba(255,255,255,.04);
+  border:1px solid var(--border);
+  border-radius:24px;
+  padding:34px;
+  position:relative;z-index:2;
+}
+.login-card h1{
+  font-family:var(--head);
+  font-size:34px;line-height:1.08;letter-spacing:-.03em;margin:10px 0 12px
+}
+.login-card p{color:var(--muted);font-size:14px}
+.form{display:grid;gap:14px;margin-top:22px}
+.field{display:grid;gap:6px}
+.field label{
+  font-family:var(--mono);
+  font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--soft)
+}
+.field input{
+  min-height:48px;padding:0 14px;border-radius:12px;border:1px solid var(--border);
+  background:rgba(255,255,255,.03);color:var(--text);font:inherit
+}
+.small-note{
+  margin-top:14px;font-size:12px;color:var(--soft);line-height:1.6
+}
+.tag{
+  display:inline-flex;align-items:center;min-height:34px;padding:0 12px;border-radius:999px;
+  background:var(--blue-bg);border:1px solid rgba(79,143,255,.22);
+  color:var(--blue);font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase
+}
+@media (max-width:980px){
+  .hero-grid,.split,.contact-box,.footer-top{grid-template-columns:1fr}
+  .grid-3{grid-template-columns:1fr}
+  .grid-4{grid-template-columns:repeat(2,1fr)}
+}
+@media (max-width:768px){
+  .nav-links,.nav-cta{display:none}
+  .menu-btn{display:block}
+  .wrapper{padding:0 16px}
+  .section{padding:68px 0}
+  .section-tight{padding:54px 0}
+  .hero{padding:54px 0 42px}
+  .actions{flex-direction:column;align-items:stretch}
+  .actions .btn{width:100%}
+  .grid-2,.grid-3,.grid-4{grid-template-columns:1fr}
+  .cta h2{font-size:28px}
+  .footer-top{gap:18px}
+  .mobile-only{display:inline-flex}
+  .desktop-only{display:none}
+}
+@media (max-width:560px){
+  body{padding-bottom:86px}
+  .mobile-bar{
+    position:fixed;left:12px;right:12px;bottom:12px;z-index:999;
+    display:grid;grid-template-columns:1fr 1fr;gap:10px;
+    padding:10px;border:1px solid var(--border);border-radius:18px;
+    background:rgba(7,11,20,.94);backdrop-filter:blur(20px)
   }
-  </script>
+  .mobile-bar a{
+    min-height:46px;border-radius:12px;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center
+  }
+  .mobile-bar .main{background:var(--blue);color:#fff}
+  .mobile-bar .secondary{background:var(--green-bg);border:1px solid rgba(0,212,170,.22);color:var(--green)}
+  .wa-float{display:none}
+}
+</style>
 </head>
 <body>
 
-
-<div class="bg-mesh"><div class="bg-orb"></div><div class="bg-orb"></div><div class="bg-orb"></div></div>
 <nav class="nav">
-  <div class="nav-inner">
-    <a class="nav-logo" href="index.html" aria-label="TANTECNO"><div class="brand-wordmark"><strong>TANTECNO</strong><span>Soluciones computacionales</span></div></a>
+  <div class="wrapper nav-inner">
+    <a class="brand" href="index.html" aria-label="TANTECNO">
+      <strong>TANTECNO</strong>
+      <span>Optimización de computadores</span>
+    </a>
     <div class="nav-links">
-      <a href="index.html" class="active">Inicio</a>
-      <a href="servicios.html">Optimización</a>
-      <a href="asistencia.html">Asistencia</a>
-      <a href="#contacto">Contacto</a>
+      <a href="index.html" class="active">Inicio</a><a href="servicios.html">Optimización</a><a href="asistencia.html">Diagnóstico remoto</a><a href="index.html#contacto">Contacto</a>
     </div>
-    <div class="nav-actions">
-      <a href="asistencia.html" class="btn-wa">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M9 10l2 2 4-4"/></svg>
-        Soporte remoto
-      </a>
-      <a href="https://wa.me/56971036909?text=Hola%2C%20quiero%20evaluar%20mi%20computador%20para%20saber%20si%20vale%20la%20pena%20optimizarlo." target="_blank" class="btn-wa" style="background:rgba(0,212,170,.12);border-color:rgba(0,212,170,.25)">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.115.548 4.103 1.509 5.833L.057 24l6.305-1.654A11.954 11.954 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.007-1.374l-.359-.213-3.722.976.993-3.625-.234-.373A9.818 9.818 0 012.182 12c0-5.42 4.398-9.818 9.818-9.818 5.42 0 9.818 4.398 9.818 9.818 0 5.42-4.398 9.818-9.818 9.818z"/></svg>
-        Contacto
-      </a>
-      <a href="https://wa.me/56971036909?text=Hola%2C%20quiero%20evaluar%20mi%20computador%20para%20saber%20si%20vale%20la%20pena%20optimizarlo." target="_blank" class="btn-cta">Evaluar mi computador</a>
+    <div class="nav-cta">
+      <a href="https://wa.me/56971036909?text=Hola%2C%20quiero%20evaluar%20mi%20computador%20para%20saber%20si%20vale%20la%20pena%20optimizarlo." target="_blank" class="btn btn-whatsapp">WhatsApp</a>
+      <a href="https://wa.me/56971036909?text=Hola%2C%20quiero%20evaluar%20mi%20computador%20para%20saber%20si%20vale%20la%20pena%20optimizarlo." target="_blank" class="btn btn-primary">Evaluar mi computador</a>
     </div>
-    <button class="nav-hamburger" id="navHam" aria-label="Menú" onclick="document.getElementById('mobNav').classList.toggle('open')"><span></span><span></span><span></span></button>
+    <button class="menu-btn" id="menuBtn" aria-label="Abrir menú">
+      <span></span><span></span><span></span>
+    </button>
   </div>
 </nav>
-<div class="mobile-nav" id="mobNav">
-  <a href="index.html">Inicio</a>
-  <a href="servicios.html">Optimización</a>
-  <a href="asistencia.html">Asistencia remota</a>
-  <a href="#contacto">Contacto</a>
-  <a href="https://wa.me/56971036909?text=Hola%2C%20quiero%20evaluar%20mi%20computador%20para%20saber%20si%20vale%20la%20pena%20optimizarlo." target="_blank" style="color:var(--green)">💬 WhatsApp</a>
+<div class="mobile-menu" id="mobileMenu">
+  <div class="wrapper">
+    <a href="index.html" class="active">Inicio</a><a href="servicios.html">Optimización</a><a href="asistencia.html">Diagnóstico remoto</a><a href="index.html#contacto">Contacto</a><a href="login.html" style="color:var(--soft);font-size:12px">Acceso interno</a>
+  </div>
 </div>
 
 
-<section class="hero img-hero">
-  <div class="hero-glow"></div>
-  <div class="hero-inner">
-    <div class="hero-grid">
-      <div>
-        <div class="hero-tag">Diagnóstico técnico y optimización de equipos · Machalí</div>
-        <h1 aria-label="Recupera el rendimiento de tu notebook o PC sin comprar otro.">Recupera el rendimiento de tu notebook o PC <em>sin comprar otro.</em></h1>
-        <p class="hero-sub">Revisamos si tu equipo realmente vale la pena. Si conviene intervenirlo, lo optimizamos con criterio técnico, respaldo y garantía escrita. Si no conviene, te lo decimos igual.</p>
-        <div class="hero-btns">
-          <a href="https://wa.me/56971036909?text=Hola%2C%20quiero%20evaluar%20mi%20computador%20para%20saber%20si%20vale%20la%20pena%20optimizarlo." target="_blank" class="btn-hp">Evaluar mi computador por WhatsApp →</a>
-          <a href="servicios.html" class="btn-hs">Ver optimización &rarr;</a>
+<header class="hero">
+  <div class="wrapper hero-grid">
+    <div>
+      <div class="eyebrow">Diagnóstico técnico remoto avanzado</div>
+      <h1>¿Tu computador está lento? Evaluamos si vale la pena optimizarlo.</h1>
+      <p class="lead">Tantecno se enfoca en una sola cosa: revisar computadores lentos y definir si la mejora correcta pasa por SSD, RAM, mantención interna o una optimización completa.</p>
+      <div class="actions">
+        <a href="https://wa.me/56971036909?text=Hola%2C%20quiero%20evaluar%20mi%20computador%20para%20saber%20si%20vale%20la%20pena%20optimizarlo." target="_blank" class="btn btn-primary">Evaluar mi computador</a>
+        <a href="asistencia.html" class="btn btn-secondary">Ver diagnóstico remoto</a>
+      </div>
+      <div class="chips">
+        <div class="chip">Diagnóstico remoto · $29.900</div>
+        <div class="chip">Optimización de computadores Windows</div>
+        <div class="chip">Si no conviene, te lo decimos igual</div>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="kicker">Lo que hacemos</div>
+      <h3>Te ayudamos a decidir bien antes de intervenir.</h3>
+      <p>No vendemos piezas ni soporte al lote. Primero evaluamos si el equipo vale la pena. Luego definimos la optimización correcta.</p>
+      <div class="stack">
+        <div class="stack-item">Cambio de HDD a SSD cuando el cuello de botella está en almacenamiento.</div>
+        <div class="stack-item">Aumento de RAM cuando falta fluidez y multitarea.</div>
+        <div class="stack-item">Mantención interna y sistema limpio cuando hace sentido completar la mejora.</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section class="section">
+  <div class="wrapper">
+    <div class="eyebrow">El problema</div>
+    <h2 class="sec-h">No siempre conviene comprar otro computador.</h2>
+    <p class="sec-s">Muchos equipos lentos todavía tienen vida útil real. La diferencia está en saber si conviene optimizarlos o si ya no vale la pena meterles dinero.</p>
+    <div class="grid-3">
+      <div class="card">
+        <div class="icon">01</div>
+        <h3>Demora en iniciar</h3>
+        <p>El equipo tarda demasiado en encender, abrir programas o responder en uso diario.</p>
+      </div>
+      <div class="card">
+        <div class="icon">02</div>
+        <h3>Se pega al trabajar</h3>
+        <p>Navegador, Office o tareas comunes empiezan a sentirse pesadas, lentas o inestables.</p>
+      </div>
+      <div class="card">
+        <div class="icon">03</div>
+        <h3>No sabes si arreglarlo</h3>
+        <p>La duda real no es técnica: es si vale la pena invertir o si conviene reemplazarlo.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section-tight" style="background:rgba(255,255,255,.02);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
+  <div class="wrapper">
+    <div class="eyebrow">La solución</div>
+    <h2 class="sec-h">Definimos qué necesita realmente tu equipo.</h2>
+    <p class="sec-s">La optimización no es una acción suelta. Puede incluir almacenamiento, memoria, mantención interna y sistema limpio, según lo que determine el diagnóstico.</p>
+    <div class="grid-4">
+      <div class="card">
+        <div class="icon">SSD</div>
+        <h4>HDD a SSD</h4>
+        <p>Recupera velocidad general, tiempos de arranque y apertura de programas.</p>
+      </div>
+      <div class="card">
+        <div class="icon">RAM</div>
+        <h4>Aumento de RAM</h4>
+        <p>Mejora fluidez y multitarea cuando el equipo se queda corto de memoria.</p>
+      </div>
+      <div class="card">
+        <div class="icon">MT</div>
+        <h4>Mantención interna</h4>
+        <p>Ayuda a controlar temperatura, ruido y comportamiento sostenido del equipo.</p>
+      </div>
+      <div class="card">
+        <div class="icon">SYS</div>
+        <h4>Sistema limpio</h4>
+        <p>Windows, drivers y configuración correcta para dejarlo listo para trabajar.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrapper">
+    <div class="eyebrow">Cómo funciona</div>
+    <h2 class="sec-h">Tres pasos. Sin vueltas.</h2>
+    <div class="grid-3">
+      <div class="card">
+        <div class="icon">1</div>
+        <h3>Evaluamos</h3>
+        <p>Revisamos el computador y detectamos si realmente vale la pena optimizarlo.</p>
+      </div>
+      <div class="card">
+        <div class="icon">2</div>
+        <h3>Definimos</h3>
+        <p>Te decimos qué mejora corresponde y qué resultado es razonable esperar.</p>
+      </div>
+      <div class="card">
+        <div class="icon">3</div>
+        <h3>Optimizamos</h3>
+        <p>Si conviene avanzar, ejecutamos la intervención correcta para recuperar rendimiento.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" style="background:rgba(255,255,255,.02);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
+  <div class="wrapper split">
+    <div>
+      <div class="eyebrow">Servicio de entrada</div>
+      <h2 class="sec-h">Diagnóstico técnico remoto avanzado</h2>
+      <p class="sec-s">El objetivo no es “mirar el computador”. Es ayudarte a tomar la decisión correcta antes de invertir. Si no conviene optimizarlo, también te lo decimos.</p>
+      <div class="list">
+        <div>Evaluación remota orientada a computadores Windows.</div>
+        <div>Lectura técnica de almacenamiento, memoria y comportamiento general.</div>
+        <div>Definición clara de si conviene optimizar y con qué estrategia.</div>
+        <div>Cotización posterior solo si la intervención tiene sentido real.</div>
+      </div>
+    </div>
+    <div class="price-box">
+      <div class="kicker">Valor del diagnóstico</div>
+      <div class="price">$29.900 <small>CLP</small></div>
+      <p class="muted">Pensado para definir si tu computador todavía tiene vida útil aprovechable y qué optimización corresponde de verdad.</p>
+      <div class="actions" style="margin-top:20px">
+        <a href="https://mpago.la/2nr3BK8" target="_blank" class="btn btn-primary">Pagar diagnóstico</a>
+        <a href="asistencia.html" class="btn btn-secondary">Cómo funciona</a>
+      </div>
+      <div class="access-note">Quick Assist y AnyDesk se explican en la página de diagnóstico remoto.</div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="contacto">
+  <div class="wrapper">
+    <div class="cta">
+      <div class="eyebrow">Siguiente paso</div>
+      <h2>¿Vale la pena optimizar tu computador?</h2>
+      <p>Lo evaluamos contigo y te decimos qué conviene de verdad. Ese es el punto de partida correcto.</p>
+      <div class="actions">
+        <a href="https://wa.me/56971036909?text=Hola%2C%20quiero%20evaluar%20mi%20computador%20para%20saber%20si%20vale%20la%20pena%20optimizarlo." target="_blank" class="btn btn-primary">Evaluar mi computador</a>
+        <a href="https://mpago.la/2nr3BK8" target="_blank" class="btn btn-secondary">Pagar diagnóstico $29.900</a>
+      </div>
+    </div>
+    <div class="contact-box" style="margin-top:20px">
+      <div class="card">
+        <h3>Contacto</h3>
+        <div class="contact-lines">
+          <div class="contact-line"><span>WhatsApp</span><strong><a href="https://wa.me/56971036909" target="_blank">+56 9 7103 6909</a></strong></div>
+          <div class="contact-line"><span>Email</span><strong><a href="mailto:contacto@tantecno.cl">contacto@tantecno.cl</a></strong></div>
+          <div class="contact-line"><span>Ubicación</span><strong>Machalí, Chile</strong></div>
+          <div class="contact-line"><span>Horario</span><strong>Lun–Vie 8:30–19:00</strong></div>
         </div>
-        <div class="hero-trust">
-          <div class="hero-trust-item">
-            <div class="hero-trust-k">Diagnóstico</div>
-            <div class="hero-trust-v">Diagnóstico técnico remoto avanzado $29.900.</div>
-          </div>
-          <div class="hero-trust-item">
-            <div class="hero-trust-k">Respuesta</div>
-            <div class="hero-trust-v">Te respondemos en menos de 24 horas hábiles.</div>
-          </div>
-          <div class="hero-trust-item">
-            <div class="hero-trust-k">Respaldo</div>
-            <div class="hero-trust-v">Trabajo documentado y garantía escrita sobre la intervención.</div>
-          </div>
-        </div>
       </div>
-      <div class="hero-logo-big">
-        <div class="hero-mark sr" style="transition-delay:.15s">
-          <div class="hero-mark-title">TANTECNO</div>
-          <div class="hero-mark-sub">Soluciones computacionales</div>
-          <div class="hero-mark-list">
-            <div class="hero-mark-item">Diagnóstico técnico y criterio real antes de intervenir</div>
-            <div class="hero-mark-item">Optimización documentada para computadores de trabajo y uso diario</div>
-            <div class="hero-mark-item">Atención directa por WhatsApp y respuesta en menos de 24 h hábiles</div>
-          </div>
+      <div class="card">
+        <h3>Lo que debes esperar</h3>
+        <p>No te vamos a empujar a cambiar piezas por cambiar. El foco es definir si el equipo vale la pena y qué mejora tiene sentido real.</p>
+        <div class="list">
+          <div>Claridad antes de intervenir.</div>
+          <div>Criterio técnico antes de gastar.</div>
+          <div>Optimización cuando realmente conviene.</div>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<div class="stats" style="position:relative;overflow:hidden">
-  <div style="position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1600&q=80') center/cover;opacity:.03;pointer-events:none"></div>
-  <div class="stats-inner sr">
-    <div class="stat"><div class="stat-num">4<span>–6</span></div><div class="stat-label">Años de vida útil<br>ganada por equipo</div></div>
-    <div class="stat"><div class="stat-num"><span>24</span>h</div><div class="stat-label">Plazo diagnóstico<br>con resultado escrito</div></div>
-    <div class="stat"><div class="stat-num"><span>30</span>d</div><div class="stat-label">Garantía escrita<br>sobre el trabajo</div></div>
-    <div class="stat"><div class="stat-num"><span>~</span>75<span>%</span></div><div class="stat-label">Ahorro estimado vs<br>comprar equipo nuevo</div></div>
-  </div>
+<div class="mobile-bar">
+  <a href="https://wa.me/56971036909?text=Hola%2C%20quiero%20evaluar%20mi%20computador%20para%20saber%20si%20vale%20la%20pena%20optimizarlo." target="_blank" class="main">Evaluar</a>
+  <a href="https://mpago.la/2nr3BK8" target="_blank" class="secondary">Diagnóstico</a>
 </div>
-
-<section class="section" style="background:var(--bg2);position:relative;overflow:hidden">
-  <div style="position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1531297484001-80022131f5a1?auto=format&fit=crop&w=1600&q=80') center/cover;opacity:.03;pointer-events:none"></div>
-  <div class="w" style="position:relative;z-index:2">
-    <div class="sec-tag sr">La propuesta</div>
-    <div class="sec-h sr">Primero te ayudamos a decidir bien.</div>
-    <div class="sec-s sr">La diferencia de Tantecno no es solo el trabajo técnico. Es que evaluamos con honestidad, explicamos con claridad y no vendemos intervenciones que no tienen sentido.</div>
-    <div class="pilares">
-      <div class="g-card sr">
-        <div class="pilar-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="var(--blue)" stroke-width="1.5" stroke-linecap="round"><circle cx="8" cy="8" r="6"/><path d="M5 8l2 2 4-4"/></svg></div>
-        <div class="pilar-title">Diagnóstico honesto</div>
-        <div class="pilar-desc">Si tu equipo no califica para ser optimizado, te lo decimos con explicación técnica clara. No trabajamos en equipos que no podemos mejorar correctamente.</div>
-      </div>
-      <div class="g-card sr" style="transition-delay:.1s">
-        <div class="pilar-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="var(--blue)" stroke-width="1.5" stroke-linecap="round"><rect x="2" y="3" width="12" height="9" rx="1"/><path d="M5 14h6M8 12v2"/></svg></div>
-        <div class="pilar-title">Optimización técnica</div>
-        <div class="pilar-desc">No hacemos "formateo" ni "limpieza general". Hacemos intervenciones definidas con objetivo claro: que tu equipo rinda como hardware nuevo por 4 a 6 años más.</div>
-      </div>
-      <div class="g-card sr" style="transition-delay:.2s">
-        <div class="pilar-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="var(--blue)" stroke-width="1.5" stroke-linecap="round"><path d="M8 2v3M8 11v3M2 8h3M11 8h3"/><circle cx="8" cy="8" r="3"/></svg></div>
-        <div class="pilar-title">Continuidad operativa</div>
-        <div class="pilar-desc">Trabajamos para profesionales y empresas que necesitan su equipo funcionando. Plazo definido, documentación formal y garantía por escrito — no promesas verbales.</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<div class="photo-strip">
-  <img src="https://images.unsplash.com/photo-1597872200969-2b65d56bd16b?auto=format&fit=crop&w=1600&q=80" alt="">
-  <div class="photo-overlay">
-    <div class="sr">
-      <div style="font-family:var(--mono);font-size:11px;color:var(--blue);letter-spacing:.1em;text-transform:uppercase;margin-bottom:14px;opacity:.8">Economía circular aplicada</div>
-      <div class="photo-h">No improvisamos con tu equipo.<br><span>Diagnosticamos, optimizamos</span><br>y documentamos.</div>
-      <a href="servicios.html" class="btn-hp" style="margin-top:8px">Ver cómo optimizamos →</a>
-    </div>
-  </div>
-</div>
-
-<section class="section" style="background:var(--bg3);position:relative;overflow:hidden">
-  <div style="position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1563206767-5b18f218e8de?auto=format&fit=crop&w=1600&q=80') center/cover;opacity:.03;pointer-events:none"></div>
-  <div class="w" style="position:relative;z-index:2">
-    <div class="sec-tag sr">Lo que hacemos</div>
-    <div class="sec-h sr">Optimización pensada para decidir bien y actuar rápido.</div>
-    <div class="sec-s sr">No trabajamos con paquetes genéricos. Partimos con un diagnóstico real y definimos solo la intervención que de verdad mejora tu equipo.</div>
-    <div class="svc-grid">
-      <a href="servicios.html#servicios" class="g-card svc-card sr">
-        <div class="svc-badge">Diagnóstico</div>
-        <div class="svc-name">¿Vale la pena tu equipo?</div>
-        <div class="svc-desc">Antes de gastar un peso en intervención, te decimos con claridad si tu equipo tiene futuro técnico — y cuánto. Si no conviene, te lo decimos igual.</div>
-        <div class="svc-arrow">Ver servicio →</div>
-      </a>
-      <a href="asistencia.html" class="g-card svc-card sr" style="transition-delay:.1s">
-        <div class="svc-badge">Remoto</div>
-        <div class="svc-name">Sin mover el equipo de tu casa.</div>
-        <div class="svc-desc">Acceso remoto seguro. Analizamos disco, RAM, temperatura y sistema operativo en tiempo real. Diagnóstico en la misma sesión, sin visita técnica.</div>
-        <div class="svc-arrow">Iniciar sesión remota →</div>
-      </a>
-      <a href="servicios.html#servicios" class="g-card svc-card sr" style="transition-delay:.15s">
-        <div class="svc-badge">Optimización</div>
-        <div class="svc-name">De lento a rápido en 72 horas.</div>
-        <div class="svc-desc">SSD nuevo + sistema operativo limpio. El salto de rendimiento más grande que puede experimentar un equipo existente — documentado y con garantía.</div>
-        <div class="svc-arrow">Ver servicio →</div>
-      </a>
-      <a href="servicios.html#servicios" class="g-card svc-card sr" style="transition-delay:.2s">
-        <div class="svc-badge">Empresas</div>
-        <div class="svc-name">Tu oficina entera, con criterio.</div>
-        <div class="svc-desc">Evaluamos cada equipo de tu flota y te decimos exactamente cuáles vale la pena optimizar y cuáles no. Informe por equipo, cotización total, priorización clara.</div>
-        <div class="svc-arrow">Ver servicio →</div>
-      </a>
-    </div>
-    <div style="margin-top:24px" class="sr">
-      <a href="#contacto" class="btn-hs">Evaluar mi computador →</a>
-    </div>
-  </div>
-</section>
-
-<div class="img-divider">
-  <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=1600&q=80" alt="">
-  <div class="img-divider-overlay"></div>
-</div>
-
-<section class="section" style="background:var(--bg2)">
-  <div class="w">
-    <div class="sec-tag sr">Clientes</div>
-    <div class="sec-h sr">Lo que dicen quienes ya optimizaron.</div>
-    <div class="testi-grid" style="margin-top:32px">
-      <div class="g-card sr" style="display:flex;flex-direction:column">
-        <div class="testi-stars"><span class="testi-star">★</span><span class="testi-star">★</span><span class="testi-star">★</span><span class="testi-star">★</span><span class="testi-star">★</span></div>
-        <div class="testi-quote">"Mi MacBook 2017 andaba a paso de tortuga. Pensé que tenía que comprar equipo nuevo, pero con la optimización quedó perfecta para diseño. El informe técnico me dio confianza real en lo que se hizo."</div>
-        <div class="testi-author"><div class="testi-av">CP</div><div><div class="testi-name">Carolina P.</div><div class="testi-role">Diseñadora · Rancagua</div></div></div>
-      </div>
-      <div class="g-card sr" style="display:flex;flex-direction:column;transition-delay:.1s">
-        <div class="testi-stars"><span class="testi-star">★</span><span class="testi-star">★</span><span class="testi-star">★</span><span class="testi-star">★</span><span class="testi-star">★</span></div>
-        <div class="testi-quote">"Tenía 6 PCs lentas en la oficina. Evaluaron cada una y optimizaron las 4 que valían la pena. Nos ahorramos comprar equipos nuevos y entregaron todo documentado."</div>
-        <div class="testi-author"><div class="testi-av">MV</div><div><div class="testi-name">Mauricio V.</div><div class="testi-role">Contador · Machalí</div></div></div>
-      </div>
-      <div class="g-card sr" style="display:flex;flex-direction:column;transition-delay:.2s">
-        <div class="testi-stars"><span class="testi-star">★</span><span class="testi-star">★</span><span class="testi-star">★</span><span class="testi-star">★</span><span class="testi-star">★</span></div>
-        <div class="testi-quote">"Lo que más valoro es la honestidad. Me dijeron que uno de mis equipos no valía intervenir y me explicaron por qué. Con los otros dos quedé muy conforme."</div>
-        <div class="testi-author"><div class="testi-av">JL</div><div><div class="testi-name">Jorge L.</div><div class="testi-role">Abogado · Machalí</div></div></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<div class="img-divider">
-  <img src="https://images.unsplash.com/photo-1629654297299-c8506221ca97?auto=format&fit=crop&w=1600&q=80" alt="">
-  <div class="img-divider-overlay"></div>
-</div>
-
-<section class="contact" id="contacto">
-  <div class="contact-inner">
-    <div class="sr">
-      <div class="sec-tag">Contacto</div>
-      <div class="sec-h" style="font-size:36px;margin-bottom:12px">¿Tu equipo vale la pena recuperar?</div>
-      <p style="font-size:15px;color:var(--text2);line-height:1.8;margin-bottom:24px">Cuéntanos qué equipo tienes y qué problema presenta. Evaluamos si vale la pena intervenirlo y te respondemos en menos de 24 horas hábiles. El diagnóstico técnico remoto avanzado cuesta $29.900 y te permite definir la optimización correcta antes de invertir.</p>
-      <div class="info-row"><span class="info-lbl">WhatsApp</span><span class="info-val"><a href="https://wa.me/56971036909" target="_blank">+56 9 7103 6909</a></span></div>
-      <div class="info-row"><span class="info-lbl">Email</span><span class="info-val"><a href="mailto:contacto@tantecno.cl">contacto@tantecno.cl</a></span></div>
-      <div class="info-row"><span class="info-lbl">Ubicación</span><span class="info-val">Machalí, Región de O'Higgins</span></div>
-      <div class="info-row"><span class="info-lbl">Horario</span><span class="info-val">Lun–Vie 8:30–19:00 · Sáb 8:30–13:00</span></div>
-      <a href="https://wa.me/56971036909?text=Hola%2C%20quiero%20saber%20si%20mi%20equipo%20es%20viable%20para%20optimizar." target="_blank" class="wa-big">
-        <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.115.548 4.103 1.509 5.833L.057 24l6.305-1.654A11.954 11.954 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.007-1.374l-.359-.213-3.722.976.993-3.625-.234-.373A9.818 9.818 0 012.182 12c0-5.42 4.398-9.818 9.818-9.818 5.42 0 9.818 4.398 9.818 9.818 0 5.42-4.398 9.818-9.818 9.818z"/></svg>
-        Consultar por WhatsApp
-      </a>
-    </div>
-    <div class="form-card sr" style="transition-delay:.15s">
-      <div class="form-title">Consulta sobre tu equipo</div>
-      <div class="form-sub">Cuéntanos el problema y te orientamos con criterio técnico. Respuesta en menos de 24 horas hábiles.</div>
-      <div class="fg"><label>Nombre o empresa</label><input type="text" id="f-name" placeholder="Tu nombre o empresa"></div>
-      <div class="fg"><label>Tipo de equipo</label>
-        <select id="f-tipo"><option value="">Selecciona...</option><option>Notebook Windows</option><option>PC escritorio</option><option>MacBook</option><option>iMac / Mac Mini</option><option>Otro</option></select>
-      </div>
-      <div class="fg"><label>¿Cuál es el problema?</label>
-        <select id="f-prob"><option value="">Selecciona...</option><option>Equipo muy lento</option><option>Sistema no inicia o falla</option><option>Poco espacio en disco</option><option>Batería se agota rápido</option><option>Quiero evaluar si vale la pena</option><option>Otro</option></select>
-      </div>
-      <div class="fg"><label>Detalle adicional (opcional)</label><textarea id="f-msg" placeholder="Marca, modelo, antigüedad, o cualquier dato relevante..."></textarea></div>
-      <button class="btn-form" onclick="enviarWA()">Enviar por WhatsApp →</button>
-      <a href="https://mpago.la/2nr3BK8" target="_blank" style="display:flex;align-items:center;justify-content:center;gap:8px;margin-top:10px;padding:14px 28px;border-radius:var(--r);background:rgba(0,212,170,.12);border:1px solid rgba(0,212,170,.25);color:var(--green);font-family:var(--font);font-size:15px;font-weight:600;text-align:center;transition:all .2s;text-decoration:none"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>Pagar diagnóstico $29.900 →</a>
-    </div>
-  </div>
-</section>
 
 
 <footer class="footer">
-  <div class="footer-inner">
-    <div class="footer-brand">
-      <div class="footer-brand-mark">TANTECNO</div>
-      <p>Optimización de computadores.<br>Machalí, Región de O'Higgins, Chile.</p>
-    </div>
-    <div class="footer-links">
-      <div class="footer-col">
+  <div class="wrapper">
+    <div class="footer-top">
+      <div>
+        <div class="brand" style="margin-bottom:12px">
+          <strong style="font-size:20px">TANTECNO</strong>
+          <span>Optimización de computadores</span>
+        </div>
+        <p>Evaluamos si tu computador vale la pena y definimos la optimización correcta antes de que gastes plata a ciegas.</p>
+      </div>
+      <div>
         <h4>Navegación</h4>
-        <a href="index.html">Inicio</a>
-        <a href="servicios.html">Optimización</a>
-        <a href="asistencia.html">Asistencia remota</a>
+        <div class="footer-links">
+          <a href="index.html">Inicio</a>
+          <a href="servicios.html">Optimización</a>
+          <a href="asistencia.html">Diagnóstico remoto</a>
+          <a href="index.html#contacto">Contacto</a>
+        </div>
       </div>
-      <div class="footer-col">
+      <div>
         <h4>Contacto</h4>
-        <a href="https://wa.me/56971036909" target="_blank">+56 9 7103 6909</a>
-        <a href="mailto:contacto@tantecno.cl">contacto@tantecno.cl</a>
-        <a>Lun–Vie 8:30–19:00</a>
-        <div style="display:flex;gap:12px;margin-top:12px"><a href="https://www.facebook.com/tantecno.cl" target="_blank" rel="noopener" style="display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;background:rgba(79,143,255,.1);border:1px solid rgba(79,143,255,.15);transition:all .2s" aria-label="Facebook"><svg width="18" height="18" viewBox="0 0 24 24" fill="var(--blue)"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a><a href="https://www.instagram.com/tantecno.cl" target="_blank" rel="noopener" style="display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;background:rgba(139,92,246,.1);border:1px solid rgba(139,92,246,.15);transition:all .2s" aria-label="Instagram"><svg width="18" height="18" viewBox="0 0 24 24" fill="var(--purple)"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg></a></div>
+        <div class="footer-links">
+          <a href="https://wa.me/56971036909" target="_blank">+56 9 7103 6909</a>
+          <a href="mailto:contacto@tantecno.cl">contacto@tantecno.cl</a>
+          <a href="login.html">Acceso interno</a>
+        </div>
       </div>
     </div>
+    <div class="footer-bottom">© 2026 Tantecno · Machalí, Chile</div>
   </div>
-  <div class="footer-copy">© 2026 Tantecno · Machalí, Chile</div>
 </footer>
-
-<div class="mobile-cta-bar" aria-label="Acciones rápidas móviles">
-  <a href="https://wa.me/56971036909?text=Hola%2C%20quiero%20evaluar%20mi%20computador%20para%20saber%20si%20vale%20la%20pena%20optimizarlo." target="_blank" class="mobile-main">Evaluar</a>
-  <a href="https://wa.me/56971036909?text=Hola%2C%20quiero%20consultar%20por%20la%20optimizaci%C3%B3n%20de%20mi%20computador." target="_blank" class="mobile-secondary">WhatsApp</a>
-</div>
-<a href="https://wa.me/56971036909?text=Hola%2C%20quiero%20evaluar%20mi%20computador%20para%20saber%20si%20vale%20la%20pena%20optimizarlo." target="_blank" class="wa-float" aria-label="WhatsApp"><svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.115.548 4.103 1.509 5.833L.057 24l6.305-1.654A11.954 11.954 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.007-1.374l-.359-.213-3.722.976.993-3.625-.234-.373A9.818 9.818 0 012.182 12c0-5.42 4.398-9.818 9.818-9.818 5.42 0 9.818 4.398 9.818 9.818 0 5.42-4.398 9.818-9.818 9.818z"/></svg></a>
-
+<a class="wa-float" href="https://wa.me/56971036909?text=Hola%2C%20quiero%20evaluar%20mi%20computador%20para%20saber%20si%20vale%20la%20pena%20optimizarlo." target="_blank" aria-label="WhatsApp">
+  <svg width="30" height="30" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+    <path d="M12 0C5.373 0 0 5.373 0 12c0 2.115.548 4.103 1.509 5.833L.057 24l6.305-1.654A11.954 11.954 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.007-1.374l-.359-.213-3.722.976.993-3.625-.234-.373A9.818 9.818 0 012.182 12c0-5.42 4.398-9.818 9.818-9.818 5.42 0 9.818 4.398 9.818 9.818 0 5.42-4.398 9.818-9.818 9.818z"/>
+  </svg>
+</a>
 
 
 <script>
-const obs=new IntersectionObserver((entries)=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('vis');obs.unobserve(e.target)}})},{threshold:.1,rootMargin:'0px 0px -40px 0px'});
-document.querySelectorAll('.sr').forEach(el=>obs.observe(el));
+const menuBtn = document.getElementById('menuBtn');
+const mobileMenu = document.getElementById('mobileMenu');
+if(menuBtn && mobileMenu){
+  menuBtn.addEventListener('click', ()=> mobileMenu.classList.toggle('open'));
+}
 </script>
 
-
-<script>
-function enviarWA(){
-  const n=document.getElementById('f-name').value.trim();
-  const t=document.getElementById('f-tipo').value;
-  const p=document.getElementById('f-prob').value;
-  const d=document.getElementById('f-msg').value.trim();
-  if(!n){alert('Por favor ingresa tu nombre');return;}
-  if(!t||
+</body>
+</html>

@@ -2,383 +2,486 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="description" content="Diagnóstico técnico remoto avanzado para optimización de computadores en Machalí. Evaluación remota segura para equipos Windows, orientada a definir si tu equipo mejora con SSD, RAM, mantención interna y puesta a punto profesional.">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Diagnóstico Remoto Avanzado · TANTECNO">
-<meta property="og:description" content="Evalúa tu computador sin moverlo de tu escritorio. Diagnóstico técnico remoto avanzado $29.900 para definir la optimización correcta.">
-<meta property="og:url" content="https://tantecno-web.vercel.app/asistencia.html">
-<meta property="og:locale" content="es_CL">
-<meta name="robots" content="index, follow">
-<link rel="canonical" href="https://tantecno-web.vercel.app/asistencia.html">
-<meta name="theme-color" content="#06080f">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Diagnóstico Remoto Avanzado · TANTECNO</title>
+<meta name="theme-color" content="#070b14">
+<meta name="description" content="Diagnóstico técnico remoto avanzado para optimización de computadores.">
+<title>Diagnóstico remoto · TANTECNO</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Sora:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&family=Sora:wght@500;600;700;800&display=swap" rel="stylesheet">
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
+*{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#06080f;--bg2:#0b0f1a;--bg3:#0e1324;--bg4:#111730;
-  --glass:rgba(255,255,255,.025);--glass-h:rgba(255,255,255,.05);--glass-b:rgba(255,255,255,.06);
-  --border:rgba(255,255,255,.07);--border-h:rgba(255,255,255,.14);
-  --text:#f0f2f8;--text2:rgba(240,242,248,.62);--text3:rgba(240,242,248,.3);
-  --blue:#4f8fff;--blue-h:#3a7bff;--blue-dim:rgba(79,143,255,.1);--blue-b:rgba(79,143,255,.22);
-  --green:#00d4aa;--green-dim:rgba(0,212,170,.1);--green-b:rgba(0,212,170,.22);
-  --purple:#8b5cf6;--purple-dim:rgba(139,92,246,.08);--purple-b:rgba(139,92,246,.18);
-  --r:10px;--rl:14px;
+  --bg:#070b14;
+  --bg2:#0d1322;
+  --card:rgba(255,255,255,.04);
+  --card2:rgba(255,255,255,.03);
+  --border:rgba(255,255,255,.09);
+  --text:#f5f7fb;
+  --muted:rgba(245,247,251,.68);
+  --soft:rgba(245,247,251,.36);
+  --blue:#4f8fff;
+  --blue2:#3a7bff;
+  --green:#00d4aa;
+  --green-bg:rgba(0,212,170,.10);
+  --blue-bg:rgba(79,143,255,.11);
+  --radius:18px;
   --font:'DM Sans',system-ui,sans-serif;
   --head:'Sora',system-ui,sans-serif;
-  --mono:'JetBrains Mono','IBM Plex Mono',monospace;
+  --mono:'JetBrains Mono',monospace;
 }
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;scroll-padding-top:84px}
-body{font-family:var(--font);color:var(--text);background:var(--bg);font-size:16px;line-height:1.7;overflow-x:hidden}
+body{
+  font-family:var(--font);
+  background:
+    radial-gradient(600px 600px at 0% 0%, rgba(79,143,255,.10), transparent 60%),
+    radial-gradient(500px 500px at 100% 0%, rgba(139,92,246,.08), transparent 50%),
+    linear-gradient(180deg,#070b14 0%, #0a1020 100%);
+  color:var(--text);
+  line-height:1.65;
+  overflow-x:hidden;
+}
+body::after{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  background:url("data:image/svg+xml,%3Csvg viewBox='0 0 220 220' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.02'/%3E%3C/svg%3E");
+  opacity:.5;
+}
+a{text-decoration:none;color:inherit}
 img{max-width:100%;display:block}
-a{color:inherit;text-decoration:none}
-::-webkit-scrollbar{width:5px;background:var(--bg)}
-::-webkit-scrollbar-thumb{background:rgba(255,255,255,.08);border-radius:3px}
-
-.bg-mesh{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
-.bg-orb{position:absolute;border-radius:50%;filter:blur(120px);opacity:.12;animation:orbFloat 20s ease-in-out infinite}
-.bg-orb:nth-child(1){width:600px;height:600px;background:var(--blue);top:-10%;left:-5%;animation-delay:0s}
-.bg-orb:nth-child(2){width:500px;height:500px;background:var(--purple);bottom:-15%;right:-10%;animation-delay:-7s}
-.bg-orb:nth-child(3){width:400px;height:400px;background:var(--green);top:40%;left:50%;animation-delay:-14s;opacity:.06}
-@keyframes orbFloat{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(30px,-40px) scale(1.1)}66%{transform:translate(-20px,30px) scale(.9)}}
-body::after{content:'';position:fixed;inset:0;background:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.025'/%3E%3C/svg%3E");pointer-events:none;z-index:1;opacity:.5}
-
-.nav{position:sticky;top:0;z-index:100;background:rgba(6,8,15,.85);border-bottom:1px solid var(--border);backdrop-filter:blur(20px) saturate(1.4);-webkit-backdrop-filter:blur(20px) saturate(1.4)}
-.nav-inner{max-width:1100px;margin:0 auto;padding:0 28px;height:90px;display:flex;align-items:center;justify-content:space-between;gap:20px}
-.nav-logo{display:flex;align-items:center;text-decoration:none}
-.brand-wordmark{display:flex;flex-direction:column;line-height:1}
-.brand-wordmark strong{font-family:var(--head);font-size:22px;font-weight:700;letter-spacing:.14em;color:var(--text)}
-.brand-wordmark span{font-family:var(--mono);font-size:10px;color:var(--text3);letter-spacing:.12em;text-transform:uppercase;margin-top:6px}
-.footer-brand-mark{font-family:var(--head);font-size:24px;font-weight:700;letter-spacing:.14em;margin-bottom:10px}
-.nav-links{display:flex;align-items:center;gap:6px}
-.nav-links a{font-size:13px;font-weight:500;color:var(--text2);padding:7px 14px;border-radius:8px;transition:all .2s;letter-spacing:.01em}
-.nav-links a:hover,.nav-links a.active{color:var(--text);background:var(--glass-h)}
-.nav-actions{display:flex;gap:8px}
-.btn-wa{display:inline-flex;align-items:center;gap:6px;font-family:var(--font);font-size:13px;font-weight:500;padding:8px 16px;border-radius:8px;background:var(--green-dim);color:var(--green);border:1px solid var(--green-b);cursor:pointer;transition:all .2s}
-.btn-wa:hover{background:rgba(0,212,170,.18);box-shadow:0 0 20px rgba(0,212,170,.15)}
-.btn-cta{display:inline-flex;align-items:center;gap:6px;font-family:var(--font);font-size:13px;font-weight:600;padding:8px 18px;border-radius:8px;background:var(--blue);color:#fff;border:none;cursor:pointer;transition:all .2s}
-.btn-cta:hover{background:var(--blue-h);box-shadow:0 0 24px rgba(79,143,255,.3)}
-.nav-hamburger{display:none;background:none;border:none;cursor:pointer;padding:8px}
-.nav-hamburger span{display:block;width:20px;height:2px;background:var(--text2);margin:4px 0;border-radius:1px;transition:all .2s}
-.mobile-nav{display:none;position:fixed;top:90px;left:0;right:0;background:rgba(6,8,15,.97);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);z-index:99;padding:16px 28px;flex-direction:column;gap:4px}
-.mobile-nav.open{display:flex}
-.mobile-nav a{font-size:14px;color:var(--text2);padding:10px 0;border-bottom:1px solid var(--border)}
-.mobile-nav a:last-child{border:none}
-
-.section{position:relative;z-index:2}
-.w{max-width:1100px;margin:0 auto;padding:80px 28px}
-.sec-tag{font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--blue);margin-bottom:24px;display:flex;align-items:center;gap:10px}
-.sec-tag::before{content:'';width:20px;height:1px;background:var(--blue)}
-.sec-h{font-family:var(--head);font-size:44px;font-weight:700;line-height:1.1;margin-bottom:12px;letter-spacing:-.02em}
-.sec-s{font-size:16px;color:var(--text2);margin-bottom:40px;max-width:720px;line-height:1.8}
-.g-card{background:var(--glass);border:1px solid var(--border);border-radius:var(--rl);padding:28px;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);transition:all .3s}
-.g-card:hover{border-color:var(--border-h);background:var(--glass-h);transform:translateY(-2px);box-shadow:0 12px 40px rgba(0,0,0,.3)}
-.sr{opacity:0;transform:translateY(24px);transition:all .7s cubic-bezier(.16,1,.3,1)}
-.sr.vis{opacity:1;transform:translateY(0)}
-
-.page-hdr{position:relative;z-index:2;border-bottom:1px solid var(--border);overflow:hidden}
-.page-hdr::before{content:'';position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1600&q=80') center/cover;opacity:.05}
-.page-hdr-inner{max-width:1100px;margin:0 auto;padding:74px 28px 58px;position:relative;z-index:2}
-.breadcrumb{font-size:13px;color:var(--text3);margin-bottom:20px}
-.breadcrumb a{color:var(--text2)}
-.page-title{font-family:var(--head);font-size:56px;font-weight:800;line-height:1.05;letter-spacing:-.03em;max-width:920px;margin-bottom:18px}
-.page-title em{font-style:normal;background:linear-gradient(135deg,var(--blue),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.page-sub{font-size:17px;color:var(--text2);max-width:760px;line-height:1.8;margin-bottom:28px}
-.hero-points{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;max-width:920px}
-.hero-point{padding:14px 16px;border:1px solid var(--border);border-radius:12px;background:rgba(255,255,255,.025);backdrop-filter:blur(10px)}
-.hero-point-k{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--blue);margin-bottom:6px}
-.hero-point-v{font-size:13px;color:var(--text2);line-height:1.55}
-.hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}
-.btn-main{display:inline-flex;align-items:center;gap:8px;font-family:var(--font);font-size:15px;font-weight:600;padding:14px 28px;border-radius:var(--r);background:var(--blue);color:#fff;transition:all .2s}
-.btn-main:hover{background:var(--blue-h);box-shadow:0 0 28px rgba(79,143,255,.3)}
-.btn-ghost{display:inline-flex;align-items:center;gap:8px;font-family:var(--font);font-size:15px;font-weight:500;padding:14px 28px;border-radius:var(--r);border:1px solid var(--border);color:var(--text2);transition:all .2s}
-.btn-ghost:hover{border-color:var(--border-h);color:var(--text);background:var(--glass)}
-.note-inline{font-size:12px;color:var(--text3);font-family:var(--mono);margin-top:12px;padding:12px 14px;border:1px solid var(--border);border-radius:12px;background:rgba(255,255,255,.03);line-height:1.6;max-width:760px}
-
-.quick-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
-.quick-card .label{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--blue);margin-bottom:12px}
-.quick-card .title{font-family:var(--head);font-size:22px;font-weight:700;line-height:1.1;margin-bottom:8px}
-.quick-card .desc{font-size:13px;color:var(--text2);line-height:1.7}
-.quick-card.highlight{border-color:var(--blue-b);background:var(--blue-dim)}
-
-.process-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
-.step-num{font-family:var(--head);font-size:34px;font-weight:800;color:var(--blue);line-height:1;margin-bottom:10px}
-.step-tag{font-family:var(--mono);font-size:10px;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px}
-.step-title{font-family:var(--head);font-size:18px;font-weight:600;margin-bottom:8px}
-.step-desc{font-size:13px;color:var(--text2);line-height:1.75}
-
-.dual-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.info-box{background:var(--glass);border:1px solid var(--border);border-radius:var(--rl);padding:26px}
-.info-box.blue{background:var(--blue-dim);border-color:var(--blue-b)}
-.info-box h3{font-family:var(--head);font-size:22px;font-weight:700;margin-bottom:10px}
-.info-box p{font-size:14px;color:var(--text2);line-height:1.85}
-.info-list{display:grid;gap:9px;margin-top:16px}
-.info-list div{display:flex;gap:10px;align-items:flex-start;font-size:13px;color:var(--text2);line-height:1.7}
-.info-list svg{width:14px;height:14px;flex-shrink:0;margin-top:4px;color:var(--blue)}
-
-.compat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
-.compat-card h3{font-family:var(--head);font-size:22px;font-weight:700;margin-bottom:10px}
-.compat-list{display:grid;gap:10px}
-.compat-item{display:flex;gap:10px;align-items:flex-start;font-size:13px;color:var(--text2);line-height:1.75}
-.compat-item svg{width:15px;height:15px;flex-shrink:0;margin-top:3px}
-.compat-card.good svg{color:var(--green)}
-.compat-card.bad svg{color:#ff6b6b}
-
-.cta-wrap{display:flex;justify-content:space-between;align-items:center;gap:28px;padding:32px;border-radius:18px;border:1px solid var(--blue-b);background:linear-gradient(180deg,rgba(79,143,255,.12),rgba(255,255,255,.025));flex-wrap:wrap}
-.cta-tag{font-family:var(--mono);font-size:11px;color:var(--blue);letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px}
-.cta-title{font-family:var(--head);font-size:30px;font-weight:700;line-height:1.15;margin-bottom:10px}
-.cta-copy{font-size:14px;color:var(--text2);line-height:1.8;max-width:600px}
-.cta-actions{display:flex;gap:12px;flex-wrap:wrap}
-
-.footer{border-top:1px solid var(--border);position:relative;z-index:2}
-.footer-inner{max-width:1100px;margin:0 auto;padding:48px 28px 32px;display:flex;justify-content:space-between;align-items:start;gap:40px;flex-wrap:wrap}
-.footer-brand{max-width:280px}
-.footer-brand p{font-size:13px;color:var(--text3);line-height:1.7}
-.footer-links{display:flex;gap:40px}
-.footer-col h4{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin-bottom:12px}
-.footer-col a{display:block;font-size:13px;color:var(--text2);padding:3px 0;transition:color .15s}
-.footer-col a:hover{color:var(--text)}
-.footer-copy{max-width:1100px;margin:0 auto;padding:16px 28px;border-top:1px solid var(--border);font-size:12px;color:var(--text3);text-align:center}
-
-.wa-float{position:fixed;bottom:24px;right:24px;z-index:999;width:60px;height:60px;border-radius:50%;background:#25d366;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(37,211,102,.4);transition:all .3s;cursor:pointer;text-decoration:none}
-.wa-float:hover{transform:scale(1.1);box-shadow:0 6px 24px rgba(37,211,102,.5)}
-.wa-float svg{width:32px;height:32px;fill:#fff}
-.mobile-cta-bar{display:none}
-
-@media(max-width:1024px){
-  .nav-inner{padding:0 20px}
-  .w{padding:56px 24px}
-  .page-hdr-inner{padding:64px 24px 48px}
-  .page-title{font-size:48px}
-  .quick-grid,.process-grid{grid-template-columns:repeat(2,1fr)}
+.wrapper{max-width:1120px;margin:0 auto;padding:0 24px}
+.nav{
+  position:sticky;top:0;z-index:1000;
+  background:rgba(7,11,20,.82);
+  border-bottom:1px solid var(--border);
+  backdrop-filter:blur(18px);
 }
-@media(max-width:768px){
-  .nav-links,.nav-actions{display:none}
-  .nav-hamburger{display:block}
-  .nav-inner{height:70px;padding:0 16px}
-  .mobile-nav{top:70px;padding:12px 20px}
-  .brand-wordmark strong{font-size:18px}
-  .brand-wordmark span{font-size:9px}
-  .w{padding:40px 16px}
-  .page-hdr-inner{padding:44px 16px 36px}
-  .page-title{font-size:34px;text-wrap:balance}
-  .page-sub{font-size:15px;max-width:none}
-  .hero-points,.quick-grid,.process-grid,.dual-grid,.compat-grid{grid-template-columns:1fr}
-  .hero-actions,.cta-actions{flex-direction:column;align-items:stretch}
-  .hero-actions a,.cta-actions a{width:100%;justify-content:center;min-height:50px}
-  .hero-point,.g-card,.info-box{padding:20px}
-  .sec-h{font-size:30px;text-wrap:balance}
-  .sec-s{max-width:none}
-  .cta-wrap{padding:24px}
-  .cta-title{font-size:26px;text-wrap:balance}
-  .footer-inner{flex-direction:column;gap:24px}
-  .footer-links{flex-direction:column;gap:20px}
+.nav-inner{
+  height:78px;
+  display:flex;align-items:center;justify-content:space-between;gap:18px;
 }
-@media(max-width:560px){
-  body{padding-bottom:96px}
-  .mobile-cta-bar{display:grid;grid-template-columns:1fr 1fr;gap:10px;position:fixed;left:12px;right:12px;bottom:12px;z-index:1001;padding:10px;border:1px solid var(--border);border-radius:16px;background:rgba(6,8,15,.94);backdrop-filter:blur(20px);box-shadow:0 12px 30px rgba(0,0,0,.35)}
-  .mobile-cta-bar a{display:flex;align-items:center;justify-content:center;min-height:46px;border-radius:12px;font-size:13px;font-weight:600}
-  .mobile-cta-bar .mobile-main{background:var(--blue);color:#fff}
-  .mobile-cta-bar .mobile-secondary{background:var(--green-dim);border:1px solid var(--green-b);color:var(--green)}
+.brand{
+  display:flex;flex-direction:column;gap:4px;
+}
+.brand strong{
+  font-family:var(--head);
+  font-size:22px;font-weight:800;letter-spacing:.14em;
+}
+.brand span{
+  font-family:var(--mono);
+  font-size:10px;color:var(--soft);letter-spacing:.12em;text-transform:uppercase;
+}
+.nav-links{display:flex;gap:6px;align-items:center}
+.nav-links a{
+  padding:10px 14px;
+  border-radius:10px;
+  color:var(--muted);
+  font-size:14px;font-weight:500;
+}
+.nav-links a:hover,.nav-links a.active{
+  background:var(--card);
+  color:var(--text);
+}
+.nav-cta{display:flex;gap:10px;align-items:center}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  min-height:48px;
+  padding:0 18px;
+  border-radius:12px;
+  font-size:15px;font-weight:700;
+  transition:.2s ease;
+  border:1px solid transparent;
+}
+.btn-primary{background:var(--blue);color:#fff}
+.btn-primary:hover{background:var(--blue2)}
+.btn-secondary{
+  background:transparent;
+  border-color:var(--border);
+  color:var(--text);
+}
+.btn-secondary:hover{background:var(--card)}
+.btn-whatsapp{
+  background:var(--green-bg);
+  border-color:rgba(0,212,170,.22);
+  color:var(--green);
+}
+.btn-whatsapp:hover{background:rgba(0,212,170,.16)}
+.menu-btn{
+  display:none;
+  width:44px;height:44px;
+  border:none;background:transparent;color:var(--text);
+}
+.menu-btn span{
+  display:block;width:22px;height:2px;background:var(--text);margin:4px auto;border-radius:2px;
+}
+.mobile-menu{
+  display:none;
+  border-bottom:1px solid var(--border);
+  background:rgba(7,11,20,.96);
+}
+.mobile-menu.open{display:block}
+.mobile-menu .wrapper{padding-top:10px;padding-bottom:12px}
+.mobile-menu a{
+  display:block;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.06);color:var(--muted);font-size:14px
+}
+.mobile-menu a:last-child{border-bottom:none}
+section{position:relative;z-index:2}
+.section{padding:86px 0}
+.section-tight{padding:66px 0}
+.eyebrow{
+  display:inline-flex;align-items:center;gap:10px;
+  font-family:var(--mono);
+  font-size:11px;color:var(--blue);letter-spacing:.12em;text-transform:uppercase;
+  margin-bottom:18px;
+}
+.eyebrow::before{
+  content:"";width:22px;height:1px;background:var(--blue);display:inline-block;
+}
+.hero{padding:74px 0 56px;border-bottom:1px solid var(--border)}
+.hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:28px;align-items:center}
+.hero h1{
+  font-family:var(--head);
+  font-size:clamp(34px,6vw,64px);
+  line-height:1.02;
+  letter-spacing:-.04em;
+  margin-bottom:16px;
+  max-width:760px;
+  text-wrap:balance;
+}
+.hero p.lead{
+  max-width:680px;
+  font-size:18px;
+  color:var(--muted);
+  margin-bottom:24px;
+}
+.actions{display:flex;gap:12px;flex-wrap:wrap}
+.chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+.chip{
+  min-height:38px;
+  display:inline-flex;align-items:center;
+  padding:0 14px;border-radius:999px;
+  background:var(--card2);
+  border:1px solid var(--border);
+  font-size:12px;font-weight:600;color:var(--muted);
+}
+.panel{
+  background:linear-gradient(180deg, rgba(79,143,255,.12), rgba(255,255,255,.03));
+  border:1px solid rgba(79,143,255,.18);
+  border-radius:24px;
+  padding:28px;
+}
+.panel h3{
+  font-family:var(--head);
+  font-size:24px;
+  line-height:1.15;
+  margin-bottom:12px;
+}
+.panel p{color:var(--muted);font-size:14px}
+.stack{display:grid;gap:12px;margin-top:18px}
+.stack-item{
+  background:rgba(255,255,255,.03);
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:14px 16px;
+  color:var(--muted);
+  font-size:14px;
+}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:24px;
+}
+.card h3,.card h4{
+  font-family:var(--head);
+  font-size:21px;
+  line-height:1.15;
+  margin-bottom:10px;
+  text-wrap:balance;
+}
+.card p{color:var(--muted);font-size:14px}
+.icon{
+  width:42px;height:42px;border-radius:12px;
+  display:flex;align-items:center;justify-content:center;
+  background:var(--blue-bg);
+  border:1px solid rgba(79,143,255,.22);
+  color:var(--blue);
+  font-family:var(--head);font-weight:800;
+  margin-bottom:14px;
+}
+.list{display:grid;gap:10px;margin-top:12px}
+.list div{
+  display:flex;gap:10px;align-items:flex-start;
+  color:var(--muted);font-size:14px
+}
+.list div::before{
+  content:"•";color:var(--blue);font-weight:900;line-height:1
+}
+.split{
+  display:grid;grid-template-columns:1fr .95fr;gap:24px;align-items:start;
+}
+.price-box{
+  background:linear-gradient(180deg, rgba(79,143,255,.12), rgba(255,255,255,.03));
+  border:1px solid rgba(79,143,255,.20);
+  border-radius:22px;
+  padding:28px;
+}
+.price{
+  font-family:var(--head);
+  font-size:48px;
+  line-height:1;
+  margin:10px 0 14px;
+}
+.price small{
+  font-size:.34em;color:var(--muted);font-weight:700
+}
+.kicker{
+  font-family:var(--mono);
+  font-size:10px;
+  text-transform:uppercase;
+  letter-spacing:.12em;
+  color:var(--blue);
+}
+.cta{
+  background:linear-gradient(180deg, rgba(79,143,255,.12), rgba(255,255,255,.03));
+  border:1px solid rgba(79,143,255,.20);
+  border-radius:24px;
+  padding:32px;
+}
+.cta h2{
+  font-family:var(--head);font-size:34px;line-height:1.08;letter-spacing:-.03em;margin-bottom:12px;text-wrap:balance
+}
+.cta p{color:var(--muted);max-width:620px;margin-bottom:20px}
+.contact-box{
+  display:grid;grid-template-columns:1fr .9fr;gap:22px;align-items:start;
+}
+.contact-lines{display:grid;gap:10px}
+.contact-line{
+  display:flex;justify-content:space-between;gap:16px;
+  padding:12px 0;border-bottom:1px solid rgba(255,255,255,.07);
+  color:var(--muted);font-size:14px
+}
+.contact-line strong{
+  color:var(--text);font-weight:700
+}
+.footer{
+  border-top:1px solid var(--border);
+  padding:40px 0 16px;
+  position:relative;z-index:2;
+}
+.footer-top{
+  display:grid;grid-template-columns:1.2fr .9fr .9fr;gap:24px;
+  margin-bottom:20px;
+}
+.footer h4{
+  font-family:var(--mono);
+  font-size:10px;text-transform:uppercase;letter-spacing:.12em;
+  color:var(--soft);margin-bottom:12px
+}
+.footer p,.footer a{color:var(--muted);font-size:14px}
+.footer-links{display:grid;gap:8px}
+.footer-bottom{
+  border-top:1px solid rgba(255,255,255,.07);
+  padding-top:16px;
+  color:var(--soft);
+  font-size:12px;
+}
+.wa-float{
+  position:fixed;right:18px;bottom:18px;z-index:998;
+  width:58px;height:58px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  background:#25d366;color:#fff;
+  box-shadow:0 14px 30px rgba(37,211,102,.28);
+}
+.muted{color:var(--muted)}
+.center{text-align:center}
+.mobile-only{display:none}
+.desktop-only{display:inline-flex}
+.access-note{
+  font-size:12px;color:var(--soft);margin-top:12px
+}
+.login-wrap{
+  min-height:100vh;display:grid;place-items:center;padding:28px
+}
+.login-card{
+  width:min(100%,420px);
+  background:rgba(255,255,255,.04);
+  border:1px solid var(--border);
+  border-radius:24px;
+  padding:34px;
+  position:relative;z-index:2;
+}
+.login-card h1{
+  font-family:var(--head);
+  font-size:34px;line-height:1.08;letter-spacing:-.03em;margin:10px 0 12px
+}
+.login-card p{color:var(--muted);font-size:14px}
+.form{display:grid;gap:14px;margin-top:22px}
+.field{display:grid;gap:6px}
+.field label{
+  font-family:var(--mono);
+  font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--soft)
+}
+.field input{
+  min-height:48px;padding:0 14px;border-radius:12px;border:1px solid var(--border);
+  background:rgba(255,255,255,.03);color:var(--text);font:inherit
+}
+.small-note{
+  margin-top:14px;font-size:12px;color:var(--soft);line-height:1.6
+}
+.tag{
+  display:inline-flex;align-items:center;min-height:34px;padding:0 12px;border-radius:999px;
+  background:var(--blue-bg);border:1px solid rgba(79,143,255,.22);
+  color:var(--blue);font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase
+}
+@media (max-width:980px){
+  .hero-grid,.split,.contact-box,.footer-top{grid-template-columns:1fr}
+  .grid-3{grid-template-columns:1fr}
+  .grid-4{grid-template-columns:repeat(2,1fr)}
+}
+@media (max-width:768px){
+  .nav-links,.nav-cta{display:none}
+  .menu-btn{display:block}
+  .wrapper{padding:0 16px}
+  .section{padding:68px 0}
+  .section-tight{padding:54px 0}
+  .hero{padding:54px 0 42px}
+  .actions{flex-direction:column;align-items:stretch}
+  .actions .btn{width:100%}
+  .grid-2,.grid-3,.grid-4{grid-template-columns:1fr}
+  .cta h2{font-size:28px}
+  .footer-top{gap:18px}
+  .mobile-only{display:inline-flex}
+  .desktop-only{display:none}
+}
+@media (max-width:560px){
+  body{padding-bottom:86px}
+  .mobile-bar{
+    position:fixed;left:12px;right:12px;bottom:12px;z-index:999;
+    display:grid;grid-template-columns:1fr 1fr;gap:10px;
+    padding:10px;border:1px solid var(--border);border-radius:18px;
+    background:rgba(7,11,20,.94);backdrop-filter:blur(20px)
+  }
+  .mobile-bar a{
+    min-height:46px;border-radius:12px;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center
+  }
+  .mobile-bar .main{background:var(--blue);color:#fff}
+  .mobile-bar .secondary{background:var(--green-bg);border:1px solid rgba(0,212,170,.22);color:var(--green)}
   .wa-float{display:none}
-}
-@media(max-width:480px){
-  .nav-inner{height:60px;padding:0 12px}
-  .mobile-nav{top:60px}
-  .page-hdr-inner{padding:36px 12px 28px}
-  .page-title{font-size:27px}
-  .page-sub{font-size:14px}
-  .w{padding:28px 12px}
-  .sec-h{font-size:24px}
-  .g-card,.info-box,.hero-point{padding:18px}
-  .hero-point-v,.quick-card .desc,.step-desc,.info-list div,.compat-item,.cta-copy{font-size:13px}
-  .note-inline{font-size:11px;padding:11px 12px}
-  .wa-float{bottom:16px;right:16px;width:52px;height:52px}
-  .wa-float svg{width:28px;height:28px}
 }
 </style>
 </head>
 <body>
-<div class="bg-mesh"><div class="bg-orb"></div><div class="bg-orb"></div><div class="bg-orb"></div></div>
 
 <nav class="nav">
-  <div class="nav-inner">
-    <a class="nav-logo" href="index.html" aria-label="TANTECNO"><div class="brand-wordmark"><strong>TANTECNO</strong><span>Soluciones computacionales</span></div></a>
+  <div class="wrapper nav-inner">
+    <a class="brand" href="index.html" aria-label="TANTECNO">
+      <strong>TANTECNO</strong>
+      <span>Optimización de computadores</span>
+    </a>
     <div class="nav-links">
-      <a href="index.html">Inicio</a>
-      <a href="servicios.html">Optimización</a>
-      <a href="asistencia.html" class="active">Asistencia remota</a>
-      <a href="index.html#contacto">Contacto</a>
+      <a href="index.html">Inicio</a><a href="servicios.html">Optimización</a><a href="asistencia.html" class="active">Diagnóstico remoto</a><a href="index.html#contacto">Contacto</a>
     </div>
-    <div class="nav-actions">
-      <a href="https://wa.me/56971036909?text=Hola%2C%20quiero%20agendar%20un%20diagn%C3%B3stico%20t%C3%A9cnico%20remoto%20para%20evaluar%20mi%20computador." target="_blank" class="btn-wa">WhatsApp</a>
-      <a href="https://wa.me/56971036909?text=Hola%2C%20quiero%20evaluar%20mi%20computador%20para%20saber%20si%20vale%20la%20pena%20optimizarlo." target="_blank" class="btn-cta">Evaluar mi computador</a>
+    <div class="nav-cta">
+      <a href="https://wa.me/56971036909?text=Hola%2C%20quiero%20evaluar%20mi%20computador%20para%20saber%20si%20vale%20la%20pena%20optimizarlo." target="_blank" class="btn btn-whatsapp">WhatsApp</a>
+      <a href="https://wa.me/56971036909?text=Hola%2C%20quiero%20evaluar%20mi%20computador%20para%20saber%20si%20vale%20la%20pena%20optimizarlo." target="_blank" class="btn btn-primary">Evaluar mi computador</a>
     </div>
-    <button class="nav-hamburger" id="menuBtn" aria-label="Abrir menú"><span></span><span></span><span></span></button>
+    <button class="menu-btn" id="menuBtn" aria-label="Abrir menú">
+      <span></span><span></span><span></span>
+    </button>
   </div>
 </nav>
-
-<div class="mobile-nav" id="mobNav">
-  <a href="index.html">Inicio</a>
-  <a href="servicios.html">Optimización</a>
-  <a href="asistencia.html">Asistencia remota</a>
-  <a href="index.html#contacto">Contacto</a>
-  <a href="https://wa.me/56971036909?text=Hola%2C%20quiero%20agendar%20un%20diagn%C3%B3stico%20t%C3%A9cnico%20remoto%20para%20evaluar%20mi%20computador." target="_blank" style="color:var(--green)">WhatsApp</a>
+<div class="mobile-menu" id="mobileMenu">
+  <div class="wrapper">
+    <a href="index.html">Inicio</a><a href="servicios.html">Optimización</a><a href="asistencia.html" class="active">Diagnóstico remoto</a><a href="index.html#contacto">Contacto</a><a href="login.html" style="color:var(--soft);font-size:12px">Acceso interno</a>
+  </div>
 </div>
 
-<header class="page-hdr">
-  <div class="page-hdr-inner">
-    <div class="breadcrumb"><a href="index.html">Inicio</a> / Asistencia remota</div>
-    <h1 class="page-title">Diagnóstico técnico remoto <em>avanzado</em> para optimizar tu computador sin moverlo de tu escritorio.</h1>
-    <p class="page-sub">Esta asistencia no está pensada como soporte genérico. Está orientada a evaluar tu computador en remoto, identificar si realmente vale la pena optimizarlo y definir si la mejora correcta pasa por SSD, RAM, mantención interna, reinstalación limpia o una combinación de todo lo anterior.</p>
-    <div class="hero-points">
-      <div class="hero-point">
-        <div class="hero-point-k">Valor</div>
-        <div class="hero-point-v">Diagnóstico técnico remoto avanzado · $29.900</div>
-      </div>
-      <div class="hero-point">
-        <div class="hero-point-k">Enfoque</div>
-        <div class="hero-point-v">Pensado principalmente para computadores Windows orientados a optimización.</div>
-      </div>
-      <div class="hero-point">
-        <div class="hero-point-k">Resultado</div>
-        <div class="hero-point-v">Definición clara de si conviene optimizar y qué intervención corresponde.</div>
-      </div>
+
+<header class="hero">
+  <div class="wrapper">
+    <div class="eyebrow">Diagnóstico remoto</div>
+    <h1>Evaluamos tu computador en remoto para saber si vale la pena optimizarlo.</h1>
+    <p class="lead">Usamos conexión remota para revisar computadores Windows y definir si la mejora correcta pasa por SSD, RAM, mantención interna o una optimización completa.</p>
+    <div class="actions">
+      <a href="ms-quick-assist:" class="btn btn-primary">Abrir Quick Assist</a>
+      <a href="https://anydesk.com/es/downloads/thank-you?dv=win_exe" target="_blank" class="btn btn-secondary">Descargar AnyDesk</a>
+      <a href="https://wa.me/56971036909?text=Hola%2C%20quiero%20agendar%20un%20diagn%C3%B3stico%20t%C3%A9cnico%20remoto%20avanzado%20para%20evaluar%20mi%20computador." target="_blank" class="btn btn-whatsapp">WhatsApp</a>
     </div>
-    <div class="hero-actions">
-      <a href="ms-quick-assist:" class="btn-main" id="quickassist">Abrir Quick Assist →</a>
-      <a href="https://anydesk.com/es/downloads/thank-you?dv=win_exe" target="_blank" class="btn-ghost">Descargar AnyDesk para Windows</a>
-      <a href="https://wa.me/56971036909?text=Hola%2C%20quiero%20agendar%20un%20diagn%C3%B3stico%20t%C3%A9cnico%20remoto%20para%20evaluar%20mi%20computador." target="_blank" class="btn-ghost">Coordinar por WhatsApp</a>
+    <div class="chips">
+      <div class="chip">Diagnóstico remoto · $29.900</div>
+      <div class="chip">Principalmente para Windows</div>
+      <div class="chip">Sales con una recomendación clara</div>
     </div>
-    <div class="note-inline">Quick Assist es la opción principal. Si no funciona o prefieres una alternativa, puedes usar AnyDesk para Windows y te guiamos durante la conexión.</div>
   </div>
 </header>
 
-<section class="section" style="background:var(--bg2)">
-  <div class="w">
-    <div class="sec-tag sr">Cuándo sirve</div>
-    <div class="sec-h sr">No necesitas visita para saber si tu computador todavía tiene futuro.</div>
-    <div class="sec-s sr">La asistencia remota tiene sentido cuando el objetivo es diagnosticar bien antes de intervenir. Sirve especialmente para equipos lentos, saturados o con dudas reales sobre si conviene invertirles dinero.</div>
-    <div class="quick-grid">
-      <div class="g-card quick-card sr highlight">
-        <div class="label">Rendimiento</div>
-        <div class="title">Equipo muy lento</div>
-        <div class="desc">Cuando el computador demora en iniciar, abrir programas o responder en uso cotidiano.</div>
+<section class="section">
+  <div class="wrapper">
+    <div class="eyebrow">Cuándo sirve</div>
+    <h2 class="sec-h">Este formato tiene sentido cuando lo que necesitas es criterio.</h2>
+    <div class="grid-4">
+      <div class="card"><div class="icon">01</div><h3>Equipo muy lento</h3><p>Demora en iniciar, abrir programas o responder con soltura.</p></div>
+      <div class="card"><div class="icon">02</div><h3>Duda real</h3><p>No sabes si optimizar el equipo o reemplazarlo directamente.</p></div>
+      <div class="card"><div class="icon">03</div><h3>Posible cuello de botella</h3><p>No está claro si el problema viene del disco, RAM, temperatura o sistema.</p></div>
+      <div class="card"><div class="icon">04</div><h3>Decisión antes de gastar</h3><p>Quieres una recomendación técnica antes de meter dinero en hardware o servicios.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section section-tight" style="background:rgba(255,255,255,.02);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
+  <div class="wrapper split">
+    <div>
+      <div class="eyebrow">Qué revisamos</div>
+      <h2 class="sec-h">Leemos el estado real del computador.</h2>
+      <p class="sec-s">La sesión no se queda en “se siente lento”. Buscamos encontrar qué mejora realmente cambia el equipo.</p>
+      <div class="list">
+        <div>Tipo de almacenamiento y conveniencia de migración a SSD.</div>
+        <div>Carga de memoria y conveniencia de aumento de RAM.</div>
+        <div>Estado general del sistema operativo y arranque.</div>
+        <div>Señales que sugieren mantención interna o revisión física.</div>
       </div>
-      <div class="g-card quick-card sr" style="transition-delay:.08s">
-        <div class="label">Decisión</div>
-        <div class="title">Duda entre optimizar o reemplazar</div>
-        <div class="desc">Antes de comprar un equipo nuevo, vale la pena saber si el actual todavía tiene vida útil real.</div>
-      </div>
-      <div class="g-card quick-card sr" style="transition-delay:.16s">
-        <div class="label">Hardware</div>
-        <div class="title">Sospecha de cuello de botella</div>
-        <div class="desc">Muy útil cuando no está claro si el problema es disco, RAM, temperatura o sistema operativo.</div>
-      </div>
-      <div class="g-card quick-card sr" style="transition-delay:.24s">
-        <div class="label">Orientación</div>
-        <div class="title">Necesitas una ruta correcta</div>
-        <div class="desc">La gracia no es revisar por revisar, sino salir con una recomendación técnica clara y útil.</div>
+    </div>
+    <div class="card">
+      <h3>Qué obtienes al final</h3>
+      <div class="list">
+        <div>Definición de viabilidad técnica del equipo.</div>
+        <div>Recomendación clara de optimización según el caso.</div>
+        <div>Criterio para no gastar mal si no conviene intervenir.</div>
+        <div>Cotización posterior solo si la mejora tiene sentido real.</div>
       </div>
     </div>
   </div>
 </section>
 
 <section class="section">
-  <div class="w">
-    <div class="sec-tag sr">Qué se revisa</div>
-    <div class="sec-h sr">La sesión remota está diseñada para detectar qué mejora realmente cambia el equipo.</div>
-    <div class="sec-s sr">La evaluación no se queda en “se siente lento”. Busca leer con criterio el estado general del computador y encontrar la intervención correcta.</div>
-
-    <div class="dual-grid">
-      <div class="info-box blue sr">
-        <h3>Lo que analizamos</h3>
-        <p>Durante la sesión remota se revisan señales claves del equipo para determinar si vale la pena optimizarlo y con qué combinación de mejoras tendría sentido hacerlo.</p>
-        <div class="info-list">
-          <div><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 8l3 3 7-7"/></svg>Tipo de almacenamiento y viabilidad de migración a SSD.</div>
-          <div><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 8l3 3 7-7"/></svg>Carga de memoria y conveniencia de aumento de RAM.</div>
-          <div><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 8l3 3 7-7"/></svg>Estado del sistema operativo, arranque y comportamiento general.</div>
-          <div><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 8l3 3 7-7"/></svg>Indicadores que sugieren mantención interna o revisión física complementaria.</div>
+  <div class="wrapper">
+    <div class="eyebrow">Cómo conectarse</div>
+    <h2 class="sec-h">Dos opciones simples para iniciar la sesión.</h2>
+    <div class="grid-2">
+      <div class="card">
+        <div class="icon">Q</div>
+        <h3>Quick Assist</h3>
+        <p>Es la opción principal porque viene integrada en Windows y suele ser la vía más simple para iniciar la evaluación.</p>
+        <div class="list">
+          <div>Haz clic en “Abrir Quick Assist”.</div>
+          <div>Se abrirá la herramienta de asistencia de Windows.</div>
+          <div>Te guiamos por WhatsApp hasta dejar la conexión lista.</div>
         </div>
       </div>
-
-      <div class="info-box sr" style="transition-delay:.1s">
-        <h3>Qué obtienes al final</h3>
-        <p>No terminas con una impresión vaga. Terminas con una conclusión útil: si conviene optimizar, con qué estrategia y qué resultado es razonable esperar del equipo.</p>
-        <div class="info-list">
-          <div><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 8l3 3 7-7"/></svg>Definición de viabilidad técnica del equipo.</div>
-          <div><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 8l3 3 7-7"/></svg>Ruta sugerida de optimización según el caso.</div>
-          <div><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 8l3 3 7-7"/></svg>Criterio para no gastar mal si el equipo no conviene.</div>
-          <div><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 8l3 3 7-7"/></svg>Cotización posterior solo si la optimización tiene sentido real.</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="section" style="background:var(--bg3);position:relative;overflow:hidden">
-  <div style="position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1600&q=80') center/cover;opacity:.03;pointer-events:none"></div>
-  <div class="w" style="position:relative;z-index:2">
-    <div class="sec-tag sr">Proceso</div>
-    <div class="sec-h sr">Cómo funciona la asistencia remota.</div>
-    <div class="sec-s sr">La sesión es simple para el cliente, pero útil técnicamente. Lo importante es que termina en una decisión concreta, no en una conversación larga sin cierre.</div>
-    <div class="process-grid">
-      <div class="g-card sr">
-        <div class="step-num">01</div>
-        <div class="step-tag">Contacto</div>
-        <div class="step-title">Coordinamos el caso</div>
-        <div class="step-desc">Nos cuentas qué equipo tienes, qué problema presenta y si estás evaluando optimizarlo o reemplazarlo.</div>
-      </div>
-      <div class="g-card sr" style="transition-delay:.08s">
-        <div class="step-num">02</div>
-        <div class="step-tag">Conexión</div>
-        <div class="step-title">Abrimos sesión remota</div>
-        <div class="step-desc">La conexión se realiza de forma segura mediante Quick Assist o, si hace más sentido, mediante AnyDesk en el equipo a evaluar.</div>
-      </div>
-      <div class="g-card sr" style="transition-delay:.16s">
-        <div class="step-num">03</div>
-        <div class="step-tag">Evaluación</div>
-        <div class="step-title">Leemos el estado real</div>
-        <div class="step-desc">Se revisan almacenamiento, memoria, sistema y señales que permitan definir la mejor ruta de optimización.</div>
-      </div>
-      <div class="g-card sr" style="transition-delay:.24s">
-        <div class="step-num">04</div>
-        <div class="step-tag">Cierre</div>
-        <div class="step-title">Te decimos qué conviene</div>
-        <div class="step-desc">Sales con una conclusión clara: optimizar, con qué combinación, o no intervenir si no tiene sentido.</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="section" style="background:var(--bg2)">
-  <div class="w">
-    <div class="sec-tag sr">Conexión remota</div>
-    <div class="sec-h sr">Dos formas simples de iniciar la sesión.</div>
-    <div class="sec-s sr">Quick Assist queda como opción principal porque viene integrado en Windows. Si no está disponible o prefieres una alternativa, también puedes descargar AnyDesk y usarlo para la conexión remota.</div>
-
-    <div class="dual-grid">
-      <div class="info-box blue sr">
-        <h3>Opción 1 · Quick Assist</h3>
-        <p>Es la vía más directa para equipos Windows compatibles. No requiere instalar un programa externo si ya viene disponible en el sistema.</p>
-        <div class="info-list">
-          <div><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 8l3 3 7-7"/></svg>Haz clic en <strong style="color:var(--text)">Abrir Quick Assist</strong>.</div>
-          <div><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 8l3 3 7-7"/></svg>Se abrirá la herramienta de asistencia de Windows.</div>
-          <div><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 8l3 3 7-7"/></svg>Seguimos la conexión contigo paso a paso por WhatsApp.</div>
-        </div>
-      </div>
-
-      <div class="info-box sr" style="transition-delay:.1s">
-        <h3>Opción 2 · AnyDesk para Windows</h3>
-        <p>Si Quick Assist no funciona o quieres una alternativa más directa, puedes descargar AnyDesk para Windows e iniciar la sesión desde ahí.</p>
-        <div class="info-list">
-          <div><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 8l3 3 7-7"/></svg>Haz clic en <a href="https://anydesk.com/es/downloads/thank-you?dv=win_exe" target="_blank" style="color:var(--blue)">Descargar AnyDesk para Windows</a>.</div>
-          <div><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 8l3 3 7-7"/></svg>Abre el archivo descargado y ejecuta AnyDesk.</div>
-          <div><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 8l3 3 7-7"/></svg>Compártenos el código o ID que te muestra la aplicación.</div>
-          <div><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 8l3 3 7-7"/></svg>Te guiamos por WhatsApp hasta dejar la conexión lista.</div>
+      <div class="card">
+        <div class="icon">A</div>
+        <h3>AnyDesk para Windows</h3>
+        <p>Si Quick Assist no funciona o prefieres una alternativa, también puedes usar AnyDesk para realizar la sesión remota.</p>
+        <div class="list">
+          <div>Descarga AnyDesk para Windows.</div>
+          <div>Abre el archivo y ejecuta la aplicación.</div>
+          <div>Compártenos el ID que muestra la pantalla.</div>
         </div>
       </div>
     </div>
@@ -386,92 +489,72 @@ body::after{content:'';position:fixed;inset:0;background:url("data:image/svg+xml
 </section>
 
 <section class="section">
-  <div class="w">
-    <div class="sec-tag sr">Compatibilidad</div>
-    <div class="sec-h sr">Cuándo este formato remoto funciona mejor.</div>
-    <div class="sec-s sr">No todo problema se resuelve en remoto, pero para diagnóstico de optimización este formato suele ser muy eficiente.</div>
-
-    <div class="compat-grid">
-      <div class="g-card compat-card good sr">
-        <h3>Sí funciona muy bien cuando...</h3>
-        <div class="compat-list">
-          <div class="compat-item"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 8l3 3 7-7"/></svg>El computador enciende y permite conexión remota.</div>
-          <div class="compat-item"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 8l3 3 7-7"/></svg>La duda principal es rendimiento, lentitud o conveniencia de optimización.</div>
-          <div class="compat-item"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 8l3 3 7-7"/></svg>Se necesita criterio antes de decidir compra de SSD, RAM o reinstalación.</div>
-          <div class="compat-item"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 8l3 3 7-7"/></svg>El objetivo es evaluar, no improvisar cambios al azar.</div>
-        </div>
-      </div>
-
-      <div class="g-card compat-card bad sr" style="transition-delay:.1s">
-        <h3>No es el formato ideal cuando...</h3>
-        <div class="compat-list">
-          <div class="compat-item"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 3l10 10M13 3L3 13"/></svg>El equipo no enciende o no permite acceso al sistema.</div>
-          <div class="compat-item"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 3l10 10M13 3L3 13"/></svg>Existe sospecha de falla física grave que requiere inspección directa.</div>
-          <div class="compat-item"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 3l10 10M13 3L3 13"/></svg>La conexión a internet es demasiado inestable para trabajar bien.</div>
-          <div class="compat-item"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 3l10 10M13 3L3 13"/></svg>Se busca soporte genérico y no diagnóstico orientado a optimización.</div>
-        </div>
+  <div class="wrapper">
+    <div class="cta">
+      <div class="eyebrow">Siguiente paso</div>
+      <h2>Agenda el diagnóstico remoto.</h2>
+      <p>Por $29.900 defines si tu computador todavía tiene vida útil aprovechable y qué optimización corresponde antes de gastar plata a ciegas.</p>
+      <div class="actions">
+        <a href="ms-quick-assist:" class="btn btn-primary">Abrir Quick Assist</a>
+        <a href="https://anydesk.com/es/downloads/thank-you?dv=win_exe" target="_blank" class="btn btn-secondary">Descargar AnyDesk</a>
+        <a href="https://wa.me/56971036909?text=Hola%2C%20quiero%20agendar%20un%20diagn%C3%B3stico%20t%C3%A9cnico%20remoto%20avanzado%20para%20evaluar%20mi%20computador." target="_blank" class="btn btn-whatsapp">Agendar por WhatsApp</a>
       </div>
     </div>
   </div>
 </section>
 
-<section class="section" style="background:var(--bg2)">
-  <div class="w">
-    <div class="cta-wrap sr">
-      <div>
-        <div class="cta-tag">Siguiente paso</div>
-        <div class="cta-title">Inicia la evaluación remota y define si tu equipo vale la pena.</div>
-        <div class="cta-copy">Por $29.900 puedes saber si tu computador todavía tiene vida útil aprovechable, qué tipo de optimización necesita y cuál es la intervención correcta antes de gastar plata a ciegas.</div>
-      </div>
-      <div class="cta-actions">
-        <a href="ms-quick-assist:" class="btn-main">Abrir Quick Assist →</a>
-        <a href="https://anydesk.com/es/downloads/thank-you?dv=win_exe" target="_blank" class="btn-ghost">Descargar AnyDesk</a>
-        <a href="https://wa.me/56971036909?text=Hola%2C%20quiero%20agendar%20un%20diagn%C3%B3stico%20t%C3%A9cnico%20remoto%20avanzado%20para%20evaluar%20mi%20computador." target="_blank" class="btn-ghost">Agendar por WhatsApp</a>
-      </div>
-    </div>
-  </div>
-</section>
-
-<footer class="footer">
-  <div class="footer-inner">
-    <div class="footer-brand">
-      <div class="footer-brand-mark">TANTECNO</div>
-      <p>Optimización de computadores. Machalí, Región de O'Higgins, Chile.</p>
-    </div>
-    <div class="footer-links">
-      <div class="footer-col">
-        <h4>Navegación</h4>
-        <a href="index.html">Inicio</a>
-        <a href="servicios.html">Optimización</a>
-        <a href="asistencia.html">Asistencia remota</a>
-      </div>
-      <div class="footer-col">
-        <h4>Contacto</h4>
-        <a href="https://wa.me/56971036909" target="_blank">+56 9 7103 6909</a>
-        <a href="mailto:contacto@tantecno.cl">contacto@tantecno.cl</a>
-        <a>Lun–Vie 8:30–19:00 · Sáb 8:30–13:00</a>
-      </div>
-    </div>
-  </div>
-  <div class="footer-copy">© 2026 Tantecno · Machalí, Chile</div>
-</footer>
-
-<div class="mobile-cta-bar" aria-label="Acciones rápidas móviles">
-  <a href="ms-quick-assist:" class="mobile-main">Quick Assist</a>
-  <a href="https://wa.me/56971036909?text=Hola%2C%20quiero%20evaluar%20mi%20computador%20para%20saber%20si%20vale%20la%20pena%20optimizarlo." target="_blank" class="mobile-secondary">WhatsApp</a>
+<div class="mobile-bar">
+  <a href="ms-quick-assist:" class="main">Quick Assist</a>
+  <a href="https://wa.me/56971036909?text=Hola%2C%20quiero%20agendar%20un%20diagn%C3%B3stico%20t%C3%A9cnico%20remoto%20avanzado%20para%20evaluar%20mi%20computador." target="_blank" class="secondary">WhatsApp</a>
 </div>
 
-<a href="https://wa.me/56971036909?text=Hola%2C%20quiero%20consultar%20por%20la%20optimizaci%C3%B3n%20de%20mi%20computador." target="_blank" class="wa-float" aria-label="WhatsApp">
-  <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.115.548 4.103 1.509 5.833L.057 24l6.305-1.654A11.954 11.954 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.007-1.374l-.359-.213-3.722.976.993-3.625-.234-.373A9.818 9.818 0 012.182 12c0-5.42 4.398-9.818 9.818-9.818 5.42 0 9.818 4.398 9.818 9.818 0 5.42-4.398 9.818-9.818 9.818z"/></svg>
+
+<footer class="footer">
+  <div class="wrapper">
+    <div class="footer-top">
+      <div>
+        <div class="brand" style="margin-bottom:12px">
+          <strong style="font-size:20px">TANTECNO</strong>
+          <span>Optimización de computadores</span>
+        </div>
+        <p>Evaluamos si tu computador vale la pena y definimos la optimización correcta antes de que gastes plata a ciegas.</p>
+      </div>
+      <div>
+        <h4>Navegación</h4>
+        <div class="footer-links">
+          <a href="index.html">Inicio</a>
+          <a href="servicios.html">Optimización</a>
+          <a href="asistencia.html">Diagnóstico remoto</a>
+          <a href="index.html#contacto">Contacto</a>
+        </div>
+      </div>
+      <div>
+        <h4>Contacto</h4>
+        <div class="footer-links">
+          <a href="https://wa.me/56971036909" target="_blank">+56 9 7103 6909</a>
+          <a href="mailto:contacto@tantecno.cl">contacto@tantecno.cl</a>
+          <a href="login.html">Acceso interno</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">© 2026 Tantecno · Machalí, Chile</div>
+  </div>
+</footer>
+<a class="wa-float" href="https://wa.me/56971036909?text=Hola%2C%20quiero%20evaluar%20mi%20computador%20para%20saber%20si%20vale%20la%20pena%20optimizarlo." target="_blank" aria-label="WhatsApp">
+  <svg width="30" height="30" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+    <path d="M12 0C5.373 0 0 5.373 0 12c0 2.115.548 4.103 1.509 5.833L.057 24l6.305-1.654A11.954 11.954 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.007-1.374l-.359-.213-3.722.976.993-3.625-.234-.373A9.818 9.818 0 012.182 12c0-5.42 4.398-9.818 9.818-9.818 5.42 0 9.818 4.398 9.818 9.818 0 5.42-4.398 9.818-9.818 9.818z"/>
+  </svg>
 </a>
 
-<script>
-const obs=new IntersectionObserver((entries)=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('vis');obs.unobserve(e.target)}})},{threshold:.1,rootMargin:'0px 0px -40px 0px'});
-document.querySelectorAll('.sr').forEach(el=>obs.observe(el));
 
-const menuBtn=document.getElementById('menuBtn');
-const mobNav=document.getElementById('mobNav');
-if(menuBtn&&mobNav){menuBtn.addEventListener('click',()=>mobNav.classList.toggle('open'));}
+<script>
+const menuBtn = document.getElementById('menuBtn');
+const mobileMenu = document.getElementById('mobileMenu');
+if(menuBtn && mobileMenu){
+  menuBtn.addEventListener('click', ()=> mobileMenu.classList.toggle('open'));
+}
 </script>
+
 </body>
 </html>
