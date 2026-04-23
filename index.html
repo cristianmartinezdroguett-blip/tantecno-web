@@ -3,375 +3,212 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#070b14">
+<meta name="theme-color" content="#050914">
 <meta name="description" content="Evaluamos si tu computador vale la pena y definimos la optimización correcta.">
 <title>TANTECNO · Optimización de computadores</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&family=Sora:wght@500;600;700;800&display=swap" rel="stylesheet">
-<style>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700;800&family=JetBrains+Mono:wght@400;500&family=Sora:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>:root{--hero-image:url("https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1800&q=80");--side-image:url("https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1800&q=80");--cta-image:url("https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1800&q=80")}
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#070b14;
-  --bg2:#0d1322;
-  --card:rgba(255,255,255,.04);
-  --card2:rgba(255,255,255,.03);
-  --border:rgba(255,255,255,.09);
-  --text:#f5f7fb;
-  --muted:rgba(245,247,251,.68);
-  --soft:rgba(245,247,251,.36);
-  --blue:#4f8fff;
-  --blue2:#3a7bff;
-  --green:#00d4aa;
-  --green-bg:rgba(0,212,170,.10);
-  --blue-bg:rgba(79,143,255,.11);
-  --radius:18px;
-  --font:'DM Sans',system-ui,sans-serif;
-  --head:'Sora',system-ui,sans-serif;
-  --mono:'JetBrains Mono',monospace;
+  --bg:#050914;--surface:rgba(255,255,255,.05);--border:rgba(255,255,255,.10);
+  --text:#f5f7fb;--muted:rgba(245,247,251,.72);--soft:rgba(245,247,251,.42);
+  --blue:#4f8fff;--blue2:#77a6ff;--cyan:#38cfff;--green:#00d4aa;--greenbg:rgba(0,212,170,.12);
+  --radius:20px;--shadow:0 24px 60px rgba(0,0,0,.28);
+  --font:'DM Sans',system-ui,sans-serif;--head:'Sora',system-ui,sans-serif;--mono:'JetBrains Mono',monospace;
 }
-html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;scroll-padding-top:84px}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;scroll-padding-top:90px}
 body{
-  font-family:var(--font);
+  font-family:var(--font);color:var(--text);line-height:1.65;overflow-x:hidden;
   background:
-    radial-gradient(600px 600px at 0% 0%, rgba(79,143,255,.10), transparent 60%),
-    radial-gradient(500px 500px at 100% 0%, rgba(139,92,246,.08), transparent 50%),
-    linear-gradient(180deg,#070b14 0%, #0a1020 100%);
-  color:var(--text);
-  line-height:1.65;
-  overflow-x:hidden;
+    radial-gradient(800px 500px at -10% -10%, rgba(79,143,255,.18), transparent 58%),
+    radial-gradient(700px 520px at 110% 0%, rgba(0,212,170,.08), transparent 45%),
+    linear-gradient(180deg,#050914 0%,#081224 100%);
+}
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;
+  background:
+    linear-gradient(rgba(255,255,255,.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.02) 1px, transparent 1px);
+  background-size:36px 36px;opacity:.12;
 }
 body::after{
-  content:"";
-  position:fixed;
-  inset:0;
-  pointer-events:none;
-  background:url("data:image/svg+xml,%3Csvg viewBox='0 0 220 220' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.02'/%3E%3C/svg%3E");
-  opacity:.5;
+  content:"";position:fixed;inset:0;pointer-events:none;
+  background:url("data:image/svg+xml,%3Csvg viewBox='0 0 220 220' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.03'/%3E%3C/svg%3E");
+  opacity:.42;
 }
 a{text-decoration:none;color:inherit}
-img{max-width:100%;display:block}
-.wrapper{max-width:1120px;margin:0 auto;padding:0 24px}
-.nav{
-  position:sticky;top:0;z-index:1000;
-  background:rgba(7,11,20,.82);
-  border-bottom:1px solid var(--border);
-  backdrop-filter:blur(18px);
-}
-.nav-inner{
-  height:78px;
-  display:flex;align-items:center;justify-content:space-between;gap:18px;
-}
-.brand{
-  display:flex;flex-direction:column;gap:4px;
-}
-.brand strong{
-  font-family:var(--head);
-  font-size:22px;font-weight:800;letter-spacing:.14em;
-}
-.brand span{
-  font-family:var(--mono);
-  font-size:10px;color:var(--soft);letter-spacing:.12em;text-transform:uppercase;
-}
-.nav-links{display:flex;gap:6px;align-items:center}
-.nav-links a{
-  padding:10px 14px;
-  border-radius:10px;
-  color:var(--muted);
-  font-size:14px;font-weight:500;
-}
-.nav-links a:hover,.nav-links a.active{
-  background:var(--card);
-  color:var(--text);
-}
-.nav-cta{display:flex;gap:10px;align-items:center}
-.btn{
-  display:inline-flex;align-items:center;justify-content:center;gap:8px;
-  min-height:48px;
-  padding:0 18px;
-  border-radius:12px;
-  font-size:15px;font-weight:700;
-  transition:.2s ease;
-  border:1px solid transparent;
-}
-.btn-primary{background:var(--blue);color:#fff}
-.btn-primary:hover{background:var(--blue2)}
-.btn-secondary{
-  background:transparent;
-  border-color:var(--border);
-  color:var(--text);
-}
-.btn-secondary:hover{background:var(--card)}
-.btn-whatsapp{
-  background:var(--green-bg);
-  border-color:rgba(0,212,170,.22);
-  color:var(--green);
-}
-.btn-whatsapp:hover{background:rgba(0,212,170,.16)}
-.menu-btn{
-  display:none;
-  width:44px;height:44px;
-  border:none;background:transparent;color:var(--text);
-}
-.menu-btn span{
-  display:block;width:22px;height:2px;background:var(--text);margin:4px auto;border-radius:2px;
-}
-.mobile-menu{
-  display:none;
-  border-bottom:1px solid var(--border);
-  background:rgba(7,11,20,.96);
-}
-.mobile-menu.open{display:block}
-.mobile-menu .wrapper{padding-top:10px;padding-bottom:12px}
-.mobile-menu a{
-  display:block;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.06);color:var(--muted);font-size:14px
-}
-.mobile-menu a:last-child{border-bottom:none}
-section{position:relative;z-index:2}
-.section{padding:86px 0}
-.section-tight{padding:66px 0}
-.eyebrow{
+.wrapper{max-width:1160px;margin:0 auto;padding:0 24px;position:relative;z-index:2}
+.section{padding:78px 0}.section-tight{padding:56px 0}
+.kicker{
   display:inline-flex;align-items:center;gap:10px;
-  font-family:var(--mono);
-  font-size:11px;color:var(--blue);letter-spacing:.12em;text-transform:uppercase;
-  margin-bottom:18px;
+  font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--blue2);margin-bottom:18px
 }
-.eyebrow::before{
-  content:"";width:22px;height:1px;background:var(--blue);display:inline-block;
+.kicker::before{content:"";width:24px;height:1px;background:var(--blue2)}
+.h2{
+  font-family:var(--head);font-size:clamp(30px,4vw,46px);line-height:1.06;
+  letter-spacing:-.04em;margin-bottom:14px;text-wrap:balance
 }
-.hero{padding:74px 0 56px;border-bottom:1px solid var(--border)}
-.hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:28px;align-items:center}
-.hero h1{
-  font-family:var(--head);
-  font-size:clamp(34px,6vw,64px);
-  line-height:1.02;
-  letter-spacing:-.04em;
-  margin-bottom:16px;
-  max-width:760px;
-  text-wrap:balance;
+.p-large{max-width:760px;color:var(--muted);font-size:17px}
+.nav{
+  position:sticky;top:0;z-index:999;background:rgba(5,9,20,.72);backdrop-filter:blur(18px);
+  border-bottom:1px solid rgba(255,255,255,.08)
 }
-.hero p.lead{
-  max-width:680px;
-  font-size:18px;
-  color:var(--muted);
-  margin-bottom:24px;
+.nav-inner{height:82px;display:flex;align-items:center;justify-content:space-between;gap:18px}
+.brand{display:flex;flex-direction:column;gap:3px}
+.brand strong{font-family:var(--head);font-size:22px;font-weight:800;letter-spacing:.14em}
+.brand span{font-family:var(--mono);font-size:10px;letter-spacing:.12em;color:var(--soft);text-transform:uppercase}
+.nav-links{display:flex;align-items:center;gap:6px}
+.nav-links a{color:var(--muted);font-size:14px;font-weight:600;padding:10px 14px;border-radius:12px}
+.nav-links a:hover,.nav-links a.active{color:var(--text);background:rgba(255,255,255,.05)}
+.nav-actions{display:flex;gap:10px;align-items:center}
+.btn{
+  min-height:48px;padding:0 18px;border-radius:14px;display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  font-size:15px;font-weight:700;transition:.18s ease;border:1px solid transparent
 }
+.btn-primary{background:linear-gradient(135deg,var(--blue),#5d7dff);color:#fff;box-shadow:0 10px 24px rgba(79,143,255,.26)}
+.btn-secondary{border-color:var(--border);background:rgba(255,255,255,.03);color:var(--text)}
+.btn-whatsapp{border-color:rgba(0,212,170,.18);background:var(--greenbg);color:var(--green)}
+.menu-btn{display:none;width:44px;height:44px;border:none;background:transparent}
+.menu-btn span{display:block;width:22px;height:2px;margin:4px auto;background:var(--text)}
+.mobile-menu{display:none;background:rgba(5,9,20,.95);border-bottom:1px solid var(--border)}
+.mobile-menu.open{display:block}.mobile-menu .wrapper{padding-top:8px;padding-bottom:12px}
+.mobile-menu a{display:block;padding:13px 0;color:var(--muted);border-bottom:1px solid rgba(255,255,255,.06)}
+.mobile-menu a:last-child{border-bottom:none}
+.hero{
+  position:relative;overflow:hidden;padding:74px 0 52px;border-bottom:1px solid rgba(255,255,255,.06)
+}
+.hero::before{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(90deg, rgba(5,9,20,.92) 0%, rgba(5,9,20,.82) 38%, rgba(5,9,20,.74) 100%), var(--hero-image) center/cover no-repeat
+}
+.hero::after{
+  content:"";position:absolute;inset:0;
+  background:
+    radial-gradient(600px 320px at 70% 18%, rgba(79,143,255,.18), transparent 60%),
+    radial-gradient(500px 300px at 88% 78%, rgba(0,212,170,.08), transparent 60%);
+}
+.hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:28px;align-items:center}
+.hero-copy{position:relative;z-index:2}
+.hero-title{
+  font-family:var(--head);font-size:clamp(38px,6vw,68px);line-height:1.01;letter-spacing:-.05em;
+  margin-bottom:16px;max-width:780px;text-wrap:balance
+}
+.hero-lead{font-size:18px;color:var(--muted);max-width:690px;margin-bottom:24px}
 .actions{display:flex;gap:12px;flex-wrap:wrap}
-.chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
-.chip{
-  min-height:38px;
-  display:inline-flex;align-items:center;
-  padding:0 14px;border-radius:999px;
-  background:var(--card2);
-  border:1px solid var(--border);
-  font-size:12px;font-weight:600;color:var(--muted);
+.tags{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+.tag{
+  display:inline-flex;align-items:center;min-height:38px;padding:0 14px;border-radius:999px;
+  background:rgba(255,255,255,.05);border:1px solid var(--border);font-size:12px;font-weight:700;color:var(--muted)
 }
-.panel{
-  background:linear-gradient(180deg, rgba(79,143,255,.12), rgba(255,255,255,.03));
-  border:1px solid rgba(79,143,255,.18);
-  border-radius:24px;
-  padding:28px;
+.glass{
+  position:relative;background:linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04));
+  border:1px solid rgba(255,255,255,.10);border-radius:26px;padding:28px;box-shadow:var(--shadow);backdrop-filter:blur(16px)
 }
-.panel h3{
-  font-family:var(--head);
-  font-size:24px;
-  line-height:1.15;
-  margin-bottom:12px;
+.glow-card::before{
+  content:"";position:absolute;inset:-1px;background:linear-gradient(135deg, rgba(79,143,255,.20), rgba(255,255,255,0), rgba(0,212,170,.12));
+  z-index:-1;border-radius:inherit
 }
-.panel p{color:var(--muted);font-size:14px}
-.stack{display:grid;gap:12px;margin-top:18px}
-.stack-item{
-  background:rgba(255,255,255,.03);
-  border:1px solid var(--border);
-  border-radius:14px;
-  padding:14px 16px;
-  color:var(--muted);
-  font-size:14px;
+.metric{display:grid;gap:10px;margin-top:18px}
+.metric-row{
+  display:flex;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.08);
+  color:var(--muted);font-size:14px
 }
-.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
-.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
-.grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.metric-row:last-child{border-bottom:none}.metric-row strong{color:var(--text)}
+.grid-2,.grid-3{display:grid;gap:16px}.grid-2{grid-template-columns:repeat(2,1fr)}.grid-3{grid-template-columns:repeat(3,1fr)}
 .card{
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:var(--radius);
-  padding:24px;
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:24px;position:relative;overflow:hidden
 }
-.card h3,.card h4{
-  font-family:var(--head);
-  font-size:21px;
-  line-height:1.15;
-  margin-bottom:10px;
-  text-wrap:balance;
+.card::before{
+  content:"";position:absolute;top:-80px;right:-20%;width:180px;height:180px;
+  background:radial-gradient(circle, rgba(79,143,255,.12), transparent 65%);opacity:.8;pointer-events:none
 }
-.card p{color:var(--muted);font-size:14px}
+.card h3{font-family:var(--head);font-size:21px;line-height:1.12;margin-bottom:8px;text-wrap:balance}
+.card p{font-size:14px;color:var(--muted)}
 .icon{
-  width:42px;height:42px;border-radius:12px;
-  display:flex;align-items:center;justify-content:center;
-  background:var(--blue-bg);
-  border:1px solid rgba(79,143,255,.22);
-  color:var(--blue);
-  font-family:var(--head);font-weight:800;
-  margin-bottom:14px;
+  width:44px;height:44px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-family:var(--head);
+  font-size:13px;font-weight:800;background:rgba(79,143,255,.13);border:1px solid rgba(79,143,255,.20);color:var(--blue2);margin-bottom:14px
 }
 .list{display:grid;gap:10px;margin-top:12px}
-.list div{
-  display:flex;gap:10px;align-items:flex-start;
-  color:var(--muted);font-size:14px
-}
-.list div::before{
-  content:"•";color:var(--blue);font-weight:900;line-height:1
-}
-.split{
-  display:grid;grid-template-columns:1fr .95fr;gap:24px;align-items:start;
-}
+.list div{display:flex;gap:10px;align-items:flex-start;font-size:14px;color:var(--muted)}
+.list div::before{content:"•";color:var(--cyan);font-weight:900;line-height:1}
+.split{display:grid;grid-template-columns:1fr .92fr;gap:24px;align-items:start}
 .price-box{
-  background:linear-gradient(180deg, rgba(79,143,255,.12), rgba(255,255,255,.03));
-  border:1px solid rgba(79,143,255,.20);
-  border-radius:22px;
-  padding:28px;
+  background:
+    linear-gradient(180deg, rgba(79,143,255,.12), rgba(255,255,255,.04)),
+    var(--side-image) center/cover no-repeat;
+  border:1px solid rgba(79,143,255,.20);border-radius:24px;padding:30px;box-shadow:var(--shadow);position:relative;overflow:hidden
 }
-.price{
-  font-family:var(--head);
-  font-size:48px;
-  line-height:1;
-  margin:10px 0 14px;
-}
-.price small{
-  font-size:.34em;color:var(--muted);font-weight:700
-}
-.kicker{
-  font-family:var(--mono);
-  font-size:10px;
-  text-transform:uppercase;
-  letter-spacing:.12em;
-  color:var(--blue);
-}
+.price-box::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg, rgba(5,9,20,.78), rgba(5,9,20,.58))}
+.price-box>*{position:relative;z-index:2}
+.mini{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--blue2)}
+.price{font-family:var(--head);font-size:52px;line-height:1;margin:8px 0 14px}.price small{font-size:.34em;color:var(--muted)}
 .cta{
-  background:linear-gradient(180deg, rgba(79,143,255,.12), rgba(255,255,255,.03));
-  border:1px solid rgba(79,143,255,.20);
-  border-radius:24px;
-  padding:32px;
+  position:relative;overflow:hidden;border-radius:28px;border:1px solid rgba(255,255,255,.10);
+  background:linear-gradient(180deg, rgba(79,143,255,.12), rgba(255,255,255,.04)), var(--cta-image) center/cover no-repeat;
+  padding:34px;box-shadow:var(--shadow)
 }
-.cta h2{
-  font-family:var(--head);font-size:34px;line-height:1.08;letter-spacing:-.03em;margin-bottom:12px;text-wrap:balance
-}
-.cta p{color:var(--muted);max-width:620px;margin-bottom:20px}
-.contact-box{
-  display:grid;grid-template-columns:1fr .9fr;gap:22px;align-items:start;
-}
-.contact-lines{display:grid;gap:10px}
+.cta::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg, rgba(5,9,20,.90), rgba(5,9,20,.72))}
+.cta>*{position:relative;z-index:2}
+.cta h2{font-family:var(--head);font-size:clamp(30px,4vw,42px);line-height:1.06;letter-spacing:-.04em;margin-bottom:12px;text-wrap:balance}
+.cta p{color:var(--muted);max-width:640px;margin-bottom:20px}
+.contact-box{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:18px}
 .contact-line{
-  display:flex;justify-content:space-between;gap:16px;
-  padding:12px 0;border-bottom:1px solid rgba(255,255,255,.07);
+  display:flex;justify-content:space-between;gap:16px;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.08);
   color:var(--muted);font-size:14px
 }
-.contact-line strong{
-  color:var(--text);font-weight:700
-}
-.footer{
-  border-top:1px solid var(--border);
-  padding:40px 0 16px;
-  position:relative;z-index:2;
-}
-.footer-top{
-  display:grid;grid-template-columns:1.2fr .9fr .9fr;gap:24px;
-  margin-bottom:20px;
-}
-.footer h4{
-  font-family:var(--mono);
-  font-size:10px;text-transform:uppercase;letter-spacing:.12em;
-  color:var(--soft);margin-bottom:12px
-}
-.footer p,.footer a{color:var(--muted);font-size:14px}
-.footer-links{display:grid;gap:8px}
-.footer-bottom{
-  border-top:1px solid rgba(255,255,255,.07);
-  padding-top:16px;
-  color:var(--soft);
-  font-size:12px;
-}
-.wa-float{
-  position:fixed;right:18px;bottom:18px;z-index:998;
-  width:58px;height:58px;border-radius:50%;
-  display:flex;align-items:center;justify-content:center;
-  background:#25d366;color:#fff;
-  box-shadow:0 14px 30px rgba(37,211,102,.28);
-}
-.muted{color:var(--muted)}
-.center{text-align:center}
-.mobile-only{display:none}
-.desktop-only{display:inline-flex}
-.access-note{
-  font-size:12px;color:var(--soft);margin-top:12px
-}
+.contact-line strong{color:var(--text)}
+.footer{padding:40px 0 18px;border-top:1px solid rgba(255,255,255,.08)}
+.footer-top{display:grid;grid-template-columns:1.2fr .9fr .9fr;gap:24px;margin-bottom:20px}
+.footer h4{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--soft);margin-bottom:12px}
+.footer p,.footer a{font-size:14px;color:var(--muted)}.footer-links{display:grid;gap:8px}
+.footer-bottom{border-top:1px solid rgba(255,255,255,.06);padding-top:16px;font-size:12px;color:var(--soft)}
+.wa-float{position:fixed;right:18px;bottom:18px;z-index:998;width:58px;height:58px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#25d366;color:#fff;font-weight:800;box-shadow:0 14px 30px rgba(37,211,102,.28)}
+.mobile-bar{display:none}
 .login-wrap{
-  min-height:100vh;display:grid;place-items:center;padding:28px
+  min-height:100vh;display:grid;place-items:center;padding:28px;
+  background:radial-gradient(700px 500px at 0% 0%, rgba(79,143,255,.16), transparent 60%), linear-gradient(180deg,#050914 0%, #081224 100%)
 }
-.login-card{
-  width:min(100%,420px);
-  background:rgba(255,255,255,.04);
-  border:1px solid var(--border);
-  border-radius:24px;
-  padding:34px;
-  position:relative;z-index:2;
+.login-panel{
+  width:min(100%,430px);background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.04));
+  border:1px solid rgba(255,255,255,.10);border-radius:26px;padding:34px;box-shadow:var(--shadow);backdrop-filter:blur(16px)
 }
-.login-card h1{
-  font-family:var(--head);
-  font-size:34px;line-height:1.08;letter-spacing:-.03em;margin:10px 0 12px
+.badge{
+  display:inline-flex;align-items:center;min-height:34px;padding:0 12px;border-radius:999px;background:rgba(79,143,255,.12);
+  border:1px solid rgba(79,143,255,.22);color:var(--blue2);font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase
 }
-.login-card p{color:var(--muted);font-size:14px}
-.form{display:grid;gap:14px;margin-top:22px}
-.field{display:grid;gap:6px}
-.field label{
-  font-family:var(--mono);
-  font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--soft)
-}
+.login-panel h1{font-family:var(--head);font-size:34px;line-height:1.08;letter-spacing:-.04em;margin:12px 0}
+.login-panel p{color:var(--muted);font-size:14px}
+.form{display:grid;gap:14px;margin-top:22px}.field{display:grid;gap:6px}
+.field label{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--soft)}
 .field input{
-  min-height:48px;padding:0 14px;border-radius:12px;border:1px solid var(--border);
-  background:rgba(255,255,255,.03);color:var(--text);font:inherit
+  min-height:50px;padding:0 14px;border-radius:14px;border:1px solid var(--border);
+  background:rgba(255,255,255,.04);color:var(--text);font:inherit
 }
-.small-note{
-  margin-top:14px;font-size:12px;color:var(--soft);line-height:1.6
-}
-.tag{
-  display:inline-flex;align-items:center;min-height:34px;padding:0 12px;border-radius:999px;
-  background:var(--blue-bg);border:1px solid rgba(79,143,255,.22);
-  color:var(--blue);font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase
-}
+.small-note{margin-top:14px;font-size:12px;color:var(--soft);line-height:1.6}
 @media (max-width:980px){
   .hero-grid,.split,.contact-box,.footer-top{grid-template-columns:1fr}
   .grid-3{grid-template-columns:1fr}
-  .grid-4{grid-template-columns:repeat(2,1fr)}
 }
 @media (max-width:768px){
-  .nav-links,.nav-cta{display:none}
-  .menu-btn{display:block}
-  .wrapper{padding:0 16px}
-  .section{padding:68px 0}
-  .section-tight{padding:54px 0}
-  .hero{padding:54px 0 42px}
-  .actions{flex-direction:column;align-items:stretch}
-  .actions .btn{width:100%}
-  .grid-2,.grid-3,.grid-4{grid-template-columns:1fr}
-  .cta h2{font-size:28px}
-  .footer-top{gap:18px}
-  .mobile-only{display:inline-flex}
-  .desktop-only{display:none}
+  .wrapper{padding:0 16px}.nav-links,.nav-actions{display:none}.menu-btn{display:block}
+  .section{padding:66px 0}.section-tight{padding:48px 0}.hero{padding:54px 0 42px}
+  .grid-2,.grid-3{grid-template-columns:1fr}
+  .actions{flex-direction:column;align-items:stretch}.actions .btn{width:100%}
 }
 @media (max-width:560px){
   body{padding-bottom:86px}
   .mobile-bar{
-    position:fixed;left:12px;right:12px;bottom:12px;z-index:999;
-    display:grid;grid-template-columns:1fr 1fr;gap:10px;
-    padding:10px;border:1px solid var(--border);border-radius:18px;
-    background:rgba(7,11,20,.94);backdrop-filter:blur(20px)
+    display:grid;position:fixed;left:12px;right:12px;bottom:12px;z-index:999;grid-template-columns:1fr 1fr;gap:10px;
+    padding:10px;border:1px solid rgba(255,255,255,.10);border-radius:18px;background:rgba(5,9,20,.94);backdrop-filter:blur(18px)
   }
   .mobile-bar a{
-    min-height:46px;border-radius:12px;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center
+    min-height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800
   }
-  .mobile-bar .main{background:var(--blue);color:#fff}
-  .mobile-bar .secondary{background:var(--green-bg);border:1px solid rgba(0,212,170,.22);color:var(--green)}
+  .mobile-bar .main{background:linear-gradient(135deg,var(--blue),#5d7dff);color:#fff}
+  .mobile-bar .secondary{background:var(--greenbg);border:1px solid rgba(0,212,170,.18);color:var(--green)}
   .wa-float{display:none}
 }
 </style>
@@ -380,159 +217,109 @@ section{position:relative;z-index:2}
 
 <nav class="nav">
   <div class="wrapper nav-inner">
-    <a class="brand" href="index.html" aria-label="TANTECNO">
+    <a href="index.html" class="brand" aria-label="TANTECNO">
       <strong>TANTECNO</strong>
       <span>Optimización de computadores</span>
     </a>
-    <div class="nav-links">
-      <a href="index.html" class="active">Inicio</a><a href="servicios.html">Optimización</a><a href="asistencia.html">Diagnóstico remoto</a><a href="index.html#contacto">Contacto</a>
-    </div>
-    <div class="nav-cta">
+    <div class="nav-links"><a href="index.html" class="active">Inicio</a><a href="asistencia.html">Diagnóstico remoto</a><a href="index.html#contacto">Contacto</a></div>
+    <div class="nav-actions">
       <a href="https://wa.me/56971036909?text=Hola%2C%20quiero%20evaluar%20mi%20computador%20para%20saber%20si%20vale%20la%20pena%20optimizarlo." target="_blank" class="btn btn-whatsapp">WhatsApp</a>
       <a href="https://wa.me/56971036909?text=Hola%2C%20quiero%20evaluar%20mi%20computador%20para%20saber%20si%20vale%20la%20pena%20optimizarlo." target="_blank" class="btn btn-primary">Evaluar mi computador</a>
     </div>
-    <button class="menu-btn" id="menuBtn" aria-label="Abrir menú">
-      <span></span><span></span><span></span>
-    </button>
+    <button class="menu-btn" id="menuBtn" aria-label="Abrir menú"><span></span><span></span><span></span></button>
   </div>
 </nav>
-<div class="mobile-menu" id="mobileMenu">
-  <div class="wrapper">
-    <a href="index.html" class="active">Inicio</a><a href="servicios.html">Optimización</a><a href="asistencia.html">Diagnóstico remoto</a><a href="index.html#contacto">Contacto</a><a href="login.html" style="color:var(--soft);font-size:12px">Acceso interno</a>
-  </div>
-</div>
+<div class="mobile-menu" id="mobileMenu"><div class="wrapper"><a href="index.html" class="active">Inicio</a><a href="asistencia.html">Diagnóstico remoto</a><a href="index.html#contacto">Contacto</a><a href="login.html" style="color:var(--soft);font-size:12px">Acceso interno</a></div></div>
 
 
 <header class="hero">
   <div class="wrapper hero-grid">
-    <div>
-      <div class="eyebrow">Diagnóstico técnico remoto avanzado</div>
-      <h1>¿Tu computador está lento? Evaluamos si vale la pena optimizarlo.</h1>
-      <p class="lead">Tantecno se enfoca en una sola cosa: revisar computadores lentos y definir si la mejora correcta pasa por SSD, RAM, mantención interna o una optimización completa.</p>
+    <div class="hero-copy">
+      <div class="kicker">Optimización de computadores</div>
+      <h1 class="hero-title">¿Tu computador está lento? Evaluamos si vale la pena optimizarlo.</h1>
+      <p class="hero-lead">Tantecno revisa el equipo y define si la mejora correcta pasa por SSD, RAM, mantención interna o una optimización completa. Si no conviene invertir, también te lo decimos.</p>
       <div class="actions">
         <a href="https://wa.me/56971036909?text=Hola%2C%20quiero%20evaluar%20mi%20computador%20para%20saber%20si%20vale%20la%20pena%20optimizarlo." target="_blank" class="btn btn-primary">Evaluar mi computador</a>
         <a href="asistencia.html" class="btn btn-secondary">Ver diagnóstico remoto</a>
       </div>
-      <div class="chips">
-        <div class="chip">Diagnóstico remoto · $29.900</div>
-        <div class="chip">Optimización de computadores Windows</div>
-        <div class="chip">Si no conviene, te lo decimos igual</div>
+      <div class="tags">
+        <div class="tag">Diagnóstico remoto · $29.900</div>
+        <div class="tag">Windows</div>
+        <div class="tag">Decisión técnica clara</div>
       </div>
     </div>
-    <div class="panel">
-      <div class="kicker">Lo que hacemos</div>
-      <h3>Te ayudamos a decidir bien antes de intervenir.</h3>
-      <p>No vendemos piezas ni soporte al lote. Primero evaluamos si el equipo vale la pena. Luego definimos la optimización correcta.</p>
-      <div class="stack">
-        <div class="stack-item">Cambio de HDD a SSD cuando el cuello de botella está en almacenamiento.</div>
-        <div class="stack-item">Aumento de RAM cuando falta fluidez y multitarea.</div>
-        <div class="stack-item">Mantención interna y sistema limpio cuando hace sentido completar la mejora.</div>
+    <div class="glass glow-card">
+      <div class="mini">Lo esencial</div>
+      <h3 style="font-family:var(--head);font-size:28px;line-height:1.06;letter-spacing:-.04em;margin:10px 0 12px">Primero evaluamos. Después optimizamos.</h3>
+      <p style="color:var(--muted);font-size:14px">No vendemos cambios al azar. El foco es definir si el equipo vale la pena y qué mejora tiene sentido real.</p>
+      <div class="metric">
+        <div class="metric-row"><span>SSD</span><strong>Velocidad general</strong></div>
+        <div class="metric-row"><span>RAM</span><strong>Fluidez y multitarea</strong></div>
+        <div class="metric-row"><span>Mantención</span><strong>Temperatura y estabilidad</strong></div>
+        <div class="metric-row"><span>Sistema limpio</span><strong>Rendimiento consistente</strong></div>
       </div>
     </div>
   </div>
 </header>
 
-<section class="section">
+<section class="section" id="optimizacion">
   <div class="wrapper">
-    <div class="eyebrow">El problema</div>
-    <h2 class="sec-h">No siempre conviene comprar otro computador.</h2>
-    <p class="sec-s">Muchos equipos lentos todavía tienen vida útil real. La diferencia está en saber si conviene optimizarlos o si ya no vale la pena meterles dinero.</p>
-    <div class="grid-3">
+    <div class="kicker">Cómo trabajamos</div>
+    <h2 class="h2">Una sola lógica. Tres pasos.</h2>
+    <p class="p-large">El sitio ahora concentra todo acá para que no repita contexto entre páginas: evaluar, definir y optimizar solo si conviene.</p>
+    <div class="grid-3" style="margin-top:28px">
       <div class="card">
         <div class="icon">01</div>
-        <h3>Demora en iniciar</h3>
-        <p>El equipo tarda demasiado en encender, abrir programas o responder en uso diario.</p>
+        <h3>Evaluamos</h3>
+        <p>Revisamos si realmente vale la pena optimizar el computador y dónde está el cuello de botella.</p>
       </div>
       <div class="card">
         <div class="icon">02</div>
-        <h3>Se pega al trabajar</h3>
-        <p>Navegador, Office o tareas comunes empiezan a sentirse pesadas, lentas o inestables.</p>
-      </div>
-      <div class="card">
-        <div class="icon">03</div>
-        <h3>No sabes si arreglarlo</h3>
-        <p>La duda real no es técnica: es si vale la pena invertir o si conviene reemplazarlo.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="section section-tight" style="background:rgba(255,255,255,.02);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
-  <div class="wrapper">
-    <div class="eyebrow">La solución</div>
-    <h2 class="sec-h">Definimos qué necesita realmente tu equipo.</h2>
-    <p class="sec-s">La optimización no es una acción suelta. Puede incluir almacenamiento, memoria, mantención interna y sistema limpio, según lo que determine el diagnóstico.</p>
-    <div class="grid-4">
-      <div class="card">
-        <div class="icon">SSD</div>
-        <h4>HDD a SSD</h4>
-        <p>Recupera velocidad general, tiempos de arranque y apertura de programas.</p>
-      </div>
-      <div class="card">
-        <div class="icon">RAM</div>
-        <h4>Aumento de RAM</h4>
-        <p>Mejora fluidez y multitarea cuando el equipo se queda corto de memoria.</p>
-      </div>
-      <div class="card">
-        <div class="icon">MT</div>
-        <h4>Mantención interna</h4>
-        <p>Ayuda a controlar temperatura, ruido y comportamiento sostenido del equipo.</p>
-      </div>
-      <div class="card">
-        <div class="icon">SYS</div>
-        <h4>Sistema limpio</h4>
-        <p>Windows, drivers y configuración correcta para dejarlo listo para trabajar.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="section">
-  <div class="wrapper">
-    <div class="eyebrow">Cómo funciona</div>
-    <h2 class="sec-h">Tres pasos. Sin vueltas.</h2>
-    <div class="grid-3">
-      <div class="card">
-        <div class="icon">1</div>
-        <h3>Evaluamos</h3>
-        <p>Revisamos el computador y detectamos si realmente vale la pena optimizarlo.</p>
-      </div>
-      <div class="card">
-        <div class="icon">2</div>
         <h3>Definimos</h3>
         <p>Te decimos qué mejora corresponde y qué resultado es razonable esperar.</p>
       </div>
       <div class="card">
-        <div class="icon">3</div>
+        <div class="icon">03</div>
         <h3>Optimizamos</h3>
-        <p>Si conviene avanzar, ejecutamos la intervención correcta para recuperar rendimiento.</p>
+        <p>Si tiene sentido avanzar, ejecutamos la intervención correcta para recuperar rendimiento real.</p>
       </div>
     </div>
   </div>
 </section>
 
-<section class="section" style="background:rgba(255,255,255,.02);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
+<section class="section-tight" style="border-top:1px solid rgba(255,255,255,.06);border-bottom:1px solid rgba(255,255,255,.06);background:rgba(255,255,255,.02)">
   <div class="wrapper split">
     <div>
-      <div class="eyebrow">Servicio de entrada</div>
-      <h2 class="sec-h">Diagnóstico técnico remoto avanzado</h2>
-      <p class="sec-s">El objetivo no es “mirar el computador”. Es ayudarte a tomar la decisión correcta antes de invertir. Si no conviene optimizarlo, también te lo decimos.</p>
-      <div class="list">
-        <div>Evaluación remota orientada a computadores Windows.</div>
-        <div>Lectura técnica de almacenamiento, memoria y comportamiento general.</div>
-        <div>Definición clara de si conviene optimizar y con qué estrategia.</div>
-        <div>Cotización posterior solo si la intervención tiene sentido real.</div>
+      <div class="kicker">Qué puede incluir</div>
+      <h2 class="h2">La optimización depende del equipo.</h2>
+      <p class="p-large">No todos los equipos necesitan lo mismo. Estas son las mejoras más comunes cuando el diagnóstico confirma que vale la pena intervenir.</p>
+      <div class="grid-2" style="margin-top:24px">
+        <div class="card">
+          <div class="icon">SSD</div>
+          <h3>HDD a SSD</h3>
+          <p>Para mejorar arranque, apertura de programas y respuesta general.</p>
+        </div>
+        <div class="card">
+          <div class="icon">RAM</div>
+          <h3>Aumento de RAM</h3>
+          <p>Para recuperar fluidez cuando el equipo se queda corto de memoria.</p>
+        </div>
       </div>
     </div>
     <div class="price-box">
-      <div class="kicker">Valor del diagnóstico</div>
+      <div class="mini">Servicio de entrada</div>
+      <h3 style="font-family:var(--head);font-size:30px;line-height:1.06;letter-spacing:-.04em;margin:10px 0 10px">Diagnóstico técnico remoto avanzado</h3>
       <div class="price">$29.900 <small>CLP</small></div>
-      <p class="muted">Pensado para definir si tu computador todavía tiene vida útil aprovechable y qué optimización corresponde de verdad.</p>
-      <div class="actions" style="margin-top:20px">
-        <a href="https://mpago.la/2nr3BK8" target="_blank" class="btn btn-primary">Pagar diagnóstico</a>
-        <a href="asistencia.html" class="btn btn-secondary">Cómo funciona</a>
+      <p style="color:var(--muted);font-size:15px;max-width:460px">La idea es que sepas si el computador vale la pena y qué mejora tiene sentido real, antes de gastar plata.</p>
+      <div class="list" style="margin-top:14px">
+        <div>Evaluación orientada a equipos Windows.</div>
+        <div>Lectura técnica de almacenamiento, memoria y sistema.</div>
+        <div>Recomendación clara de viabilidad y optimización.</div>
       </div>
-      <div class="access-note">Quick Assist y AnyDesk se explican en la página de diagnóstico remoto.</div>
+      <div class="actions" style="margin-top:18px">
+        <a href="https://mpago.la/2nr3BK8" target="_blank" class="btn btn-primary">Pagar diagnóstico</a>
+        <a href="https://wa.me/56971036909?text=Hola%2C%20quiero%20agendar%20un%20diagn%C3%B3stico%20t%C3%A9cnico%20remoto%20avanzado%20para%20evaluar%20mi%20computador." target="_blank" class="btn btn-secondary">Agendar</a>
+      </div>
     </div>
   </div>
 </section>
@@ -540,7 +327,7 @@ section{position:relative;z-index:2}
 <section class="section" id="contacto">
   <div class="wrapper">
     <div class="cta">
-      <div class="eyebrow">Siguiente paso</div>
+      <div class="kicker">Siguiente paso</div>
       <h2>¿Vale la pena optimizar tu computador?</h2>
       <p>Lo evaluamos contigo y te decimos qué conviene de verdad. Ese es el punto de partida correcto.</p>
       <div class="actions">
@@ -548,23 +335,20 @@ section{position:relative;z-index:2}
         <a href="https://mpago.la/2nr3BK8" target="_blank" class="btn btn-secondary">Pagar diagnóstico $29.900</a>
       </div>
     </div>
-    <div class="contact-box" style="margin-top:20px">
+
+    <div class="contact-box">
       <div class="card">
         <h3>Contacto</h3>
-        <div class="contact-lines">
-          <div class="contact-line"><span>WhatsApp</span><strong><a href="https://wa.me/56971036909" target="_blank">+56 9 7103 6909</a></strong></div>
-          <div class="contact-line"><span>Email</span><strong><a href="mailto:contacto@tantecno.cl">contacto@tantecno.cl</a></strong></div>
-          <div class="contact-line"><span>Ubicación</span><strong>Machalí, Chile</strong></div>
-          <div class="contact-line"><span>Horario</span><strong>Lun–Vie 8:30–19:00</strong></div>
-        </div>
+        <div class="contact-line"><span>WhatsApp</span><strong><a href="https://wa.me/56971036909" target="_blank">+56 9 7103 6909</a></strong></div>
+        <div class="contact-line"><span>Email</span><strong><a href="mailto:contacto@tantecno.cl">contacto@tantecno.cl</a></strong></div>
+        <div class="contact-line"><span>Ubicación</span><strong>Machalí, Chile</strong></div>
       </div>
       <div class="card">
-        <h3>Lo que debes esperar</h3>
-        <p>No te vamos a empujar a cambiar piezas por cambiar. El foco es definir si el equipo vale la pena y qué mejora tiene sentido real.</p>
+        <h3>Qué debes esperar</h3>
         <div class="list">
           <div>Claridad antes de intervenir.</div>
-          <div>Criterio técnico antes de gastar.</div>
-          <div>Optimización cuando realmente conviene.</div>
+          <div>Diagnóstico con criterio técnico.</div>
+          <div>Optimización solo cuando realmente conviene.</div>
         </div>
       </div>
     </div>
@@ -581,17 +365,13 @@ section{position:relative;z-index:2}
   <div class="wrapper">
     <div class="footer-top">
       <div>
-        <div class="brand" style="margin-bottom:12px">
-          <strong style="font-size:20px">TANTECNO</strong>
-          <span>Optimización de computadores</span>
-        </div>
-        <p>Evaluamos si tu computador vale la pena y definimos la optimización correcta antes de que gastes plata a ciegas.</p>
+        <div class="brand" style="margin-bottom:12px"><strong style="font-size:20px">TANTECNO</strong><span>Optimización de computadores</span></div>
+        <p>Evaluamos si tu computador vale la pena y definimos la optimización correcta antes de intervenir.</p>
       </div>
       <div>
         <h4>Navegación</h4>
         <div class="footer-links">
           <a href="index.html">Inicio</a>
-          <a href="servicios.html">Optimización</a>
           <a href="asistencia.html">Diagnóstico remoto</a>
           <a href="index.html#contacto">Contacto</a>
         </div>
@@ -605,15 +385,10 @@ section{position:relative;z-index:2}
         </div>
       </div>
     </div>
-    <div class="footer-bottom">© 2026 Tantecno · Machalí, Chile</div>
+    <div class="footer-bottom">© 2026 TANTECNO · Machalí, Chile</div>
   </div>
 </footer>
-<a class="wa-float" href="https://wa.me/56971036909?text=Hola%2C%20quiero%20evaluar%20mi%20computador%20para%20saber%20si%20vale%20la%20pena%20optimizarlo." target="_blank" aria-label="WhatsApp">
-  <svg width="30" height="30" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
-    <path d="M12 0C5.373 0 0 5.373 0 12c0 2.115.548 4.103 1.509 5.833L.057 24l6.305-1.654A11.954 11.954 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.007-1.374l-.359-.213-3.722.976.993-3.625-.234-.373A9.818 9.818 0 012.182 12c0-5.42 4.398-9.818 9.818-9.818 5.42 0 9.818 4.398 9.818 9.818 0 5.42-4.398 9.818-9.818 9.818z"/>
-  </svg>
-</a>
+<a class="wa-float" href="https://wa.me/56971036909?text=Hola%2C%20quiero%20evaluar%20mi%20computador%20para%20saber%20si%20vale%20la%20pena%20optimizarlo." target="_blank" aria-label="WhatsApp">WA</a>
 
 
 <script>
