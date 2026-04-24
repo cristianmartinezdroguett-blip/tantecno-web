@@ -185,6 +185,13 @@ table.ct .dscrow td{background:#f0fdf4;color:#166534;font-size:9.5px;}
 .tab-btn.active{color:var(--accent);border-bottom-color:var(--accent);}
 @media print{.tab-bar{display:none!important;}#right{display:block!important;}}
 
+/* Indicador de sincronización Supabase (al lado de "Gestionar") */
+.sync-dot{width:7px;height:7px;border-radius:50%;background:var(--text3);transition:.3s;box-shadow:0 0 0 2px rgba(138,149,165,.12);cursor:help;flex-shrink:0;}
+.sync-dot.loading{background:var(--amber);box-shadow:0 0 0 2px var(--amber-bg);animation:pulse-sync 1.2s ease-in-out infinite;}
+.sync-dot.ok{background:var(--green);box-shadow:0 0 0 2px var(--green-bg);}
+.sync-dot.off{background:var(--red);box-shadow:0 0 0 2px var(--red-bg);}
+@keyframes pulse-sync{0%,100%{opacity:1;}50%{opacity:.4;}}
+
 /* ═══════════════════════════════════════════════════════════════
    MODO COMPACTO del #left (activado por JS cuando ancho <460px)
    ═══════════════════════════════════════════════════════════════ */
@@ -261,7 +268,7 @@ table.ct .dscrow td{background:#f0fdf4;color:#166534;font-size:9.5px;}
       <div class="brand">Generador</div>
     </div>
     <div style="display:flex;align-items:center;gap:7px;">
-      <div class="ot-pill">IT N° <input id="f-ot" value="2371" maxlength="6"></div>
+      <div class="ot-pill">IT N° <input id="f-ot" value="3271" maxlength="6"></div>
       <a href="panel.html" class="btn-back" title="Volver al panel">← Panel</a>
       <button class="btn-exit" onclick="logout()">Salir</button>
     </div>
@@ -326,7 +333,10 @@ table.ct .dscrow td{background:#f0fdf4;color:#166534;font-size:9.5px;}
 
     <div class="sec-sep" style="display:flex;justify-content:space-between;align-items:center;">
       <span>Servicios — clic para agregar</span>
-      <a href="catalogo.html" style="font-family:var(--mono);font-size:9px;color:var(--accent);text-decoration:none;letter-spacing:.06em;text-transform:uppercase;padding:3px 8px;border:1px solid var(--border);border-radius:5px;background:var(--bg2);font-weight:600;transition:.15s;" onmouseover="this.style.background='var(--accent-bg)'" onmouseout="this.style.background='var(--bg2)'" title="Agregar, editar o eliminar servicios del catálogo">Gestionar →</a>
+      <span style="display:flex;align-items:center;gap:6px;">
+        <span class="sync-dot loading" id="sync-dot" title="Sincronizando catálogo…"></span>
+        <a href="catalogo.html" style="font-family:var(--mono);font-size:9px;color:var(--accent);text-decoration:none;letter-spacing:.06em;text-transform:uppercase;padding:3px 8px;border:1px solid var(--border);border-radius:5px;background:var(--bg2);font-weight:600;transition:.15s;" onmouseover="this.style.background='var(--accent-bg)'" onmouseout="this.style.background='var(--bg2)'" title="Agregar, editar o eliminar servicios del catálogo">Gestionar →</a>
+      </span>
     </div>
     <div class="svc-sel-wrap" id="svc-sel"><div class="no-svc">Ninguno agregado aún</div></div>
     <div class="dsc-row" style="margin-bottom:8px;">
@@ -481,7 +491,58 @@ function cargarCatalogo(){
     return [...CAT_FALLBACK]
   }
 }
-const CAT=cargarCatalogo()
+let CAT=cargarCatalogo()
+
+// ═══ SINCRONIZACIÓN CON SUPABASE (background) ═══
+// Al cargar la página, además de leer el localStorage (rápido, síncrono),
+// consultamos Supabase y si hay novedades actualizamos CAT + localStorage + re-renderizamos.
+// Si no hay red o falla Supabase, se usa lo que haya en localStorage (modo offline).
+const SB_URL='https://wqgatoyouzckgmsilagz.supabase.co'
+const SB_KEY='sb_publishable_2Ar5UzQLYoLzmPYq_Xd71A_kaIOzMDc'  // ⚠️ Reemplaza con tu anon key real
+const SB_TABLE='catalogo'
+
+function rowToItem(r){
+  const item={id:r.id,n:r.nombre,d:r.descripcion,p:r.precio}
+  if(r.ai_nombre)item.aiNombre=r.ai_nombre
+  if(r.ai_nota)item.aiNota=r.ai_nota
+  if(r.insumo)item.insumo=true
+  if(r.orden!=null)item.orden=r.orden
+  return item
+}
+
+async function sincronizarDesdeSupabase(){
+  // Actualizar indicador visual a "cargando"
+  const dot=document.getElementById('sync-dot')
+  if(dot){dot.className='sync-dot loading';dot.title='Sincronizando catálogo…'}
+  try{
+    const url=`${SB_URL}/rest/v1/${SB_TABLE}?deleted_at=is.null&order=orden.asc,created_at.asc`
+    const res=await fetch(url,{
+      headers:{
+        'apikey':SB_KEY,
+        'Authorization':`Bearer ${SB_KEY}`
+      }
+    })
+    if(!res.ok)throw new Error('HTTP '+res.status)
+    const rows=await res.json()
+    const nuevos=rows.map(rowToItem)
+    // Actualizar estado global + localStorage
+    CAT.length=0
+    nuevos.forEach(it=>CAT.push(it))
+    try{
+      const stored=JSON.parse(localStorage.getItem('tantecno_catalogo')||'{}')
+      stored.activos=nuevos
+      stored.version=(stored.version||1)
+      localStorage.setItem('tantecno_catalogo',JSON.stringify(stored))
+    }catch(e){console.warn('No se pudo guardar en localStorage:',e)}
+    // Re-renderizar la lista de servicios disponibles
+    if(typeof renderCat==='function')renderCat()
+    if(dot){dot.className='sync-dot ok';dot.title='Catálogo sincronizado ('+nuevos.length+' servicios)'}
+    console.log('[TANTECNO] Catálogo sincronizado desde Supabase:',nuevos.length,'servicios')
+  }catch(e){
+    console.warn('[TANTECNO] No se pudo sincronizar desde Supabase:',e.message)
+    if(dot){dot.className='sync-dot off';dot.title='Sin conexión — usando caché local'}
+  }
+}
 const HALL=[
   {g:"Refrigeración",items:[{id:"polvo",t:"Polvo en sistema de ventilación"},{id:"pasta_deg",t:"Pasta térmica degradada (CPU/GPU)"},{id:"pasta_seca",t:"Pasta disipadora completamente seca"},{id:"tpads",t:"Thermal pads deteriorados"},{id:"throttle",t:"Thermal throttling bajo carga"}]},
   {g:"RAM",items:[{id:"single",t:"Single channel (slot libre)"},{id:"ram_4gb",t:"4 GB — insuficiente para Win 11"},{id:"ram_low",t:"RAM insuficiente para el uso declarado"}]},
@@ -508,7 +569,7 @@ let folioConfirmado=null  // Guarda el folio usado en el último savePDF exitoso
 const fmt=n=>'$'+n.toLocaleString('es-CL')
 const fdate=v=>{if(!v)return'—';try{return new Date(v+'T12:00:00').toLocaleDateString('es-CL',{day:'2-digit',month:'long',year:'numeric'})}catch(e){return v}}
 const toast=msg=>{const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2800)}
-const getOT=()=>parseInt(localStorage.getItem('tantecno_ot')||'2371')
+const getOT=()=>parseInt(localStorage.getItem('tantecno_ot')||'3271')
 const saveOT=n=>localStorage.setItem('tantecno_ot',String(n))
 
 async function saveApiKey(){
@@ -897,6 +958,8 @@ const today=new Date().toISOString().split('T')[0]
 document.getElementById('r-frecep').value=today
 document.getElementById('r-finf').value=today
 refreshApiStatus();renderHall();renderCat()
+// Sincronizar catálogo desde Supabase en background (no bloquea render inicial)
+sincronizarDesdeSupabase()
 
 // ═══ GUARDAR PDF ═══
 function savePDF(){
