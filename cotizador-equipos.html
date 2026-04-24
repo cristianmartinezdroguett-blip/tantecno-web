@@ -28,6 +28,14 @@
 }
 body{font-family:var(--body);background:var(--bg);color:var(--text);display:flex;height:100vh;overflow:hidden;}
 #left{width:440px;flex-shrink:0;display:flex;flex-direction:column;background:var(--bg2);border-right:1px solid var(--border);}
+
+/* Divisor arrastrable entre columnas (solo desktop) */
+#splitter{width:6px;background:var(--border);cursor:col-resize;flex-shrink:0;transition:background .15s;position:relative;user-select:none;}
+#splitter:hover,#splitter.dragging{background:var(--accent);}
+#splitter::before{content:"";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:2px;height:28px;background:var(--text3);border-radius:2px;opacity:.5;transition:.15s;}
+#splitter:hover::before,#splitter.dragging::before{background:#fff;opacity:1;height:40px;}
+body.splitting{cursor:col-resize;user-select:none;}
+body.splitting iframe,body.splitting #left,body.splitting #right{pointer-events:none;}
 .lh{padding:13px 16px 11px;border-bottom:1px solid var(--border);flex-shrink:0;display:flex;justify-content:space-between;align-items:center;gap:10px;}
 .lh-left .tag{font-family:var(--mono);font-size:9px;color:var(--accent);letter-spacing:.14em;text-transform:uppercase;font-weight:600;}
 .lh-left .brand{font-family:var(--cond);font-size:18px;font-weight:800;margin-top:1px;line-height:1;color:var(--text);letter-spacing:-.01em;}
@@ -160,6 +168,7 @@ table.ct td{border:1px solid #ccc;padding:4px 7px;vertical-align:top;line-height
 @page{size:A4 portrait;margin:13mm 15mm;}
 @media print{
   #left,.pbar,.edit-hint{display:none!important;}
+  #splitter{display:none!important;}
   body{background:#fff;display:block;}
   #right{background:#fff;padding:0;overflow:visible;}
   .doc{box-shadow:none;padding:0;max-width:100%;margin:0;}
@@ -169,6 +178,7 @@ table.ct td{border:1px solid #ccc;padding:4px 7px;vertical-align:top;line-height
 @media(max-width:860px){
   body{display:block;height:auto;overflow:auto;}
   #left,#right{width:100%;height:auto;overflow:visible;border:none;}
+  #splitter{display:none;}
   .tab-bar{display:flex!important;}
   #left{display:none;}
   #right{display:none;background:var(--bg);padding:10px 0 0;}
@@ -187,10 +197,10 @@ table.ct td{border:1px solid #ccc;padding:4px 7px;vertical-align:top;line-height
 .toast.show{opacity:1;}
 
 /* ═══════════════════════════════════════════════════════════════
-   MÓVIL apretado (≤560px) — complementa la @media de 860px existente
+   MÓVIL apretado (≤560px) — complementa @media 860 existente
    ═══════════════════════════════════════════════════════════════ */
 @media(max-width:560px){
-  /* Header izquierdo en 2 filas: arriba marca+folio, abajo botones */
+  /* Header izquierdo: marca+folio arriba, botones abajo */
   .lh{flex-wrap:wrap;padding:10px 12px;gap:8px;}
   .lh>div:first-child{flex:1;min-width:0;}
   .lh>div:last-child{width:100%;justify-content:flex-end;gap:6px;}
@@ -205,30 +215,40 @@ table.ct td{border:1px solid #ccc;padding:4px 7px;vertical-align:top;line-height
 
   .lb{padding:10px 12px;}
 
-  /* comp-row: etiqueta+nombre arriba, precio abajo */
+  /* Filas de componentes: etiqueta+nombre en fila, precio ancho completo abajo */
   .comp-row{grid-template-columns:60px 1fr;gap:5px 6px;margin-bottom:7px;}
   .comp-row input.price{grid-column:1 / -1;margin-top:2px;}
   .comp-row .comp-lbl{font-size:9px;}
 
-  /* ram-block: módulos+precio en fila, total aparte */
-  .ram-block{padding:9px;}
-  .ram-block .ram-head{grid-template-columns:60px 1fr;gap:5px;}
-  .ram-row{grid-template-columns:1fr 1fr;gap:5px;}
-  .ram-row .ram-lbl{grid-column:1 / -1;margin-bottom:-2px;}
-  .ram-total{grid-column:1 / -1;text-align:left;padding:4px 0 0;}
+  /* RAM rediseñada: alineada visualmente con el resto */
+  .ram-block{padding:10px 12px;margin-bottom:8px;}
+  .ram-block .ram-head{grid-template-columns:60px 1fr;gap:5px 6px;margin-bottom:8px;}
+  .ram-block .ram-head .comp-lbl{font-size:9px!important;}
+  /* Fila interna: Módulos + Precio c/u en 50/50 con etiquetas arriba */
+  .ram-row{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding-bottom:6px;border-bottom:1px dashed var(--border);margin-bottom:6px;}
+  .ram-row .ram-lbl{display:none;}
+  .ram-row input{font-size:12px;padding:7px 9px;}
+  .ram-row input#ram-n{grid-column:1;}
+  .ram-row input#ram-pu{grid-column:2;}
+  /* Poner etiquetas flotantes con ::before pseudo */
+  .ram-row::before{content:"N° módulos";grid-column:1;grid-row:1;font-family:var(--mono);font-size:8.5px;color:var(--text3);letter-spacing:.05em;text-transform:uppercase;font-weight:600;padding-left:2px;}
+  .ram-row::after{content:"Precio c/u";grid-column:2;grid-row:1;font-family:var(--mono);font-size:8.5px;color:var(--text3);letter-spacing:.05em;text-transform:uppercase;font-weight:600;padding-left:2px;}
+  .ram-row input#ram-n,.ram-row input#ram-pu{grid-row:2;}
+  /* Total RAM: fila propia con etiqueta izquierda + valor derecha */
+  .ram-total{grid-column:1 / -1;display:flex;justify-content:space-between;align-items:center;padding:4px 2px 0;text-align:right;}
+  .ram-total::before{content:"Total RAM";font-family:var(--mono);font-size:9px;color:var(--text3);letter-spacing:.05em;text-transform:uppercase;font-weight:600;}
 
-  /* perif-row: checkbox + nombre, precio abajo con ancho completo */
+  /* Periféricos: checkbox+nombre en fila, precio ancho completo debajo */
   .perif-row{grid-template-columns:20px 1fr;gap:5px;margin-bottom:6px;}
   .perif-row input.price{grid-column:1 / -1;margin-left:24px;}
 
   .sec-sep{font-size:9px;margin:12px 0 5px;padding-top:10px;}
 
-  /* Barra inferior sticky (ya la maneja la @media 860, reforzamos padding) */
   .lf{padding:10px 12px;}
   .btn-g{padding:13px;font-size:14px;}
   .btn-sm{padding:9px;font-size:12px;}
 
-  /* Preview A4: achicar título y tablas para que no desborde en celular */
+  /* Preview A4 */
   #right{padding:10px 0 0;}
   .doc{padding:14px 14px;font-size:10.5px;}
   .doc-title{font-size:17px;}
@@ -372,6 +392,8 @@ table.ct td{border:1px solid #ccc;padding:4px 7px;vertical-align:top;line-height
     <div class="tip" id="tip-ia">✦ IA activa</div>
   </div>
 </div>
+
+<div id="splitter" title="Arrastra para cambiar el ancho"></div>
 
 <div id="right">
   <div class="doc" id="doc">
@@ -886,6 +908,44 @@ function logout(){localStorage.removeItem('tantecno_auth');window.location.href=
   refreshApiStatus()
   refreshFolioUI()
   updateTotales()
+})()
+
+// ═══════════════════════════════════════════════════════════════
+// DIVISOR ARRASTRABLE (solo desktop >860px)
+// ═══════════════════════════════════════════════════════════════
+(function splitterInit(){
+  const sp=document.getElementById('splitter')
+  const left=document.getElementById('left')
+  if(!sp||!left)return
+  // Restaurar ancho guardado
+  const saved=parseInt(localStorage.getItem('tantecno_split_left')||'',10)
+  if(saved>=320&&saved<=720)left.style.width=saved+'px'
+  let dragging=false
+  sp.addEventListener('mousedown',e=>{
+    if(window.innerWidth<=860)return
+    dragging=true
+    document.body.classList.add('splitting')
+    sp.classList.add('dragging')
+    e.preventDefault()
+  })
+  document.addEventListener('mousemove',e=>{
+    if(!dragging)return
+    const w=Math.max(320,Math.min(720,e.clientX))
+    left.style.width=w+'px'
+  })
+  document.addEventListener('mouseup',()=>{
+    if(!dragging)return
+    dragging=false
+    document.body.classList.remove('splitting')
+    sp.classList.remove('dragging')
+    localStorage.setItem('tantecno_split_left',parseInt(left.style.width,10))
+  })
+  // Doble-clic para resetear al ancho por defecto
+  sp.addEventListener('dblclick',()=>{
+    if(window.innerWidth<=860)return
+    left.style.width='440px'
+    localStorage.removeItem('tantecno_split_left')
+  })
 })()
 </script>
 
