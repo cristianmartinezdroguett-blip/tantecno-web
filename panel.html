@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Panel · TANTECNO</title>
+<script>
+(function(){
+  if(localStorage.getItem('tantecno_auth') !== 'tantecno_internal_2026'){
+    window.location.href = 'login.html?redirect=panel.html';
+  }
+})();
+</script>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --bg:#f0f2f5;--bg2:#ffffff;--bg3:#f7f8fa;--surface:#f0f2f5;
+  --border:#d9dde3;--border-h:#bfc5cd;
+  --text:#1e2a3a;--text2:#5a6577;--text3:#8a95a5;
+  --accent:#1b3a5c;--accent-h:#254d78;--accent-bg:rgba(27,58,92,.08);
+  --green:#0f8a5f;--green-bg:rgba(15,138,95,.08);
+  --yellow:#c08a00;--yellow-bg:rgba(192,138,0,.08);
+  --blue:#2563eb;--blue-bg:rgba(37,99,235,.08);
+  --red:#c0392b;--red-bg:rgba(192,57,43,.06);
+  --radius:10px;
+  --mono:'JetBrains Mono',monospace;
+}
+body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;}
+
+/* Header */
+.pnl-header{background:var(--bg2);border-bottom:1px solid var(--border);box-shadow:0 1px 4px rgba(0,0,0,.04);padding:14px 24px;display:flex;justify-content:space-between;align-items:center;flex-shrink:0;}
+.pnl-brand{display:flex;align-items:center;gap:10px;}
+.pnl-brand .logo{font-weight:900;font-size:22px;letter-spacing:-.02em;color:var(--accent);}
+.pnl-brand .tag{font-family:var(--mono);font-size:10px;color:var(--text3);letter-spacing:.14em;text-transform:uppercase;padding:3px 9px;background:var(--bg3);border-radius:20px;}
+.pnl-header-right{display:flex;align-items:center;gap:14px;}
+.pnl-user{font-size:13px;color:var(--text2);}
+.pnl-user b{color:var(--text);font-weight:600;}
+.btn-out{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:7px 14px;color:var(--text2);font-family:'Outfit',sans-serif;font-size:12px;font-weight:500;cursor:pointer;transition:.15s;}
+.btn-out:hover{border-color:var(--red);color:var(--red);background:var(--red-bg);}
+
+/* Main */
+.pnl-main{flex:1;display:flex;align-items:center;justify-content:center;padding:40px 24px;}
+.pnl-inner{width:100%;max-width:900px;}
+.pnl-title{text-align:center;margin-bottom:36px;}
+.pnl-title h1{font-size:28px;font-weight:800;color:var(--text);letter-spacing:-.02em;margin-bottom:6px;}
+.pnl-title p{font-size:15px;color:var(--text2);font-weight:400;}
+
+/* Cards grid */
+.pnl-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
+@media(max-width:1000px){.pnl-cards{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:640px){.pnl-cards{grid-template-columns:1fr;}}
+
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:28px 26px;cursor:pointer;transition:all .2s;text-decoration:none;color:inherit;display:flex;flex-direction:column;gap:14px;position:relative;overflow:hidden;}
+.card:hover{border-color:var(--accent);box-shadow:0 4px 16px rgba(27,58,92,.1);transform:translateY(-2px);}
+.card:hover .card-arrow{transform:translateX(4px);color:var(--accent);}
+
+.card-icon{width:52px;height:52px;border-radius:12px;background:var(--accent-bg);display:flex;align-items:center;justify-content:center;color:var(--accent);}
+.card-icon svg{width:26px;height:26px;stroke-width:1.8;}
+
+.card-body h2{font-size:18px;font-weight:700;color:var(--text);letter-spacing:-.01em;margin-bottom:5px;}
+.card-body .card-desc{font-size:13.5px;color:var(--text2);line-height:1.55;}
+
+.card-meta{display:flex;align-items:center;justify-content:space-between;margin-top:auto;padding-top:14px;border-top:1px solid var(--border);}
+.card-meta .kw{font-family:var(--mono);font-size:10.5px;color:var(--text3);letter-spacing:.03em;}
+.card-arrow{color:var(--text3);font-size:20px;transition:.2s;}
+
+/* Tag de tipo en la esquina */
+.card-tag{position:absolute;top:14px;right:14px;font-family:var(--mono);font-size:9.5px;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;background:var(--bg3);border:1px solid var(--border);border-radius:12px;font-weight:600;}
+
+/* Footer */
+.pnl-footer{padding:16px 24px;text-align:center;font-size:11px;color:var(--text3);border-top:1px solid var(--border);background:var(--bg2);}
+.pnl-footer b{color:var(--text2);font-weight:600;}
+
+/* ═══════════════════════════════════════════════════════════════
+   MÓVIL (≤720px) — no toca desktop
+   ═══════════════════════════════════════════════════════════════ */
+@media(max-width:720px){
+  .pnl-header{padding:12px 14px;gap:10px;}
+  .pnl-brand{gap:8px;min-width:0;}
+  .pnl-brand .logo{font-size:18px;}
+  .pnl-brand .tag{font-size:9px;padding:2px 7px;letter-spacing:.1em;}
+  .pnl-header-right{gap:8px;}
+  .pnl-user{display:none;}
+  .btn-out{padding:7px 11px;font-size:12px;}
+
+  .pnl-main{padding:24px 14px;align-items:flex-start;}
+  .pnl-title{margin-bottom:22px;}
+  .pnl-title h1{font-size:22px;}
+  .pnl-title p{font-size:13.5px;line-height:1.45;}
+
+  .pnl-cards{gap:12px;}
+  .card{padding:20px 18px;gap:12px;}
+  .card-icon{width:44px;height:44px;border-radius:10px;}
+  .card-icon svg{width:22px;height:22px;}
+  .card-body h2{font-size:16px;}
+  .card-body .card-desc{font-size:13px;line-height:1.5;}
+  /* Meta en columna: kw arriba (línea completa sin cortarse), flecha abajo derecha */
+  .card-meta{flex-direction:column;align-items:flex-start;gap:8px;padding-top:12px;}
+  .card-meta .kw{font-size:10px;line-height:1.4;}
+  .card-arrow{align-self:flex-end;font-size:18px;}
+  .card-tag{top:12px;right:12px;font-size:9px;padding:2px 7px;}
+
+  .pnl-footer{padding:14px;font-size:10.5px;line-height:1.5;}
+}
+</style>
+</head>
+<body>
+
+<header class="pnl-header">
+  <div class="pnl-brand">
+    <div class="logo">TANTECNO</div>
+    <div class="tag">Panel interno</div>
+  </div>
+  <div class="pnl-header-right">
+    <div class="pnl-user">Sesión activa · <b>Cristián Martínez</b></div>
+    <button class="btn-out" onclick="logout()">Cerrar sesión</button>
+  </div>
+</header>
+
+<main class="pnl-main">
+  <div class="pnl-inner">
+    <div class="pnl-title">
+      <h1>¿Qué vas a generar hoy?</h1>
+      <p>Elige el tipo de documento que necesitas crear.</p>
+    </div>
+
+    <div class="pnl-cards">
+
+      <a href="generador-informe.html" class="card">
+        <span class="card-tag">Informe técnico</span>
+        <div class="card-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+            <line x1="9" y1="13" x2="15" y2="13"/>
+            <line x1="9" y1="17" x2="15" y2="17"/>
+            <line x1="9" y1="9" x2="10" y2="9"/>
+          </svg>
+        </div>
+        <div class="card-body">
+          <h2>Generar informe técnico</h2>
+          <div class="card-desc">Documento de cotización, post-intervención o diagnóstico no reparable para equipos ingresados a revisión.</div>
+        </div>
+        <div class="card-meta">
+          <span class="kw">Cotización · Post-intervención · No reparable</span>
+          <span class="card-arrow">→</span>
+        </div>
+      </a>
+
+      <a href="cotizador-equipos.html" class="card">
+        <span class="card-tag">Equipo nuevo</span>
+        <div class="card-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+            <line x1="8" y1="21" x2="16" y2="21"/>
+            <line x1="12" y1="17" x2="12" y2="21"/>
+            <line x1="7" y1="8" x2="7" y2="8.01"/>
+            <line x1="11" y1="8" x2="17" y2="8"/>
+            <line x1="7" y1="12" x2="17" y2="12"/>
+          </svg>
+        </div>
+        <div class="card-body">
+          <h2>Cotizar equipo nuevo</h2>
+          <div class="card-desc">Cotización formal para armado e instalación de computador nuevo con componentes seleccionados en proveedores.</div>
+        </div>
+        <div class="card-meta">
+          <span class="kw">Oficina · Gamer · Estudiante</span>
+          <span class="card-arrow">→</span>
+        </div>
+      </a>
+
+      <a href="catalogo.html" class="card">
+        <span class="card-tag">Mantenimiento</span>
+        <div class="card-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 7h16"/>
+            <path d="M4 12h16"/>
+            <path d="M4 17h10"/>
+            <circle cx="19" cy="17" r="3"/>
+            <path d="M19 15.5v1.5l1 .5"/>
+          </svg>
+        </div>
+        <div class="card-body">
+          <h2>Gestionar catálogo</h2>
+          <div class="card-desc">Agrega, edita o elimina servicios del catálogo del generador. Los eliminados quedan 30 días en la papelera por si hubo un error.</div>
+        </div>
+        <div class="card-meta">
+          <span class="kw">Servicios · Precios · Papelera</span>
+          <span class="card-arrow">→</span>
+        </div>
+      </a>
+
+    </div>
+  </div>
+</main>
+
+<footer class="pnl-footer">
+  TANTECNO CHILE SpA · <b>contacto@tantecno.cl</b> · +56 9 7103 6909 · Machalí
+</footer>
+
+<script>
+function logout(){
+  if(!confirm('¿Cerrar sesión?'))return
+  localStorage.removeItem('tantecno_auth')
+  window.location.href='login.html'
+}
+</script>
+
+</body>
+</html>
