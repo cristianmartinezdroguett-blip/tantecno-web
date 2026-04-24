@@ -919,6 +919,105 @@ function mostrarValidacion(nivel,items){
   content.innerHTML='<ul>'+items.map(i=>`<li>${escapeHtml(i)}</li>`).join('')+'</ul>'
   panel.style.display='block'
 }
+// ═══════════════════════════════════════════════════════════════
+// FORMATEO INTELIGENTE DE COMPONENTES (onblur)
+// ═══════════════════════════════════════════════════════════════
+const TECH_DICT={
+  'gb':'GB','tb':'TB','mb':'MB','kb':'KB','pb':'PB',
+  'mhz':'MHz','ghz':'GHz','khz':'KHz','hz':'Hz','w':'W','v':'V','cl':'CL',
+  'ddr':'DDR','ddr3':'DDR3','ddr4':'DDR4','ddr5':'DDR5',
+  'nvme':'NVMe','ssd':'SSD','hdd':'HDD','sshd':'SSHD','sata':'SATA','pcie':'PCIe',
+  'usb':'USB','hdmi':'HDMI','rgb':'RGB','argb':'ARGB','led':'LED',
+  'atx':'ATX','itx':'ITX','matx':'mATX','m.2':'M.2',
+  'amd':'AMD','nvidia':'NVIDIA','intel':'INTEL',
+  'rtx':'RTX','gtx':'GTX','tdp':'TDP','apu':'APU','psu':'PSU','soc':'SoC','npu':'NPU',
+  'lga':'LGA','am4':'AM4','am5':'AM5','fm2':'FM2',
+  'ips':'IPS','va':'VA','tn':'TN','oled':'OLED','bios':'BIOS','uefi':'UEFI','oem':'OEM','oc':'OC',
+  'hd':'HD','fhd':'FHD','qhd':'QHD','uhd':'UHD','4k':'4K','8k':'8K',
+  'kingston':'Kingston','corsair':'Corsair','crucial':'Crucial','samsung':'Samsung',
+  'wd':'WD','seagate':'Seagate','toshiba':'Toshiba','hyperx':'HyperX','g.skill':'G.Skill',
+  'asrock':'ASRock','asus':'ASUS','msi':'MSI','gigabyte':'Gigabyte','biostar':'Biostar',
+  'evga':'EVGA','zotac':'Zotac','gainward':'Gainward','palit':'Palit',
+  'ryzen':'Ryzen','threadripper':'Threadripper','athlon':'Athlon','celeron':'Celeron',
+  'pentium':'Pentium','core':'Core','geforce':'GeForce','radeon':'Radeon','arc':'Arc',
+  'fury':'Fury','vengeance':'Vengeance','dominator':'Dominator','predator':'Predator',
+  'trident':'Trident','ripjaws':'Ripjaws','ballistix':'Ballistix',
+  'windows':'Windows','linux':'Linux','ubuntu':'Ubuntu','debian':'Debian','fedora':'Fedora','macos':'macOS',
+  'de':'de','del':'del','con':'con','para':'para','y':'y','o':'o'
+}
+const LOWER_ALWAYS=new Set(['de','del','con','para','y','o'])
+
+function smartFormat(s){
+  if(!s||typeof s!=='string')return s
+  let t=s.trim().replace(/\s+/g,' ')
+  if(!t)return ''
+  // Pegar unidades al número usando el diccionario (para capitalización correcta tipo MHz)
+  t=t.replace(/(\d+)\s*(gb|tb|mb|kb|mhz|ghz|khz|hz|w|v)\b/gi,(_,num,u)=>num+(TECH_DICT[u.toLowerCase()]||u.toUpperCase()))
+  // Sufijo de modelo al final de número (1 letra pegada: 5600g → 5600G)
+  t=t.replace(/(\d)([a-z])(?=\s|$|\W)/g,(_,d,l)=>d+l.toUpperCase())
+  // Procesar palabra por palabra
+  const words=t.split(' ')
+  const out=words.map((w,i)=>{
+    const lower=w.toLowerCase()
+    if(TECH_DICT[lower]){
+      if(LOWER_ALWAYS.has(lower)&&i>0)return lower
+      return TECH_DICT[lower]
+    }
+    // Caso: palabra con guión (ej "a520m-hdv") → capitalizar cada parte usando mismo criterio
+    if(w.includes('-')){
+      return w.split('-').map(p=>formatPart(p)).join('-')
+    }
+    // Caso: palabra con punto interno (ej "g.skill" ya lo captura el dict, fallback)
+    if(w.includes('.')&&w.length>2){
+      return w.split('.').map(p=>formatPart(p)).join('.')
+    }
+    // Caso general: si arranca con número o mezcla número+letras (ej "nv2", "a520m"), aplicar mayúsculas a letras
+    if(/\d/.test(w))return formatAlphaNum(w)
+    return capFirst(w)
+  })
+  return out.join(' ')
+}
+// Para tokens alfanuméricos cortos con números (ej "nv2", "a520m", "hdv"):
+// si la parte alfa es ≤3 chars → MAYÚSCULAS
+// si es más larga → capitalizar primera letra
+function formatAlphaNum(w){
+  const lower=w.toLowerCase()
+  if(TECH_DICT[lower])return TECH_DICT[lower]
+  // Separar en partes: número al inicio + letras al final (ej "3200mhz", "16gb")
+  const match=w.match(/^(\d+)([a-zA-Z]+)$/)
+  if(match){
+    const num=match[1], alpha=match[2], alphaLower=alpha.toLowerCase()
+    if(TECH_DICT[alphaLower])return num+TECH_DICT[alphaLower]
+    if(alpha.length<=3)return num+alpha.toUpperCase()
+    return num+capFirst(alpha)
+  }
+  // Letras al inicio + número al final (ej "a520m", "nv2")
+  const letters=w.replace(/[^a-zA-Z]/g,'')
+  if(letters.length<=3)return w.toUpperCase()
+  return w.replace(/([a-z])/,(c)=>c.toUpperCase())
+}
+function formatPart(p){
+  if(!p)return p
+  const lower=p.toLowerCase()
+  if(TECH_DICT[lower])return TECH_DICT[lower]
+  // Mezcla letras+números (hdv, a520m, nv2, 3200mhz)
+  if(/\d/.test(p))return formatAlphaNum(p)
+  // Solo letras, corto (≤3) → MAYÚSCULAS (hdv, atx, rgb casos no cubiertos por dict)
+  const letters=p.replace(/[^a-zA-Z]/g,'')
+  if(letters.length<=3)return p.toUpperCase()
+  return capFirst(p)
+}
+function capFirst(w){
+  if(!w)return w
+  if(/[A-Z]/.test(w.slice(1)))return w
+  return w.charAt(0).toUpperCase()+w.slice(1).toLowerCase()
+}
+function applySmartFormat(el){
+  const v=el.value
+  const f=smartFormat(v)
+  if(v!==f)el.value=f
+}
+
 function escapeHtml(s){return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 
 // ═══════════════════════════════════════════════════════════════
@@ -1014,6 +1113,15 @@ function logout(){localStorage.removeItem('tantecno_auth');window.location.href=
   refreshApiStatus()
   refreshFolioUI()
   updateTotales()
+  // Activar smart format en todos los inputs de texto (componentes + cliente)
+  // Excluye: brief (textarea), api key, precios, fechas, números
+  const fmtIds=['f-cliente',
+    'c-cpu','c-pla','c-ssd','c-gab','c-fte','c-so','c-gpu','c-hdd','c-cool',
+    'c-ram','c-mon','c-tec','c-mou','c-aud','c-mp','c-web']
+  fmtIds.forEach(id=>{
+    const el=document.getElementById(id)
+    if(el)el.addEventListener('blur',()=>applySmartFormat(el))
+  })
 })();
 
 // ═══════════════════════════════════════════════════════════════
