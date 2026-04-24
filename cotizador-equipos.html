@@ -57,6 +57,24 @@ body.splitting iframe,body.splitting #left,body.splitting #right{pointer-events:
 .lb::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
 .lb::-webkit-scrollbar-thumb:hover{background:var(--border-h);}
 .sec-sep{font-family:var(--mono);font-size:9px;color:var(--text3);letter-spacing:.1em;text-transform:uppercase;margin:14px 0 6px;padding-top:12px;border-top:1px solid var(--border);font-weight:600;}
+
+/* Selector de utilidad */
+.util-wrap{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:12px;margin-bottom:10px;}
+.util-label{font-family:var(--mono);font-size:9px;color:var(--text3);letter-spacing:.1em;text-transform:uppercase;font-weight:600;margin-bottom:8px;}
+.util-radios{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:10px;}
+.util-radio{position:relative;cursor:pointer;user-select:none;}
+.util-radio input{position:absolute;opacity:0;pointer-events:none;}
+.util-radio span{display:block;text-align:center;font-family:var(--body);font-size:12px;font-weight:500;color:var(--text2);background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:8px 4px;transition:.15s;}
+.util-radio:hover span{border-color:var(--border-h);color:var(--text);}
+.util-radio input:checked + span{background:var(--accent);border-color:var(--accent);color:#fff;}
+.util-input-row{display:flex;flex-direction:column;gap:4px;}
+.util-input-row label{font-family:var(--mono);font-size:9px;color:var(--text3);letter-spacing:.05em;text-transform:uppercase;font-weight:600;}
+.util-input-wrap{position:relative;display:flex;align-items:center;}
+.util-input-wrap input{flex:1;padding-right:55px;}
+.util-input-wrap input:read-only{background:var(--bg3);color:var(--text2);cursor:not-allowed;}
+.util-pct-hint{position:absolute;right:10px;font-family:var(--mono);font-size:11px;color:var(--text3);pointer-events:none;font-weight:500;}
+#left.compact .util-radios{grid-template-columns:repeat(4,1fr);gap:4px;}
+#left.compact .util-radio span{font-size:11px;padding:7px 2px;}
 .sec-sep:first-of-type{padding-top:0;border-top:none;margin-top:0;}
 .rf{margin-bottom:7px;}
 .rf label{display:block;font-family:var(--mono);font-size:9px;color:var(--text3);letter-spacing:.06em;text-transform:uppercase;margin-bottom:3px;font-weight:600;}
@@ -350,9 +368,21 @@ table.ct td{border:1px solid #ccc;padding:4px 7px;vertical-align:top;line-height
     <div class="perif-row"><input type="checkbox" id="chk-web" onchange="togglePerif('web')"><input type="text" id="c-web" placeholder="Webcam" disabled><input type="number" id="p-web" class="price" placeholder="0" min="0" step="1000" disabled oninput="updateTotales()"></div>
 
     <div class="sec-sep">Utilidad por gestión y armado</div>
-    <div class="rf">
-      <label>Monto de utilidad (solo tú lo ves)</label>
-      <input type="number" id="f-utilidad" value="35000" min="0" step="1000" oninput="updateTotales()">
+    <div class="util-wrap">
+      <div class="util-label">% sobre subtotal componentes</div>
+      <div class="util-radios">
+        <label class="util-radio"><input type="radio" name="util-mode" value="20" onchange="setUtilMode(this.value)"><span>20%</span></label>
+        <label class="util-radio"><input type="radio" name="util-mode" value="25" onchange="setUtilMode(this.value)" checked><span>25%</span></label>
+        <label class="util-radio"><input type="radio" name="util-mode" value="30" onchange="setUtilMode(this.value)"><span>30%</span></label>
+        <label class="util-radio"><input type="radio" name="util-mode" value="manual" onchange="setUtilMode(this.value)"><span>Manual</span></label>
+      </div>
+      <div class="util-input-row">
+        <label>Monto de utilidad (solo tú lo ves)</label>
+        <div class="util-input-wrap">
+          <input type="number" id="f-utilidad" value="0" min="0" step="1000" oninput="onUtilManualInput()" readonly>
+          <span class="util-pct-hint" id="util-pct-hint"></span>
+        </div>
+      </div>
     </div>
 
     <div class="int-panel">
@@ -617,7 +647,48 @@ function leerPerif(){
     return {k:x.k,label:x.n,nombre,precio}
   })
 }
-function getUtilidad(){return parseInt(document.getElementById('f-utilidad').value)||0}
+// ─── UTILIDAD POR GESTIÓN Y ARMADO ───
+let utilMode='25' // '20' | '25' | '30' | 'manual'
+function setUtilMode(mode){
+  utilMode=mode
+  const inp=document.getElementById('f-utilidad')
+  if(mode==='manual'){
+    inp.readOnly=false
+    inp.focus()
+  }else{
+    inp.readOnly=true
+    // calcula y asigna
+    const sub=getSubComponentes()
+    const pct=parseInt(mode,10)
+    inp.value=Math.round(sub*pct/100)
+  }
+  updateTotales()
+}
+function onUtilManualInput(){
+  // Solo tiene efecto en modo manual; en modo % el input es readonly
+  if(utilMode==='manual')updateTotales()
+}
+function getSubComponentes(){
+  const torre=leerTorre()
+  const perif=leerPerif()
+  let s=0
+  torre.forEach(c=>{if(c.nombre)s+=c.precio})
+  perif.forEach(p=>{s+=p.precio})
+  return s
+}
+function getUtilidad(){
+  if(utilMode==='manual'){
+    return parseInt(document.getElementById('f-utilidad').value)||0
+  }
+  // modo %: recalcula siempre desde el subtotal actual
+  const sub=getSubComponentes()
+  const pct=parseInt(utilMode,10)
+  const val=Math.round(sub*pct/100)
+  // sincroniza el input visual
+  const inp=document.getElementById('f-utilidad')
+  if(parseInt(inp.value,10)!==val)inp.value=val
+  return val
+}
 function getValidez(){return parseInt(document.getElementById('f-validez').value)||5}
 function getPlazo(){return parseInt(document.getElementById('f-plazo').value)||7}
 function validarObligatorios(){
@@ -642,6 +713,16 @@ function updateTotales(){
   document.getElementById('int-util').textContent=fmt(t.util)
   document.getElementById('int-neto').textContent=fmt(t.neto)
   document.getElementById('int-iva').textContent=fmt(t.iva)
+  // Hint % equivalente (solo en modo manual)
+  const hint=document.getElementById('util-pct-hint')
+  if(hint){
+    if(utilMode==='manual'&&t.subComp>0){
+      const pct=Math.round((t.util/t.subComp)*100)
+      hint.textContent='≈ '+pct+'%'
+    }else{
+      hint.textContent=''
+    }
+  }
   const wrap=document.getElementById('p-total-wrap')
   if(wrap.style.display!=='none'){
     document.getElementById('p-total-neto').textContent=fmt(t.neto)
@@ -845,7 +926,11 @@ function limpiar(){
     document.getElementById('c-'+x.k).disabled=true
     document.getElementById('p-'+x.k).disabled=true
   })
-  document.getElementById('f-utilidad').value='35000'
+  document.getElementById('f-utilidad').value='0'
+  // Reset modo utilidad a 25%
+  document.querySelector('input[name="util-mode"][value="25"]').checked=true
+  utilMode='25'
+  document.getElementById('f-utilidad').readOnly=true
   document.getElementById('chk-iva').checked=false
   document.getElementById('iva-toggle').classList.remove('on')
   document.getElementById('val-panel').style.display='none'
