@@ -197,58 +197,50 @@ table.ct td{border:1px solid #ccc;padding:4px 7px;vertical-align:top;line-height
 .toast.show{opacity:1;}
 
 /* ═══════════════════════════════════════════════════════════════
-   MÓVIL apretado (≤560px) — complementa @media 860 existente
+   MODO COMPACTO del #left (activado por JS cuando ancho <460px)
+   Se aplica también cuando arrastras el splitter muy a la izquierda
+   ═══════════════════════════════════════════════════════════════ */
+#left.compact .lh{flex-wrap:wrap;padding:10px 12px;gap:8px;}
+#left.compact .lh>div:first-child{flex:1;min-width:0;}
+#left.compact .lh>div:last-child{width:100%;justify-content:flex-end;gap:6px;}
+#left.compact .lh-left .brand{font-size:16px;}
+#left.compact .lh-left .tag{font-size:8.5px;}
+#left.compact .ot-pill{font-size:9.5px;padding:3px 7px;}
+#left.compact .btn-back,#left.compact .btn-exit{padding:6px 10px;font-size:11px;}
+#left.compact .api-row{padding:5px 12px;gap:5px;}
+#left.compact .api-row input{font-size:9.5px;padding:5px 7px;}
+#left.compact .api-save{font-size:9.5px;padding:5px 9px;}
+#left.compact .lb{padding:10px 12px;}
+/* Filas de componentes: etiqueta+nombre en fila, precio ancho completo abajo */
+#left.compact .comp-row{grid-template-columns:60px 1fr;gap:5px 6px;margin-bottom:7px;}
+#left.compact .comp-row input.price{grid-column:1 / -1;margin-top:2px;}
+#left.compact .comp-row .comp-lbl{font-size:9px;}
+/* RAM rediseñada compacta */
+#left.compact .ram-block{padding:10px 12px;margin-bottom:8px;}
+#left.compact .ram-block .ram-head{grid-template-columns:60px 1fr;gap:5px 6px;margin-bottom:8px;}
+#left.compact .ram-block .ram-head .comp-lbl{font-size:9px!important;}
+#left.compact .ram-row{grid-template-columns:1fr 1fr;gap:6px 8px;padding-bottom:6px;border-bottom:1px dashed var(--border);margin-bottom:6px;grid-template-areas:"lbln lblpu" "inpn inppu" "tot tot";}
+#left.compact .ram-row .ram-lbl{display:block;grid-area:lbln;}
+#left.compact .ram-row input#ram-n{grid-area:inpn;}
+#left.compact .ram-row input#ram-pu{grid-area:inppu;}
+#left.compact .ram-row .ram-total{grid-area:tot;display:flex;justify-content:space-between;align-items:center;padding:4px 2px 0;text-align:right;}
+#left.compact .ram-row .ram-total::before{content:"Total RAM";font-family:var(--mono);font-size:9px;color:var(--text3);letter-spacing:.05em;text-transform:uppercase;font-weight:600;}
+/* Inyectamos etiqueta "Precio c/u" encima del input de precio vía placeholder visual */
+#left.compact .ram-row input#ram-pu::placeholder{color:var(--text3);}
+/* Etiqueta visible arriba del precio unitario */
+#left.compact .ram-row::before{content:"Precio c/u";grid-area:lblpu;font-family:var(--mono);font-size:8.5px;color:var(--text3);letter-spacing:.05em;text-transform:uppercase;font-weight:600;padding-left:2px;}
+/* Periféricos compactos */
+#left.compact .perif-row{grid-template-columns:20px 1fr;gap:5px;margin-bottom:6px;}
+#left.compact .perif-row input.price{grid-column:1 / -1;margin-left:24px;}
+#left.compact .sec-sep{font-size:9px;margin:12px 0 5px;padding-top:10px;}
+#left.compact .lf{padding:10px 12px;}
+#left.compact .btn-g{padding:13px;font-size:14px;}
+#left.compact .btn-sm{padding:9px;font-size:12px;}
+
+/* ═══════════════════════════════════════════════════════════════
+   MÓVIL apretado del preview (≤560px viewport)
    ═══════════════════════════════════════════════════════════════ */
 @media(max-width:560px){
-  /* Header izquierdo: marca+folio arriba, botones abajo */
-  .lh{flex-wrap:wrap;padding:10px 12px;gap:8px;}
-  .lh>div:first-child{flex:1;min-width:0;}
-  .lh>div:last-child{width:100%;justify-content:flex-end;gap:6px;}
-  .lh-left .brand{font-size:16px;}
-  .lh-left .tag{font-size:8.5px;}
-  .ot-pill{font-size:9.5px;padding:3px 7px;}
-  .btn-back,.btn-exit{padding:6px 10px;font-size:11px;}
-
-  .api-row{padding:5px 12px;gap:5px;}
-  .api-row input{font-size:9.5px;padding:5px 7px;}
-  .api-save{font-size:9.5px;padding:5px 9px;}
-
-  .lb{padding:10px 12px;}
-
-  /* Filas de componentes: etiqueta+nombre en fila, precio ancho completo abajo */
-  .comp-row{grid-template-columns:60px 1fr;gap:5px 6px;margin-bottom:7px;}
-  .comp-row input.price{grid-column:1 / -1;margin-top:2px;}
-  .comp-row .comp-lbl{font-size:9px;}
-
-  /* RAM rediseñada: alineada visualmente con el resto */
-  .ram-block{padding:10px 12px;margin-bottom:8px;}
-  .ram-block .ram-head{grid-template-columns:60px 1fr;gap:5px 6px;margin-bottom:8px;}
-  .ram-block .ram-head .comp-lbl{font-size:9px!important;}
-  /* Fila interna: Módulos + Precio c/u en 50/50 con etiquetas arriba */
-  .ram-row{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding-bottom:6px;border-bottom:1px dashed var(--border);margin-bottom:6px;}
-  .ram-row .ram-lbl{display:none;}
-  .ram-row input{font-size:12px;padding:7px 9px;}
-  .ram-row input#ram-n{grid-column:1;}
-  .ram-row input#ram-pu{grid-column:2;}
-  /* Poner etiquetas flotantes con ::before pseudo */
-  .ram-row::before{content:"N° módulos";grid-column:1;grid-row:1;font-family:var(--mono);font-size:8.5px;color:var(--text3);letter-spacing:.05em;text-transform:uppercase;font-weight:600;padding-left:2px;}
-  .ram-row::after{content:"Precio c/u";grid-column:2;grid-row:1;font-family:var(--mono);font-size:8.5px;color:var(--text3);letter-spacing:.05em;text-transform:uppercase;font-weight:600;padding-left:2px;}
-  .ram-row input#ram-n,.ram-row input#ram-pu{grid-row:2;}
-  /* Total RAM: fila propia con etiqueta izquierda + valor derecha */
-  .ram-total{grid-column:1 / -1;display:flex;justify-content:space-between;align-items:center;padding:4px 2px 0;text-align:right;}
-  .ram-total::before{content:"Total RAM";font-family:var(--mono);font-size:9px;color:var(--text3);letter-spacing:.05em;text-transform:uppercase;font-weight:600;}
-
-  /* Periféricos: checkbox+nombre en fila, precio ancho completo debajo */
-  .perif-row{grid-template-columns:20px 1fr;gap:5px;margin-bottom:6px;}
-  .perif-row input.price{grid-column:1 / -1;margin-left:24px;}
-
-  .sec-sep{font-size:9px;margin:12px 0 5px;padding-top:10px;}
-
-  .lf{padding:10px 12px;}
-  .btn-g{padding:13px;font-size:14px;}
-  .btn-sm{padding:9px;font-size:12px;}
-
-  /* Preview A4 */
   #right{padding:10px 0 0;}
   .doc{padding:14px 14px;font-size:10.5px;}
   .doc-title{font-size:17px;}
@@ -263,12 +255,20 @@ table.ct td{border:1px solid #ccc;padding:4px 7px;vertical-align:top;line-height
   .doc-pay-box{padding:8px 10px;}
   .doc-pay-box table td.lbl{width:90px;}
   .doc-cond,.doc-pago{font-size:9px;}
-
   .pbar{padding:10px;gap:6px;}
   .btn-p{font-size:11px;padding:9px 12px;}
-
   .tab-btn{padding:11px 6px;font-size:9.5px;}
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   DICTADO POR VOZ (botón micrófono en Brief)
+   ═══════════════════════════════════════════════════════════════ */
+.lbl-mic-wrap{display:flex;justify-content:space-between;align-items:center;gap:8px;}
+.btn-mic{background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:3px 8px;cursor:pointer;font-size:13px;line-height:1;transition:.15s;color:var(--text2);}
+.btn-mic:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-bg);}
+.btn-mic.recording{background:var(--red);border-color:var(--red);color:#fff;animation:pulse 1.3s ease-in-out infinite;}
+.btn-mic.unsupported{display:none;}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(192,57,43,.6);}50%{box-shadow:0 0 0 6px rgba(192,57,43,0);}}
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </head>
@@ -310,7 +310,7 @@ table.ct td{border:1px solid #ccc;padding:4px 7px;vertical-align:top;line-height
       <div class="rf"><label>Plazo entrega (días hábiles)</label><input type="number" id="f-plazo" value="7" min="1" max="60"></div>
     </div>
     <div class="rf">
-      <label>Brief del cliente</label>
+      <label class="lbl-mic-wrap">Brief del cliente<button type="button" class="btn-mic" id="btn-mic" title="Dictar por voz" aria-label="Dictar por voz">🎤</button></label>
       <textarea id="f-brief" rows="4" placeholder="Ej: cliente busca PC para su hijo de 12 años, le gusta jugar Fortnite y Minecraft, también tareas del colegio. Presupuesto aprox $500.000. No necesita monitor. Teclado y mouse sí."></textarea>
     </div>
 
@@ -908,15 +908,31 @@ function logout(){localStorage.removeItem('tantecno_auth');window.location.href=
   refreshApiStatus()
   refreshFolioUI()
   updateTotales()
-})()
+})();
 
 // ═══════════════════════════════════════════════════════════════
-// DIVISOR ARRASTRABLE (solo desktop >860px)
+// DIVISOR ARRASTRABLE + MODO COMPACTO (solo desktop >860px)
 // ═══════════════════════════════════════════════════════════════
 (function splitterInit(){
   const sp=document.getElementById('splitter')
   const left=document.getElementById('left')
   if(!sp||!left)return
+
+  // ResizeObserver: activa/desactiva modo compact según ancho real de #left
+  function updateCompact(){
+    const w=left.offsetWidth
+    // En móvil (<=860 viewport) el left ocupa 100%, ahí también va compact si es pequeño
+    if(w>0&&w<460)left.classList.add('compact')
+    else left.classList.remove('compact')
+  }
+  if(window.ResizeObserver){
+    const ro=new ResizeObserver(updateCompact)
+    ro.observe(left)
+  }
+  // fallback: también en resize de ventana
+  window.addEventListener('resize',updateCompact)
+  updateCompact()
+
   // Restaurar ancho guardado
   const saved=parseInt(localStorage.getItem('tantecno_split_left')||'',10)
   if(saved>=320&&saved<=720)left.style.width=saved+'px'
@@ -946,7 +962,57 @@ function logout(){localStorage.removeItem('tantecno_auth');window.location.href=
     left.style.width='440px'
     localStorage.removeItem('tantecno_split_left')
   })
-})()
+})();
+
+// ═══════════════════════════════════════════════════════════════
+// DICTADO POR VOZ (Web Speech API) — solo en Brief del cliente
+// ═══════════════════════════════════════════════════════════════
+(function micInit(){
+  const btn=document.getElementById('btn-mic')
+  const ta=document.getElementById('f-brief')
+  if(!btn||!ta)return
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition
+  if(!SR){btn.classList.add('unsupported');return}
+  const rec=new SR()
+  rec.lang='es-CL'
+  rec.continuous=true
+  rec.interimResults=true
+  let listening=false
+  let baseText=''
+  rec.onresult=e=>{
+    let interim='',final=''
+    for(let i=e.resultIndex;i<e.results.length;i++){
+      const t=e.results[i][0].transcript
+      if(e.results[i].isFinal)final+=t
+      else interim+=t
+    }
+    if(final){baseText=(baseText?baseText+' ':'')+final.trim()}
+    ta.value=baseText+(interim?' '+interim:'')
+  }
+  rec.onerror=e=>{
+    console.error('[mic]',e.error)
+    if(e.error==='not-allowed')toast('Permiso de micrófono denegado')
+    else if(e.error==='no-speech')toast('No se detectó voz, intenta de nuevo')
+    else toast('Error de micrófono: '+e.error)
+    stop()
+  }
+  rec.onend=()=>{if(listening){try{rec.start()}catch(_){stop()}}}
+  function start(){
+    baseText=ta.value.trim()
+    try{rec.start();listening=true;btn.classList.add('recording');btn.textContent='⏹'}
+    catch(e){toast('No se pudo iniciar el dictado');console.error(e)}
+  }
+  function stop(){
+    listening=false
+    try{rec.stop()}catch(_){}
+    btn.classList.remove('recording')
+    btn.textContent='🎤'
+  }
+  btn.addEventListener('click',()=>{
+    if(listening)stop()
+    else start()
+  })
+})();
 </script>
 
 </body>
