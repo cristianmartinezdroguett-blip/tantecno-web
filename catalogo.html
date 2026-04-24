@@ -49,6 +49,22 @@ body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);min-
 .btn-primary{padding:9px 16px;background:var(--accent);color:#fff;border:none;border-radius:8px;font-family:'Outfit',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:.15s;display:inline-flex;align-items:center;gap:6px;box-shadow:0 2px 6px rgba(27,58,92,.2);}
 .btn-primary:hover{background:var(--accent-h);box-shadow:0 3px 10px rgba(27,58,92,.28);}
 .svc-list{display:flex;flex-direction:column;gap:8px;}
+
+/* Buscador y ordenamiento del catálogo */
+.cat-search-row{display:flex;gap:8px;margin-bottom:12px;align-items:stretch;flex-wrap:wrap;}
+.cat-search-wrap{flex:1;min-width:200px;position:relative;display:flex;align-items:center;}
+.cat-search-ico{position:absolute;left:10px;font-size:13px;opacity:.55;pointer-events:none;}
+#cat-search{flex:1;padding:8px 30px 8px 32px;background:var(--bg2);border:1px solid var(--border);border-radius:7px;font-family:var(--body);font-size:13px;color:var(--text);outline:none;transition:.15s;width:100%;}
+#cat-search:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-bg);}
+#cat-search::placeholder{color:var(--text3);}
+.cat-search-clear{position:absolute;right:6px;background:none;border:none;color:var(--text3);font-size:18px;line-height:1;cursor:pointer;padding:3px 7px;border-radius:4px;display:none;transition:.15s;}
+.cat-search-clear:hover{color:var(--red);background:var(--red-bg);}
+.cat-search-wrap.has-text .cat-search-clear{display:block;}
+.cat-sort-btns{display:flex;gap:3px;}
+.cat-sort-btn{background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:6px 10px;font-family:var(--mono);font-size:11px;color:var(--text2);cursor:pointer;transition:.15s;min-width:32px;text-align:center;font-weight:600;}
+.cat-sort-btn:hover{border-color:var(--accent);color:var(--accent);}
+.cat-sort-btn.on{background:var(--accent);border-color:var(--accent);color:#fff;}
+.cat-empty{padding:24px 16px;text-align:center;color:var(--text3);font-size:13px;font-style:italic;}
 .svc-item{display:grid;grid-template-columns:1fr 110px 200px;gap:14px;align-items:center;padding:14px 16px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;transition:.15s;}
 .svc-item:hover{border-color:var(--border-h);}
 .svc-info .svc-name{font-size:13.5px;font-weight:600;color:var(--text);margin-bottom:3px;display:flex;align-items:center;flex-wrap:wrap;gap:6px;}
@@ -130,6 +146,12 @@ body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);min-
   .panel-head{flex-direction:column;align-items:stretch;gap:12px;}
   .panel-head .btn-primary{width:100%;justify-content:center;padding:11px 16px;}
 
+  /* Buscador y orden en móvil: apilar vertical */
+  .cat-search-row{flex-direction:column;gap:8px;margin-bottom:14px;}
+  .cat-search-wrap{min-width:0;}
+  .cat-sort-btns{justify-content:stretch;}
+  .cat-sort-btn{flex:1;padding:8px 6px;}
+
   /* Servicio como tarjeta vertical */
   .svc-item{grid-template-columns:1fr;gap:10px;padding:14px;}
   .svc-info{min-width:0;}
@@ -189,6 +211,20 @@ body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);min-
         <div class="sub">Los servicios aparecen en el catálogo del generador de informes.</div>
       </div>
       <button class="btn-primary" onclick="abrirNuevo()">+ Nuevo servicio</button>
+    </div>
+    <div class="cat-search-row">
+      <div class="cat-search-wrap">
+        <span class="cat-search-ico">🔍</span>
+        <input type="text" id="cat-search" placeholder="Buscar servicio…" autocomplete="off">
+        <button type="button" class="cat-search-clear" id="cat-search-clear" title="Limpiar búsqueda">×</button>
+      </div>
+      <div class="cat-sort-btns">
+        <button type="button" class="cat-sort-btn on" data-sort="orig" title="Orden original">—</button>
+        <button type="button" class="cat-sort-btn" data-sort="az" title="Nombre A-Z">A↓</button>
+        <button type="button" class="cat-sort-btn" data-sort="za" title="Nombre Z-A">A↑</button>
+        <button type="button" class="cat-sort-btn" data-sort="pa" title="Precio menor a mayor">$↓</button>
+        <button type="button" class="cat-sort-btn" data-sort="pd" title="Precio mayor a menor">$↑</button>
+      </div>
     </div>
     <div class="svc-list" id="list-active"></div>
   </div>
@@ -421,14 +457,39 @@ function switchTab(t){
 // Cache en memoria de la lista actual (para que abrirEditar no re-fetchee)
 let _activeCache=[]
 let _trashCache=[]
-
-async function renderActive(){
+// Estado de filtro y orden del buscador (solo afecta panel activos)
+let _catSearch=''
+let _catSort='orig'  // 'orig'|'az'|'za'|'pa'|'pd'
+function normalizeTxt(s){
+  return (s||'').toString().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+}
+function getFilteredActive(){
+  let list=[..._activeCache]
+  if(_catSearch){
+    const q=normalizeTxt(_catSearch)
+    list=list.filter(it=>{
+      const n=normalizeTxt(it.n)
+      const d=normalizeTxt(it.d)
+      const ai=normalizeTxt(it.aiNombre||'')
+      return n.includes(q)||d.includes(q)||ai.includes(q)
+    })
+  }
+  if(_catSort==='az')list.sort((a,b)=>normalizeTxt(a.n).localeCompare(normalizeTxt(b.n)))
+  else if(_catSort==='za')list.sort((a,b)=>normalizeTxt(b.n).localeCompare(normalizeTxt(a.n)))
+  else if(_catSort==='pa')list.sort((a,b)=>(a.p||0)-(b.p||0))
+  else if(_catSort==='pd')list.sort((a,b)=>(b.p||0)-(a.p||0))
+  return list
+}
+function drawActive(){
+  // Re-dibuja la lista sin re-fetch. Usa _activeCache + filtro/orden actuales.
   const c=document.getElementById('list-active')
-  c.innerHTML='<div class="empty"><div class="empty-txt">Cargando…</div></div>'
-  const list=await loadActive()
-  _activeCache=list
-  document.getElementById('count-active').textContent=list.length
+  if(!c)return
+  const list=getFilteredActive()
   if(!list.length){
+    if(_catSearch){
+      c.innerHTML=`<div class="cat-empty">Ningún servicio coincide con "${escapeHtml(_catSearch)}"</div>`
+      return
+    }
     if(!isOnline){
       c.innerHTML='<div class="empty"><div class="empty-ico">⚠</div><div class="empty-txt">No hay conexión con Supabase. Verifica tu SUPABASE_ANON_KEY en el código.</div></div>'
     } else {
@@ -457,6 +518,15 @@ async function renderActive(){
     row.querySelector('[data-action=del]').onclick=()=>eliminar(s.id)
     c.appendChild(row)
   })
+}
+
+async function renderActive(){
+  const c=document.getElementById('list-active')
+  c.innerHTML='<div class="empty"><div class="empty-txt">Cargando…</div></div>'
+  const list=await loadActive()
+  _activeCache=list
+  document.getElementById('count-active').textContent=list.length
+  drawActive()
 }
 
 async function renderTrash(){
@@ -696,6 +766,37 @@ async function importar(evt){
 // ═══════════════════════════════════════════════════════════════
 document.addEventListener('keydown',e=>{if(e.key==='Escape')cerrarModal()})
 renderAll()
+
+// Listeners del buscador y botones de orden (panel activos)
+;(function catSearchInit(){
+  const inp=document.getElementById('cat-search')
+  const clear=document.getElementById('cat-search-clear')
+  const wrap=inp&&inp.parentElement
+  if(inp){
+    inp.addEventListener('input',()=>{
+      _catSearch=inp.value.trim()
+      if(wrap)wrap.classList.toggle('has-text',_catSearch.length>0)
+      drawActive()
+    })
+  }
+  if(clear){
+    clear.addEventListener('click',()=>{
+      inp.value=''
+      _catSearch=''
+      if(wrap)wrap.classList.remove('has-text')
+      drawActive()
+      inp.focus()
+    })
+  }
+  document.querySelectorAll('.cat-sort-btn').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      document.querySelectorAll('.cat-sort-btn').forEach(b=>b.classList.remove('on'))
+      btn.classList.add('on')
+      _catSort=btn.dataset.sort
+      drawActive()
+    })
+  })
+})();
 </script>
 
 </body>
