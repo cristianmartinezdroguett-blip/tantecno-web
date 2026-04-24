@@ -104,6 +104,54 @@ body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);min-
 .pnl-footer{padding:16px 24px;text-align:center;font-size:11px;color:var(--text3);border-top:1px solid var(--border);background:var(--bg2);}
 .pnl-footer b{color:var(--text2);font-weight:600;}
 .file-hidden{display:none;}
+
+/* ═══════════════════════════════════════════════════════════════
+   MÓVIL (≤720px) — no toca desktop
+   ═══════════════════════════════════════════════════════════════ */
+@media(max-width:720px){
+  .pnl-header{padding:12px 14px;gap:10px;}
+  .pnl-brand{gap:8px;min-width:0;}
+  .pnl-brand .logo{font-size:18px;}
+  .pnl-brand .tag{font-size:9px;padding:2px 7px;letter-spacing:.1em;}
+  #sb-txt{display:none;}
+  .btn-back{padding:7px 11px;font-size:12px;}
+
+  .main-wrap{padding:18px 14px;}
+  .page-title{margin-bottom:16px;}
+  .page-title h1{font-size:20px;}
+  .page-title p{font-size:13px;line-height:1.45;}
+
+  /* Pestañas a ancho completo, 3 columnas iguales */
+  .tabs{width:100%;gap:2px;padding:4px;}
+  .tab{flex:1;justify-content:center;padding:9px 6px;font-size:12px;gap:5px;min-width:0;}
+  .tab .count{font-size:10px;padding:1px 6px;}
+
+  .panel{padding:16px;}
+  .panel-head{flex-direction:column;align-items:stretch;gap:12px;}
+  .panel-head .btn-primary{width:100%;justify-content:center;padding:11px 16px;}
+
+  /* Servicio como tarjeta vertical */
+  .svc-item{grid-template-columns:1fr;gap:10px;padding:14px;}
+  .svc-info{min-width:0;}
+  .svc-info .svc-name{font-size:14px;word-break:break-word;}
+  .svc-info .svc-desc{font-size:12px;}
+  .svc-price{text-align:left;font-size:15px;}
+  /* Los días de papelera quedan inline con el precio */
+  .svc-days{text-align:left;width:fit-content;}
+  /* Acciones en fila, cada botón 50% */
+  .svc-actions{justify-content:stretch;gap:8px;}
+  .svc-actions .btn-icon{flex:1;text-align:center;padding:10px 8px;font-size:12.5px;}
+
+  /* Modal con menos padding y respiro abajo por teclado virtual */
+  .modal-overlay{padding:12px;align-items:flex-start;padding-top:40px;}
+  .modal-box{padding:20px;max-height:calc(100vh - 60px);}
+  .modal-title{font-size:16px;}
+  .modal-sub{font-size:12px;margin-bottom:14px;}
+  .modal-btns{flex-direction:column-reverse;gap:8px;}
+  .modal-btns .btn-cancel,.modal-btns .btn-primary{width:100%;justify-content:center;padding:11px 16px;}
+
+  .pnl-footer{padding:14px 14px;font-size:10.5px;line-height:1.5;}
+}
 </style>
 </head>
 <body>
