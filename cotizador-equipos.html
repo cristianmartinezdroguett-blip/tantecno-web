@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cotizador de Equipos · TANTECNO</title>
+<script>
+(function(){
+  if(localStorage.getItem('tantecno_auth') !== 'tantecno_internal_2026'){
+    window.location.href = 'login.html?redirect=cotizador-equipos.html';
+  }
+})();
+</script>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --bg:#f0f2f5;--bg2:#ffffff;--bg3:#f7f8fa;--surface:#f0f2f5;
+  --border:#d9dde3;--border-h:#bfc5cd;
+  --text:#1e2a3a;--text2:#5a6577;--text3:#8a95a5;
+  --accent:#1b3a5c;--accent-h:#254d78;--accent-bg:rgba(27,58,92,.08);
+  --mono:'JetBrains Mono',monospace;--body:'Outfit',sans-serif;--cond:'Outfit',sans-serif;
+  --green:#0f8a5f;--green-bg:rgba(15,138,95,.08);
+  --red:#c0392b;--red-bg:rgba(192,57,43,.06);
+  --amber:#c08a00;--amber-bg:rgba(192,138,0,.08);
+  --blue:#2563eb;--blue-bg:rgba(37,99,235,.08);
+  --radius:10px;
+}
+body{font-family:var(--body);background:var(--bg);color:var(--text);display:flex;height:100vh;overflow:hidden;}
+#left{width:440px;flex-shrink:0;display:flex;flex-direction:column;background:var(--bg2);border-right:1px solid var(--border);}
+.lh{padding:13px 16px 11px;border-bottom:1px solid var(--border);flex-shrink:0;display:flex;justify-content:space-between;align-items:center;gap:10px;}
+.lh-left .tag{font-family:var(--mono);font-size:9px;color:var(--accent);letter-spacing:.14em;text-transform:uppercase;font-weight:600;}
+.lh-left .brand{font-family:var(--cond);font-size:18px;font-weight:800;margin-top:1px;line-height:1;color:var(--text);letter-spacing:-.01em;}
+.ot-pill{font-family:var(--mono);font-size:10px;color:var(--text2);border:1px solid var(--border);border-radius:5px;padding:4px 8px;display:flex;align-items:center;gap:4px;background:var(--bg3);}
+.btn-back{background:var(--bg2);border:1px solid var(--border);border-radius:6px;color:var(--text2);font-family:var(--body);font-size:11px;font-weight:500;padding:5px 10px;cursor:pointer;transition:.15s;text-decoration:none;display:inline-flex;align-items:center;gap:4px;}
+.btn-back:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-bg);}
+.btn-exit{background:var(--bg2);border:1px solid var(--border);border-radius:6px;color:var(--text2);font-family:var(--body);font-size:11px;font-weight:500;padding:5px 10px;cursor:pointer;transition:.15s;}
+.btn-exit:hover{border-color:var(--red);color:var(--red);background:var(--red-bg);}
+.api-row{display:flex;align-items:center;gap:6px;padding:6px 16px;border-bottom:1px solid var(--border);flex-shrink:0;background:var(--bg3);}
+.api-dot{width:7px;height:7px;border-radius:50%;background:var(--red);flex-shrink:0;transition:.3s;box-shadow:0 0 0 2px var(--red-bg);}
+.api-dot.ok{background:var(--green);box-shadow:0 0 0 2px var(--green-bg);}
+.api-row input{flex:1;background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:5px 8px;color:var(--text);font-family:var(--mono);font-size:10px;outline:none;transition:.15s;}
+.api-row input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-bg);}
+.api-row input::placeholder{color:var(--text3);}
+.api-save{padding:5px 10px;background:var(--accent);border:1px solid var(--accent);border-radius:4px;color:#fff;font-family:var(--body);font-size:10px;font-weight:600;cursor:pointer;white-space:nowrap;transition:.15s;}
+.api-save:hover{background:var(--accent-h);}
+.lb{flex:1;overflow-y:auto;padding:12px 16px;}
+.lb::-webkit-scrollbar{width:4px;}
+.lb::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
+.lb::-webkit-scrollbar-thumb:hover{background:var(--border-h);}
+.sec-sep{font-family:var(--mono);font-size:9px;color:var(--text3);letter-spacing:.1em;text-transform:uppercase;margin:14px 0 6px;padding-top:12px;border-top:1px solid var(--border);font-weight:600;}
+.sec-sep:first-of-type{padding-top:0;border-top:none;margin-top:0;}
+.rf{margin-bottom:7px;}
+.rf label{display:block;font-family:var(--mono);font-size:9px;color:var(--text3);letter-spacing:.06em;text-transform:uppercase;margin-bottom:3px;font-weight:600;}
+.rf input,.rf textarea,.rf select{width:100%;background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:7px 10px;color:var(--text);font-family:var(--body);font-size:13px;outline:none;transition:.15s;}
+.rf input:focus,.rf textarea:focus,.rf select:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-bg);}
+.rf textarea{resize:none;line-height:1.5;}
+.rf select option{background:var(--bg2);color:var(--text);}
+.r2{display:grid;grid-template-columns:1fr 1fr;gap:7px;}
+.comp-row{display:grid;grid-template-columns:70px 1fr 90px;gap:6px;align-items:center;margin-bottom:5px;}
+.comp-row .comp-lbl{font-family:var(--mono);font-size:9.5px;color:var(--text2);letter-spacing:.05em;text-transform:uppercase;font-weight:600;}
+.comp-row .comp-lbl.req::after{content:"*";color:var(--accent);margin-left:2px;}
+.comp-row input,.comp-row select{background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:6px 9px;color:var(--text);font-family:var(--body);font-size:12px;outline:none;transition:.15s;}
+.comp-row input:focus,.comp-row select:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-bg);}
+.comp-row input.price{font-family:var(--mono);font-size:11px;text-align:right;}
+.comp-row input.price::placeholder{color:var(--text3);}
+.ram-block{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:10px;margin-bottom:7px;}
+.ram-block .ram-head{display:grid;grid-template-columns:70px 1fr;gap:6px;align-items:center;margin-bottom:6px;}
+.ram-block .ram-head input{background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:6px 9px;color:var(--text);font-family:var(--body);font-size:12px;outline:none;transition:.15s;}
+.ram-block .ram-head input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-bg);}
+.ram-row{display:grid;grid-template-columns:70px 90px 90px 1fr;gap:6px;align-items:center;}
+.ram-row .ram-lbl{font-family:var(--mono);font-size:8.5px;color:var(--text3);letter-spacing:.05em;text-transform:uppercase;font-weight:600;}
+.ram-row input{background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:6px 9px;color:var(--text);font-family:var(--mono);font-size:11px;outline:none;transition:.15s;text-align:right;}
+.ram-row input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-bg);}
+.ram-total{font-family:var(--mono);font-size:11px;color:var(--green);text-align:right;padding:4px 8px;font-weight:600;}
+.perif-row{display:grid;grid-template-columns:20px 1fr 90px;gap:6px;align-items:center;margin-bottom:4px;}
+.perif-row input[type=checkbox]{accent-color:var(--accent);width:14px;height:14px;cursor:pointer;}
+.perif-row input[type=text]{background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:6px 9px;color:var(--text);font-family:var(--body);font-size:12px;outline:none;transition:.15s;}
+.perif-row input[type=text]:disabled{opacity:.4;background:var(--bg3);}
+.perif-row input.price{font-family:var(--mono);font-size:11px;text-align:right;}
+.perif-row input[type=text]:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-bg);}
+.int-panel{background:var(--accent-bg);border:1px solid rgba(27,58,92,.18);border-radius:8px;padding:12px 14px;margin:10px 0;}
+.int-panel .ip-title{font-family:var(--mono);font-size:9px;color:var(--accent);letter-spacing:.1em;text-transform:uppercase;margin-bottom:7px;font-weight:700;}
+.int-row{display:flex;justify-content:space-between;align-items:center;font-family:var(--mono);font-size:11px;color:var(--text2);padding:3px 0;}
+.int-row.tot{color:var(--text);font-weight:600;border-top:1px solid rgba(27,58,92,.15);padding-top:6px;margin-top:4px;font-size:12px;}
+.int-row.iva{color:var(--amber);font-size:10.5px;padding-top:3px;}
+.int-row b{font-family:var(--mono);font-weight:500;}
+.int-row .v{color:var(--text);font-weight:600;}
+.int-row.tot .v{color:var(--green);font-weight:700;font-size:13px;}
+.iva-toggle{display:flex;align-items:center;gap:9px;padding:9px 12px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;margin-top:8px;cursor:pointer;user-select:none;transition:.15s;}
+.iva-toggle:hover{background:var(--bg2);border-color:var(--accent);}
+.iva-toggle input[type=checkbox]{accent-color:var(--accent);width:15px;height:15px;cursor:pointer;}
+.iva-toggle span{font-size:12px;color:var(--text2);font-weight:500;}
+.iva-toggle.on{background:var(--accent-bg);border-color:var(--accent);}
+.iva-toggle.on span{color:var(--accent);font-weight:600;}
+.val-panel{margin:10px 0;padding:10px 12px;border-radius:8px;font-size:11.5px;line-height:1.55;display:none;}
+.val-panel.ok{background:var(--green-bg);border:1px solid rgba(15,138,95,.25);color:var(--green);}
+.val-panel.warn{background:var(--amber-bg);border:1px solid rgba(192,138,0,.28);color:#92700c;}
+.val-panel.err{background:#fdecea;border:1px solid rgba(192,57,43,.25);color:var(--red);}
+.val-panel .val-title{font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;margin-bottom:5px;font-weight:700;}
+.val-panel ul{margin:0;padding-left:14px;}
+.val-panel li{margin-bottom:2px;}
+.lf{padding:12px 16px;border-top:1px solid var(--border);flex-shrink:0;background:var(--bg3);}
+.btn-g{width:100%;padding:12px;background:var(--accent);border:none;border-radius:8px;color:#fff;font-family:var(--body);font-size:14px;font-weight:600;cursor:pointer;transition:.15s;margin-bottom:4px;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 2px 6px rgba(27,58,92,.2);}
+.btn-g:hover{background:var(--accent-h);box-shadow:0 3px 10px rgba(27,58,92,.28);}
+.btn-g:disabled{opacity:.5;cursor:not-allowed;box-shadow:none;}
+.spinner{width:13px;height:13px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;display:none;}
+.btn-g.loading .spinner{display:block;}
+.btn-g.loading .blbl{opacity:.6;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.lf-row{display:flex;gap:6px;}
+.btn-sm{flex:1;padding:8px;background:var(--bg2);border:1px solid var(--border);border-radius:6px;color:var(--text2);font-family:var(--body);font-size:12px;font-weight:500;cursor:pointer;transition:.15s;}
+.btn-sm:hover{background:var(--accent-bg);color:var(--accent);border-color:var(--accent);}
+.tip{font-family:var(--mono);font-size:9px;color:var(--text3);text-align:center;margin-top:6px;letter-spacing:.03em;}
+#right{flex:1;overflow-y:auto;background:var(--bg);padding:24px;}
+#right::-webkit-scrollbar{width:6px;}#right::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
+#right::-webkit-scrollbar-thumb:hover{background:var(--border-h);}
+.doc{background:#fff;max-width:660px;margin:0 auto;padding:28px 32px;box-shadow:0 4px 24px rgba(0,0,0,.15);color:#111;font-family:Arial,Helvetica,sans-serif;font-size:11px;line-height:1.6;}
+.doc-hdr{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:2.5px solid #111;padding-bottom:10px;margin-bottom:12px;}
+.doc-title{font-family:'Arial Black',Arial,sans-serif;font-size:20px;font-weight:900;line-height:1;letter-spacing:-.02em;}
+.doc-subtipo{font-size:10.5px;font-weight:700;color:#555;letter-spacing:.05em;margin-top:3px;}
+.doc-brand{text-align:right;}
+.doc-brand b{font-size:12.5px;font-weight:900;display:block;}
+.doc-brand small{font-size:8px;color:#888;letter-spacing:.07em;text-transform:uppercase;display:block;margin-top:1px;}
+.doc-brand .doc-contact{font-size:8px;color:#999;margin-top:1px;}
+.doc-meta{margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid #ddd;}
+.doc-ot{font-weight:700;font-size:12px;margin-bottom:6px;font-family:'Courier New',monospace;}
+.dm{font-size:10.5px;margin-bottom:2px;}
+.dm b{font-weight:700;}
+.dm-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px 16px;margin:3px 0;}
+.dm-grid .dm{margin-bottom:1px;}
+.doc-sh{font-weight:700;font-size:11px;border-bottom:1px solid #ccc;padding-bottom:2px;margin:11px 0 5px;}
+.doc-sb{font-family:Georgia,serif;font-size:10.5px;line-height:1.68;text-align:justify;white-space:pre-line;}
+.doc-sb[contenteditable=true]:focus{outline:1px dashed #93c5fd;border-radius:2px;background:#f8fbff;}
+.doc-ph{font-family:Arial,sans-serif;font-size:10px;color:#bbb;font-style:italic;}
+.edit-hint{font-family:'Courier New',monospace;font-size:8px;color:#93c5fd;letter-spacing:.06em;text-transform:uppercase;margin-bottom:3px;display:none;}
+table.ct{width:100%;border-collapse:collapse;font-size:10px;margin-bottom:4px;}
+table.ct th{background:#f1f5f9;border:1px solid #ccc;padding:4px 7px;text-align:left;font-weight:700;}
+table.ct td{border:1px solid #ccc;padding:4px 7px;vertical-align:top;line-height:1.45;}
+.doc-total-box{margin-top:14px;padding:12px 14px;background:#0f172a;color:#fff;border-radius:3px;}
+.doc-total-box .tl-label{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.6);font-family:Arial,Helvetica,sans-serif;}
+.doc-total-box .tl-val{font-family:'Courier New',monospace;font-size:19px;font-weight:700;margin-top:2px;letter-spacing:-.01em;}
+.doc-total-box .tl-iva{font-size:10px;color:rgba(255,255,255,.75);margin-top:3px;font-family:Arial,Helvetica,sans-serif;}
+.doc-total-box .tl-iva b{font-family:'Courier New',monospace;color:#fff;}
+.doc-total-box .tl-leyenda{font-size:9px;color:rgba(255,255,255,.55);margin-top:7px;font-style:italic;font-family:Arial,Helvetica,sans-serif;}
+.doc-cond{font-size:9.5px;color:#333;line-height:1.6;margin-top:11px;padding-top:7px;border-top:1px solid #eee;}
+.doc-pago{font-size:9.5px;color:#333;line-height:1.6;margin-top:5px;}
+.doc-pay-box{margin-top:8px;border:1.5px solid #0f172a;border-radius:4px;padding:10px 14px;background:#f8fafc;}
+.doc-pay-box .pay-title{font-family:Arial,Helvetica,sans-serif;font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#0f172a;margin-bottom:6px;padding-bottom:4px;border-bottom:1px solid #cbd5e1;}
+.doc-pay-box table{width:100%;border-collapse:collapse;font-size:10px;}
+.doc-pay-box table td{padding:2px 0;vertical-align:top;}
+.doc-pay-box table td.lbl{width:120px;color:#555;font-weight:600;font-family:Arial,Helvetica,sans-serif;}
+.doc-pay-box table td.val{color:#111;font-family:'Courier New',monospace;}
+.doc-pay-box .pay-foot{font-size:9px;color:#555;margin-top:7px;padding-top:6px;border-top:1px solid #e2e8f0;font-style:italic;font-family:Arial,Helvetica,sans-serif;}
+.doc-firma{margin-top:9px;padding-top:7px;border-top:1px solid #ccc;font-size:10.5px;}
+.pbar{display:flex;justify-content:center;gap:8px;margin-top:14px;flex-wrap:wrap;}
+.btn-p{padding:8px 16px;border:none;border-radius:6px;cursor:pointer;font-size:12px;font-family:var(--body);transition:.15s;}
+.btn-p.dark{background:var(--accent);color:#fff;border:1px solid var(--accent);box-shadow:0 2px 6px rgba(27,58,92,.2);}.btn-p.dark:hover{background:var(--accent-h);}
+.btn-p.amber{background:var(--bg2);color:var(--text2);border:1px solid var(--border);font-size:11px;}.btn-p.amber:hover{background:var(--red-bg);color:var(--red);border-color:var(--red);}
+@page{size:A4 portrait;margin:13mm 15mm;}
+@media print{
+  #left,.pbar,.edit-hint{display:none!important;}
+  body{background:#fff;display:block;}
+  #right{background:#fff;padding:0;overflow:visible;}
+  .doc{box-shadow:none;padding:0;max-width:100%;margin:0;}
+  .doc-sb{outline:none!important;background:transparent!important;}
+  .doc-total-box{background:#0f172a!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+}
+@media(max-width:860px){
+  body{display:block;height:auto;overflow:auto;}
+  #left,#right{width:100%;height:auto;overflow:visible;border:none;}
+  .tab-bar{display:flex!important;}
+  #left{display:none;}
+  #right{display:none;background:var(--bg);padding:10px 0 0;}
+  #left.tab-active{display:flex;}
+  #right.tab-active{display:block;}
+  .doc{padding:18px 16px;max-width:100%;box-shadow:none;margin:0;}
+  .pbar{flex-direction:column;padding:12px;}
+  .btn-p{width:100%;}
+  .lf{position:sticky;bottom:0;z-index:10;background:var(--bg2);box-shadow:0 -1px 0 var(--border);}
+}
+.tab-bar{display:none;background:var(--bg2);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:20;}
+.tab-btn{flex:1;padding:13px 8px;border:none;background:none;color:var(--text2);font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;border-bottom:2px solid transparent;transition:.15s;}
+.tab-btn.active{color:var(--accent);border-bottom-color:var(--accent);}
+@media print{.tab-bar{display:none!important;}#right{display:block!important;}}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--text);color:#fff;font-family:var(--body);font-size:12px;font-weight:500;padding:10px 18px;border-radius:8px;pointer-events:none;opacity:0;transition:opacity .25s;z-index:999;white-space:nowrap;box-shadow:0 4px 16px rgba(0,0,0,.2);}
+.toast.show{opacity:1;}
+
+/* ═══════════════════════════════════════════════════════════════
+   MÓVIL apretado (≤560px) — complementa la @media de 860px existente
+   ═══════════════════════════════════════════════════════════════ */
+@media(max-width:560px){
+  /* Header izquierdo en 2 filas: arriba marca+folio, abajo botones */
+  .lh{flex-wrap:wrap;padding:10px 12px;gap:8px;}
+  .lh>div:first-child{flex:1;min-width:0;}
+  .lh>div:last-child{width:100%;justify-content:flex-end;gap:6px;}
+  .lh-left .brand{font-size:16px;}
+  .lh-left .tag{font-size:8.5px;}
+  .ot-pill{font-size:9.5px;padding:3px 7px;}
+  .btn-back,.btn-exit{padding:6px 10px;font-size:11px;}
+
+  .api-row{padding:5px 12px;gap:5px;}
+  .api-row input{font-size:9.5px;padding:5px 7px;}
+  .api-save{font-size:9.5px;padding:5px 9px;}
+
+  .lb{padding:10px 12px;}
+
+  /* comp-row: etiqueta+nombre arriba, precio abajo */
+  .comp-row{grid-template-columns:60px 1fr;gap:5px 6px;margin-bottom:7px;}
+  .comp-row input.price{grid-column:1 / -1;margin-top:2px;}
+  .comp-row .comp-lbl{font-size:9px;}
+
+  /* ram-block: módulos+precio en fila, total aparte */
+  .ram-block{padding:9px;}
+  .ram-block .ram-head{grid-template-columns:60px 1fr;gap:5px;}
+  .ram-row{grid-template-columns:1fr 1fr;gap:5px;}
+  .ram-row .ram-lbl{grid-column:1 / -1;margin-bottom:-2px;}
+  .ram-total{grid-column:1 / -1;text-align:left;padding:4px 0 0;}
+
+  /* perif-row: checkbox + nombre, precio abajo con ancho completo */
+  .perif-row{grid-template-columns:20px 1fr;gap:5px;margin-bottom:6px;}
+  .perif-row input.price{grid-column:1 / -1;margin-left:24px;}
+
+  .sec-sep{font-size:9px;margin:12px 0 5px;padding-top:10px;}
+
+  /* Barra inferior sticky (ya la maneja la @media 860, reforzamos padding) */
+  .lf{padding:10px 12px;}
+  .btn-g{padding:13px;font-size:14px;}
+  .btn-sm{padding:9px;font-size:12px;}
+
+  /* Preview A4: achicar título y tablas para que no desborde en celular */
+  #right{padding:10px 0 0;}
+  .doc{padding:14px 14px;font-size:10.5px;}
+  .doc-title{font-size:17px;}
+  .doc-subtipo{font-size:9.5px;}
+  .doc-brand b{font-size:11px;}
+  .doc-brand small,.doc-brand .doc-contact{font-size:7.5px;}
+  .doc-hdr{padding-bottom:8px;margin-bottom:10px;flex-wrap:wrap;gap:6px;}
+  .doc-hdr>div:last-child{text-align:left;width:100%;}
+  table.ct th,table.ct td{padding:3px 5px;font-size:9.5px;}
+  .doc-total-box{padding:10px 12px;}
+  .doc-total-box .tl-val{font-size:16px;}
+  .doc-pay-box{padding:8px 10px;}
+  .doc-pay-box table td.lbl{width:90px;}
+  .doc-cond,.doc-pago{font-size:9px;}
+
+  .pbar{padding:10px;gap:6px;}
+  .btn-p{font-size:11px;padding:9px 12px;}
+
+  .tab-btn{padding:11px 6px;font-size:9.5px;}
+}
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+</head>
+<body>
+
+<div class="tab-bar" id="tab-bar">
+  <button class="tab-btn active" id="tab-form" onclick="switchTab('form')">Formulario</button>
+  <button class="tab-btn" id="tab-prev" onclick="switchTab('prev')">Vista previa</button>
+</div>
+
+<div id="left" class="tab-active">
+  <div class="lh">
+    <div class="lh-left">
+      <div class="tag">TANTECNO · COTIZADOR</div>
+      <div class="brand">Equipos nuevos</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:7px;">
+      <div class="ot-pill" id="folio-pill">CE-—</div>
+      <a href="panel.html" class="btn-back" title="Volver al panel">← Panel</a>
+      <button class="btn-exit" onclick="logout()">Salir</button>
+    </div>
+  </div>
+
+  <div class="api-row">
+    <div class="api-dot" id="api-dot"></div>
+    <input id="api-key" type="password" placeholder="API key Anthropic (sk-ant-…)" autocomplete="off">
+    <button class="api-save" onclick="saveApiKey()">Guardar</button>
+  </div>
+
+  <div class="lb">
+
+    <div class="sec-sep">Cliente y brief</div>
+    <div class="r2">
+      <div class="rf"><label>Cliente</label><input id="f-cliente" placeholder="Nombre completo"></div>
+      <div class="rf"><label>Fecha</label><input type="date" id="f-fecha"></div>
+    </div>
+    <div class="r2">
+      <div class="rf"><label>Validez (días)</label><input type="number" id="f-validez" value="5" min="1" max="90"></div>
+      <div class="rf"><label>Plazo entrega (días hábiles)</label><input type="number" id="f-plazo" value="7" min="1" max="60"></div>
+    </div>
+    <div class="rf">
+      <label>Brief del cliente</label>
+      <textarea id="f-brief" rows="4" placeholder="Ej: cliente busca PC para su hijo de 12 años, le gusta jugar Fortnite y Minecraft, también tareas del colegio. Presupuesto aprox $500.000. No necesita monitor. Teclado y mouse sí."></textarea>
+    </div>
+
+    <div class="sec-sep">Torre (obligatorio)</div>
+    <div class="comp-row"><span class="comp-lbl req">CPU</span><input id="c-cpu" placeholder="Ej: Ryzen 5 5600G"><input id="p-cpu" class="price" type="number" placeholder="0" min="0" step="1000" oninput="updateTotales()"></div>
+    <div class="comp-row"><span class="comp-lbl req">Placa</span><input id="c-mb" placeholder="Ej: ASRock A520M-HDV"><input id="p-mb" class="price" type="number" placeholder="0" min="0" step="1000" oninput="updateTotales()"></div>
+
+    <div class="ram-block">
+      <div class="ram-head">
+        <span class="comp-lbl req" style="font-family:var(--mono);font-size:9.5px;color:var(--text3);letter-spacing:.05em;text-transform:uppercase;">RAM</span>
+        <input id="c-ram" placeholder="Ej: Kingston Fury 8GB DDR4 3200MHz">
+      </div>
+      <div class="ram-row">
+        <span class="ram-lbl">Módulos</span>
+        <input id="ram-n" type="number" value="2" min="1" max="4" step="1" oninput="updateRAM()">
+        <input id="ram-pu" type="number" placeholder="Precio c/u" min="0" step="1000" oninput="updateRAM()">
+        <div class="ram-total" id="ram-total">Total: $0</div>
+      </div>
+    </div>
+
+    <div class="comp-row"><span class="comp-lbl req">SSD/NVMe</span><input id="c-ssd" placeholder="Ej: NVMe 500 GB Kingston NV2"><input id="p-ssd" class="price" type="number" placeholder="0" min="0" step="1000" oninput="updateTotales()"></div>
+    <div class="comp-row"><span class="comp-lbl req">Gabinete</span><input id="c-gab" placeholder="Ej: Gabinete ATX con 3 fans"><input id="p-gab" class="price" type="number" placeholder="0" min="0" step="1000" oninput="updateTotales()"></div>
+    <div class="comp-row"><span class="comp-lbl req">Fuente</span><input id="c-fte" placeholder="Ej: EVGA 550W 80+ Bronze"><input id="p-fte" class="price" type="number" placeholder="0" min="0" step="1000" oninput="updateTotales()"></div>
+
+    <div class="sec-sep">Torre (opcional)</div>
+    <div class="comp-row"><span class="comp-lbl">GPU</span><input id="c-gpu" placeholder="Si no hay, se asume integrada"><input id="p-gpu" class="price" type="number" placeholder="0" min="0" step="1000" oninput="updateTotales()"></div>
+    <div class="comp-row"><span class="comp-lbl">HDD</span><input id="c-hdd" placeholder="Ej: WD Blue 1 TB (respaldos)"><input id="p-hdd" class="price" type="number" placeholder="0" min="0" step="1000" oninput="updateTotales()"></div>
+    <div class="comp-row"><span class="comp-lbl">Refrig.</span><input id="c-cool" placeholder="Si no hay, disipador stock"><input id="p-cool" class="price" type="number" placeholder="0" min="0" step="1000" oninput="updateTotales()"></div>
+    <div class="comp-row"><span class="comp-lbl">SO</span><input id="c-so" placeholder="Ej: Windows 11 Home / Linux / Sin SO"><input id="p-so" class="price" type="number" placeholder="0" min="0" step="1000" oninput="updateTotales()"></div>
+
+    <div class="sec-sep">Periféricos (marca para incluir)</div>
+    <div class="perif-row"><input type="checkbox" id="chk-mon" onchange="togglePerif('mon')"><input type="text" id="c-mon" placeholder="Monitor" disabled><input type="number" id="p-mon" class="price" placeholder="0" min="0" step="1000" disabled oninput="updateTotales()"></div>
+    <div class="perif-row"><input type="checkbox" id="chk-tec" onchange="togglePerif('tec')"><input type="text" id="c-tec" placeholder="Teclado" disabled><input type="number" id="p-tec" class="price" placeholder="0" min="0" step="1000" disabled oninput="updateTotales()"></div>
+    <div class="perif-row"><input type="checkbox" id="chk-mou" onchange="togglePerif('mou')"><input type="text" id="c-mou" placeholder="Mouse" disabled><input type="number" id="p-mou" class="price" placeholder="0" min="0" step="1000" disabled oninput="updateTotales()"></div>
+    <div class="perif-row"><input type="checkbox" id="chk-aud" onchange="togglePerif('aud')"><input type="text" id="c-aud" placeholder="Audífonos" disabled><input type="number" id="p-aud" class="price" placeholder="0" min="0" step="1000" disabled oninput="updateTotales()"></div>
+    <div class="perif-row"><input type="checkbox" id="chk-mp" onchange="togglePerif('mp')"><input type="text" id="c-mp" placeholder="Mousepad" disabled><input type="number" id="p-mp" class="price" placeholder="0" min="0" step="1000" disabled oninput="updateTotales()"></div>
+    <div class="perif-row"><input type="checkbox" id="chk-web" onchange="togglePerif('web')"><input type="text" id="c-web" placeholder="Webcam" disabled><input type="number" id="p-web" class="price" placeholder="0" min="0" step="1000" disabled oninput="updateTotales()"></div>
+
+    <div class="sec-sep">Utilidad por gestión y armado</div>
+    <div class="rf">
+      <label>Monto de utilidad (solo tú lo ves)</label>
+      <input type="number" id="f-utilidad" value="35000" min="0" step="1000" oninput="updateTotales()">
+    </div>
+
+    <div class="int-panel">
+      <div class="ip-title">Cálculo interno (no sale en PDF)</div>
+      <div class="int-row"><b>Subtotal componentes</b><span class="v" id="int-comp">$0</span></div>
+      <div class="int-row"><b>Utilidad gestión y armado</b><span class="v" id="int-util">$0</span></div>
+      <div class="int-row tot"><b>TOTAL NETO (al cliente)</b><span class="v" id="int-neto">$0</span></div>
+      <div class="int-row iva"><b>Con IVA 19% (si factura)</b><span class="v" id="int-iva">$0</span></div>
+    </div>
+
+    <label class="iva-toggle" id="iva-toggle">
+      <input type="checkbox" id="chk-iva" onchange="updateIvaToggle()">
+      <span>Mostrar valor con IVA calculado en el PDF</span>
+    </label>
+
+    <div class="sec-sep">Notas internas</div>
+    <div class="rf">
+      <textarea id="f-notas" rows="2" placeholder="Proveedor, fecha cotización de componentes, advertencias, recordatorios. No sale en el PDF."></textarea>
+    </div>
+
+    <div class="val-panel" id="val-panel">
+      <div class="val-title" id="val-title">Validación técnica</div>
+      <div id="val-content"></div>
+    </div>
+
+  </div>
+
+  <div class="lf">
+    <button class="btn-g" id="btn-gen" onclick="generar()">
+      <div class="spinner" id="spinner"></div>
+      <span class="blbl" id="blbl">Generar cotización</span>
+    </button>
+    <div class="lf-row" style="margin-top:5px;">
+      <button class="btn-sm" onclick="limpiar()">↺ Nueva</button>
+      <button class="btn-sm" onclick="savePDF()">⬇ Guardar PDF</button>
+    </div>
+    <div class="tip" id="tip-ia">✦ IA activa</div>
+  </div>
+</div>
+
+<div id="right">
+  <div class="doc" id="doc">
+    <div class="doc-hdr">
+      <div>
+        <div class="doc-title">COTIZACIÓN</div>
+        <div class="doc-subtipo">EQUIPO COMPUTACIONAL NUEVO</div>
+      </div>
+      <div class="doc-brand">
+        <b>TANTECNO</b>
+        <small>Optimización de Equipos Computacionales</small>
+        <div class="doc-contact"><a href="mailto:contacto@tantecno.cl" style="color:inherit;text-decoration:none;">contacto@tantecno.cl</a> · +56 9 7103 6909 · Machalí</div>
+      </div>
+    </div>
+
+    <div class="doc-meta">
+      <div class="doc-ot">Cotización N° <span id="p-folio">CE-————————-——</span></div>
+      <div class="dm"><b>Cliente:</b> <span id="p-cliente">_______________</span></div>
+      <div class="dm-grid">
+        <div class="dm"><b>Fecha:</b> <span id="p-fecha">—</span></div>
+        <div class="dm"><b>Validez:</b> <span id="p-validez">5 días</span></div>
+      </div>
+      <div class="dm"><b>Encargado técnico:</b> Cristián Martínez — TANTECNO</div>
+    </div>
+
+    <div class="doc-sh">Perfil de uso y justificación</div>
+    <div class="edit-hint" id="hint1">editable — clic para modificar</div>
+    <div class="doc-sb" id="p-just"><span class="doc-ph">Completa el formulario y genera la cotización.</span></div>
+
+    <div class="doc-sh">Configuración propuesta</div>
+    <table class="ct" id="t-torre" style="display:none;">
+      <thead><tr><th style="width:36%;">Componente</th><th>Especificación</th></tr></thead>
+      <tbody id="p-torre-body"></tbody>
+    </table>
+
+    <div id="p-perif-wrap" style="display:none;">
+      <div class="doc-sh">Periféricos incluidos</div>
+      <table class="ct">
+        <thead><tr><th style="width:36%;">Ítem</th><th>Descripción</th></tr></thead>
+        <tbody id="p-perif-body"></tbody>
+      </table>
+    </div>
+
+    <div id="p-total-wrap" style="display:none;">
+      <div class="doc-total-box">
+        <div class="tl-label">Valor total del equipo</div>
+        <div class="tl-val" id="p-total-neto">$0</div>
+        <div class="tl-iva" id="p-total-iva" style="display:none;">Con factura (incluye IVA 19%): <b id="p-total-iva-val">$0</b></div>
+        <div class="tl-leyenda">De requerir factura, se debe agregar IVA (19%).</div>
+      </div>
+    </div>
+
+    <div class="doc-cond"><b>Valor incluye:</b> armado profesional del equipo con gestión de cables, pruebas de estrés térmico bajo carga sostenida, validación de estabilidad de memoria RAM, benchmark de almacenamiento y monitoreo de temperaturas y voltajes en tiempo real. Se instala Windows 11 Pro con licencia activada, todos los drivers actualizados a la última versión estable del fabricante, actualizaciones del sistema al día, y Windows Defender configurado como antivirus principal.<br><br><b>No incluye:</b> software de productividad (Microsoft Office, Adobe y similares), programas de pago o suscripción, versiones de prueba ni software preinstalado de terceros. <i>Si requiere software adicional, debe indicarlo posteriormente para evaluar su disponibilidad e instalación.</i></div>
+
+    <div class="doc-cond"><b>Condiciones:</b> Cotización válida por <span id="p-validez-cond">5</span> días desde la fecha de emisión (los precios de componentes pueden variar rápidamente). Plazo estimado desde confirmación del pago: <span id="p-plazo-cond">7</span> días hábiles, sujeto a disponibilidad de componentes en proveedores. El equipo se entrega probado y operativo. Cualquier modificación posterior al abono se considera ajuste y se cotiza aparte. En caso de requerir factura, se debe agregar IVA (19%) al valor cotizado.</div>
+
+    <div class="doc-cond"><b>Garantía:</b> Los componentes cuentan con la garantía directa del fabricante (duración según marca). El armado, instalación y configuración tienen garantía TANTECNO de 3 meses desde la entrega, cubriendo defectos atribuibles a la mano de obra.</div>
+
+    <div class="doc-cond"><b>Entrega:</b> Retiro en dirección particular en Machalí, sector Nogales (coordinación previa). Despacho a domicilio disponible con recargo adicional según la ubicación.</div>
+
+    <div class="doc-pago"><b>Pago (100% anticipado):</b></div>
+    <div class="doc-pay-box">
+      <div class="pay-title">Datos para transferencia / pago</div>
+      <table>
+        <tr><td class="lbl">Banco</td><td class="val">Mercado Pago</td></tr>
+        <tr><td class="lbl">Razón social</td><td class="val">TANTECNO CHILE SpA</td></tr>
+        <tr><td class="lbl">RUT</td><td class="val">77.356.819-7</td></tr>
+        <tr><td class="lbl">Tipo de cuenta</td><td class="val">Cuenta Vista</td></tr>
+        <tr><td class="lbl">N° de cuenta</td><td class="val">1009023876</td></tr>
+        <tr><td class="lbl">Correo</td><td class="val">contacto@tantecno.cl</td></tr>
+      </table>
+      <div class="pay-foot">También disponible mediante link de pago de Mercado Pago.</div>
+    </div>
+
+    <div class="doc-firma"><b>Atentamente,</b><br>Cristián Martínez Droguett<br>TANTECNO — Optimización de Equipos Computacionales</div>
+  </div>
+
+  <div class="pbar">
+    <button class="btn-p dark" onclick="savePDF()">⬇ Guardar PDF</button>
+    <button class="btn-p amber" onclick="limpiar()">↺ Nueva cotización</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════
+// ESTADO Y UTILIDADES
+// ═══════════════════════════════════════════════════════════════
+let folioConfirmado=null
+const fmt=n=>'$'+(n||0).toLocaleString('es-CL')
+const fdate=v=>{if(!v)return'—';try{return new Date(v+'T12:00:00').toLocaleDateString('es-CL',{day:'2-digit',month:'long',year:'numeric'})}catch(e){return v}}
+const toast=msg=>{const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2800)}
+
+// Folio CE-AAAAMMDD-NN
+function hoyKey(){
+  const d=new Date()
+  return d.getFullYear().toString()+String(d.getMonth()+1).padStart(2,'0')+String(d.getDate()).padStart(2,'0')
+}
+function proximoFolio(){
+  const key=hoyKey()
+  const store=JSON.parse(localStorage.getItem('tantecno_ce_folios')||'{}')
+  const nn=(store[key]||0)+1
+  return `CE-${key}-${String(nn).padStart(2,'0')}`
+}
+function consumirFolio(folio){
+  const partes=folio.split('-')
+  if(partes.length!==3)return
+  const key=partes[1]
+  const nn=parseInt(partes[2])
+  if(isNaN(nn))return
+  const store=JSON.parse(localStorage.getItem('tantecno_ce_folios')||'{}')
+  store[key]=Math.max(store[key]||0,nn)
+  localStorage.setItem('tantecno_ce_folios',JSON.stringify(store))
+}
+function refreshFolioUI(){
+  const f=proximoFolio()
+  document.getElementById('folio-pill').textContent=f
+  document.getElementById('p-folio').textContent=f
+}
+
+// ═══════════════════════════════════════════════════════════════
+// API KEY
+// ═══════════════════════════════════════════════════════════════
+async function saveApiKey(){
+  const v=document.getElementById('api-key').value.trim()
+  if(!v){toast('Ingresa una API key primero');return}
+  if(!v.startsWith('sk-')){toast('Formato inválido: debe empezar con sk-');return}
+  toast('Validando API key…')
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','x-api-key':v,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+      body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:1,messages:[{role:'user',content:'hi'}]})
+    })
+    if(res.status===401){toast('API key inválida (401) — no se guardó');return}
+    if(res.status===403){toast('API key sin permisos (403) — no se guardó');return}
+    if(!res.ok){toast(`Error ${res.status} al validar — no se guardó`);return}
+    localStorage.setItem('tantecno_apikey',v)
+    refreshApiStatus()
+    toast('API key válida y guardada ✓')
+  }catch(e){
+    toast('Error de red al validar: '+e.message)
+    console.error(e)
+  }
+}
+function refreshApiStatus(){
+  const k=localStorage.getItem('tantecno_apikey')||''
+  const dot=document.getElementById('api-dot')
+  const tip=document.getElementById('tip-ia')
+  if(k.startsWith('sk-')){dot.classList.add('ok');document.getElementById('api-key').value='sk-ant-···';tip.textContent='✦ IA activa'}
+  else{dot.classList.remove('ok');tip.textContent='⚠ Sin API key — agrega una para usar IA'}
+}
+
+// ═══════════════════════════════════════════════════════════════
+// PERIFÉRICOS, RAM, TOTALES
+// ═══════════════════════════════════════════════════════════════
+function togglePerif(id){
+  const on=document.getElementById('chk-'+id).checked
+  document.getElementById('c-'+id).disabled=!on
+  document.getElementById('p-'+id).disabled=!on
+  if(!on){document.getElementById('c-'+id).value='';document.getElementById('p-'+id).value=''}
+  else{document.getElementById('c-'+id).focus()}
+  updateTotales()
+}
+function updateRAM(){
+  const n=parseInt(document.getElementById('ram-n').value)||0
+  const pu=parseInt(document.getElementById('ram-pu').value)||0
+  const tot=n*pu
+  document.getElementById('ram-total').textContent='Total: '+fmt(tot)
+  updateTotales()
+}
+function getPrecioRAM(){
+  const n=parseInt(document.getElementById('ram-n').value)||0
+  const pu=parseInt(document.getElementById('ram-pu').value)||0
+  return n*pu
+}
+function getDescripcionRAM(){
+  const desc=document.getElementById('c-ram').value.trim()
+  const n=parseInt(document.getElementById('ram-n').value)||1
+  if(!desc)return ''
+  if(n<=1)return desc
+  const canal=n===2?' (dual channel)':n===4?' (quad channel)':''
+  return `${n} × ${desc}${canal}`
+}
+
+const LBL_TORRE=[
+  {k:'cpu',n:'Procesador (CPU)',req:true},
+  {k:'mb',n:'Placa madre',req:true},
+  {k:'ssd',n:'Almacenamiento SSD',req:true},
+  {k:'gab',n:'Gabinete',req:true},
+  {k:'fte',n:'Fuente de poder',req:true},
+  {k:'gpu',n:'Tarjeta gráfica',req:false},
+  {k:'hdd',n:'HDD adicional (respaldos)',req:false},
+  {k:'cool',n:'Refrigeración CPU',req:false},
+  {k:'so',n:'Sistema operativo',req:false},
+]
+const LBL_PERIF=[
+  {k:'mon',n:'Monitor'},
+  {k:'tec',n:'Teclado'},
+  {k:'mou',n:'Mouse'},
+  {k:'aud',n:'Audífonos'},
+  {k:'mp',n:'Mousepad'},
+  {k:'web',n:'Webcam'},
+]
+function leerTorre(){
+  const items=LBL_TORRE.map(x=>{
+    const nombre=document.getElementById('c-'+x.k).value.trim()
+    const precio=parseInt(document.getElementById('p-'+x.k).value)||0
+    return {k:x.k,label:x.n,nombre,precio,req:x.req}
+  })
+  // Insertar RAM tras CPU y Placa
+  const ram={k:'ram',label:'Memoria RAM',nombre:getDescripcionRAM(),precio:getPrecioRAM(),req:true}
+  items.splice(2,0,ram)
+  return items
+}
+function leerPerif(){
+  return LBL_PERIF.filter(x=>document.getElementById('chk-'+x.k).checked).map(x=>{
+    const nombre=document.getElementById('c-'+x.k).value.trim()
+    const precio=parseInt(document.getElementById('p-'+x.k).value)||0
+    return {k:x.k,label:x.n,nombre,precio}
+  })
+}
+function getUtilidad(){return parseInt(document.getElementById('f-utilidad').value)||0}
+function getValidez(){return parseInt(document.getElementById('f-validez').value)||5}
+function getPlazo(){return parseInt(document.getElementById('f-plazo').value)||7}
+function validarObligatorios(){
+  const t=leerTorre()
+  const faltan=t.filter(c=>c.req && (!c.nombre||!c.precio))
+  return faltan.map(c=>c.label)
+}
+function calcularTotales(){
+  const torre=leerTorre()
+  const perif=leerPerif()
+  let subComp=0
+  torre.forEach(c=>{if(c.nombre)subComp+=c.precio})
+  perif.forEach(p=>{subComp+=p.precio})
+  const util=getUtilidad()
+  const neto=subComp+util
+  const iva=Math.round(neto*1.19)
+  return {subComp,util,neto,iva}
+}
+function updateTotales(){
+  const t=calcularTotales()
+  document.getElementById('int-comp').textContent=fmt(t.subComp)
+  document.getElementById('int-util').textContent=fmt(t.util)
+  document.getElementById('int-neto').textContent=fmt(t.neto)
+  document.getElementById('int-iva').textContent=fmt(t.iva)
+  const wrap=document.getElementById('p-total-wrap')
+  if(wrap.style.display!=='none'){
+    document.getElementById('p-total-neto').textContent=fmt(t.neto)
+    document.getElementById('p-total-iva-val').textContent=fmt(t.iva)
+  }
+}
+function updateIvaToggle(){
+  const on=document.getElementById('chk-iva').checked
+  document.getElementById('iva-toggle').classList.toggle('on',on)
+  const ivaRow=document.getElementById('p-total-iva')
+  if(ivaRow)ivaRow.style.display=on?'block':'none'
+}
+
+// ═══════════════════════════════════════════════════════════════
+// GENERAR (IA)
+// ═══════════════════════════════════════════════════════════════
+async function generar(){
+  const apiKey=localStorage.getItem('tantecno_apikey')||''
+  if(!apiKey.startsWith('sk-')){toast('Agrega tu API key para usar IA');return}
+  const cliente=document.getElementById('f-cliente').value.trim()
+  const brief=document.getElementById('f-brief').value.trim()
+  if(!cliente){toast('Ingresa el nombre del cliente');return}
+  if(!brief){toast('Escribe el brief del cliente');return}
+  const faltan=validarObligatorios()
+  if(faltan.length){toast('Faltan componentes: '+faltan.join(', '));return}
+
+  const torre=leerTorre()
+  const perif=leerPerif()
+  const tot=calcularTotales()
+
+  const btn=document.getElementById('btn-gen')
+  btn.classList.add('loading');btn.disabled=true
+  document.getElementById('blbl').textContent='Generando…'
+
+  // A la IA sí le pasamos precios (para validación), pero NO salen en el PDF.
+  const configTxt=torre.filter(c=>c.nombre).map(c=>`${c.label}: ${c.nombre} (${fmt(c.precio)})`).join('\n')
+  const perifTxt=perif.length?'\n\nPeriféricos incluidos:\n'+perif.map(p=>`- ${p.label}: ${p.nombre} (${fmt(p.precio)})`).join('\n'):'\n\nSin periféricos.'
+
+  const SYSTEM=`Eres el redactor de cotizaciones de equipos computacionales nuevos de TANTECNO, empresa de Cristián Martínez Droguett, Machalí, Chile.
+
+Recibes: (1) el brief del cliente, (2) la configuración técnica con precios internos.
+
+Tu trabajo es DOBLE:
+
+═══ 1. JUSTIFICACIÓN DEL PERFIL (va al PDF que lee el cliente) ═══
+Redacta 2 a 3 párrafos en español neutro, formal técnico pero accesible:
+- Parte reconociendo lo que cliente solicitó (quién usará el equipo, uso principal, presupuesto si lo hay).
+- Explica por qué la configuración propuesta es adecuada para ese uso. Menciona CPU y GPU concretos y qué permiten hacer. Si hay RAM abundante, SSD NVMe, o HDD adicional, destaca el beneficio real (multitarea, carga rápida, tiempo de encendido, espacio para respaldos).
+- Si el uso es para niño o estudiante, menciona margen de crecimiento (que sirve en 3-4 años más).
+- NO uses marketing hueco ("potente", "increíble", "asombroso"). Tono técnico honesto.
+- NO menciones precios individuales, subtotales, ni el total dentro de este texto.
+- NO uses "estimado cliente" ni "le agradecemos". Parte directo.
+- Usa forma neutra sin artículo: "Cliente solicita cotización para...", no "El cliente solicita".
+- Si hay GPU dedicada y el uso es gaming, explica brevemente qué rango de juegos corre cómodo (1080p medio-alto, etc.). Si es integrada (sin GPU), aclara que sirve para ofimática, navegación y juegos livianos.
+- Si hay HDD además del SSD, explica brevemente que el SSD lleva el sistema y programas para velocidad, y el HDD da espacio económico para respaldos y archivos.
+- Párrafos corridos, sin listas ni viñetas.
+
+═══ 2. VALIDACIÓN TÉCNICA INTERNA (NO va al PDF, es para el técnico) ═══
+Revisa compatibilidad y coherencia:
+- ¿La fuente es suficiente para CPU + GPU + resto? Estima TDP total y compara con la fuente (margen 20%).
+- ¿La RAM es compatible con la placa? (DDR4 vs DDR5, socket, frecuencia).
+- ¿CPU compatible con socket de la placa?
+- ¿Cuello de botella evidente CPU vs GPU?
+- ¿Almacenamiento adecuado (NVMe vs SATA) para la placa?
+- ¿La configuración es coherente con el presupuesto y uso declarado?
+
+Clasifica el resultado en UN nivel:
+- "ok": todo bien.
+- "warn": observaciones menores (balance no óptimo pero funcional).
+- "err": problema crítico (fuente insuficiente, incompatibilidad de socket, RAM no compatible).
+
+Devuelve SOLO JSON válido sin markdown:
+{
+  "justificacion": "texto 2-3 párrafos para el cliente",
+  "validacion_nivel": "ok|warn|err",
+  "validacion_items": ["observación 1", "observación 2", "..."]
+}`
+  const USER=`BRIEF DEL CLIENTE:\n${brief}\n\n═══ CONFIGURACIÓN PROPUESTA (precios internos, NO se muestran al cliente) ═══\n${configTxt}${perifTxt}\n\nUtilidad por gestión y armado: ${fmt(tot.util)}\nTOTAL NETO AL CLIENTE: ${fmt(tot.neto)}`
+
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+      body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:1500,system:SYSTEM,messages:[{role:'user',content:USER}]})
+    })
+    const data=await res.json()
+    if(!res.ok)throw new Error(data.error?.message||'Error API '+res.status)
+    const raw=data.content.map(c=>c.text||'').join('')
+    const clean=raw.replace(/```json|```/g,'').trim()
+    let json
+    try{json=JSON.parse(clean)}
+    catch(parseErr){
+      console.error('[TANTECNO] JSON inválido recibido de la IA. Raw:',raw)
+      throw new Error('La IA devolvió un formato inválido. Revisa la consola (F12).')
+    }
+    aplicar(cliente,torre,perif,tot,json)
+  }catch(e){toast('Error: '+e.message);console.error(e)}
+  finally{btn.classList.remove('loading');btn.disabled=false;document.getElementById('blbl').textContent='Generar cotización'}
+}
+
+// ═══════════════════════════════════════════════════════════════
+// APLICAR resultado al preview
+// ═══════════════════════════════════════════════════════════════
+function aplicar(cliente,torre,perif,tot,json){
+  document.getElementById('p-cliente').textContent=cliente||'—'
+  const fecha=document.getElementById('f-fecha').value
+  document.getElementById('p-fecha').textContent=fecha?fdate(fecha):fdate(new Date().toISOString().split('T')[0])
+  const validez=getValidez()
+  document.getElementById('p-validez').textContent=validez+' días'
+  document.getElementById('p-validez-cond').textContent=validez
+  document.getElementById('p-plazo-cond').textContent=getPlazo()
+
+  const just=document.getElementById('p-just')
+  just.textContent=json.justificacion||''
+  just.contentEditable='true'
+  document.getElementById('hint1').style.display='block'
+
+  // Tabla torre SIN precios
+  const tb=document.getElementById('p-torre-body')
+  const tabTorre=document.getElementById('t-torre')
+  tb.innerHTML=''
+  torre.filter(c=>c.nombre).forEach(c=>{
+    tb.insertAdjacentHTML('beforeend',`<tr><td><b>${c.label}</b></td><td>${escapeHtml(c.nombre)}</td></tr>`)
+  })
+  tb.insertAdjacentHTML('beforeend',`<tr><td><b>Armado</b></td><td>Armado completo, instalación de sistema operativo, configuración y pruebas de funcionamiento</td></tr>`)
+  tabTorre.style.display='table'
+
+  // Periféricos SIN precios
+  const perifWrap=document.getElementById('p-perif-wrap')
+  const perifBody=document.getElementById('p-perif-body')
+  if(perif.length){
+    perifBody.innerHTML=''
+    perif.forEach(p=>{
+      perifBody.insertAdjacentHTML('beforeend',`<tr><td><b>${p.label}</b></td><td>${escapeHtml(p.nombre)}</td></tr>`)
+    })
+    perifWrap.style.display='block'
+  } else {
+    perifWrap.style.display='none'
+  }
+
+  // Total único
+  document.getElementById('p-total-neto').textContent=fmt(tot.neto)
+  document.getElementById('p-total-iva-val').textContent=fmt(tot.iva)
+  document.getElementById('p-total-wrap').style.display='block'
+  updateIvaToggle()
+
+  mostrarValidacion(json.validacion_nivel,json.validacion_items||[])
+
+  if(window.innerWidth<=860)switchTab('prev')
+  toast('Cotización generada ✓')
+}
+
+function mostrarValidacion(nivel,items){
+  const panel=document.getElementById('val-panel')
+  const title=document.getElementById('val-title')
+  const content=document.getElementById('val-content')
+  panel.classList.remove('ok','warn','err')
+  if(!nivel||!items.length){
+    if(nivel==='ok'){
+      panel.classList.add('ok')
+      title.textContent='✓ Validación técnica — sin observaciones'
+      content.innerHTML='Configuración coherente.'
+      panel.style.display='block'
+      return
+    }
+    panel.style.display='none'
+    return
+  }
+  const icons={ok:'✓',warn:'⚠',err:'✕'}
+  const labels={ok:'Validación técnica — OK',warn:'Validación técnica — Revisa',err:'Validación técnica — Problema crítico'}
+  panel.classList.add(nivel||'ok')
+  title.textContent=`${icons[nivel]||'•'} ${labels[nivel]||'Validación técnica'}`
+  content.innerHTML='<ul>'+items.map(i=>`<li>${escapeHtml(i)}</li>`).join('')+'</ul>'
+  panel.style.display='block'
+}
+function escapeHtml(s){return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+
+// ═══════════════════════════════════════════════════════════════
+// LIMPIAR / PDF / TABS
+// ═══════════════════════════════════════════════════════════════
+function limpiar(){
+  if(!confirm('¿Nueva cotización? Se perderán los datos actuales.'))return
+  folioConfirmado=null
+  refreshFolioUI()
+  document.getElementById('f-cliente').value=''
+  document.getElementById('f-brief').value=''
+  document.getElementById('f-notas').value=''
+  document.getElementById('f-validez').value='5'
+  document.getElementById('f-plazo').value='7'
+  const today=new Date().toISOString().split('T')[0]
+  document.getElementById('f-fecha').value=today
+  LBL_TORRE.forEach(x=>{document.getElementById('c-'+x.k).value='';document.getElementById('p-'+x.k).value=''})
+  document.getElementById('c-ram').value=''
+  document.getElementById('ram-n').value='2'
+  document.getElementById('ram-pu').value=''
+  document.getElementById('ram-total').textContent='Total: $0'
+  LBL_PERIF.forEach(x=>{
+    document.getElementById('chk-'+x.k).checked=false
+    document.getElementById('c-'+x.k).value=''
+    document.getElementById('p-'+x.k).value=''
+    document.getElementById('c-'+x.k).disabled=true
+    document.getElementById('p-'+x.k).disabled=true
+  })
+  document.getElementById('f-utilidad').value='35000'
+  document.getElementById('chk-iva').checked=false
+  document.getElementById('iva-toggle').classList.remove('on')
+  document.getElementById('val-panel').style.display='none'
+  document.getElementById('p-cliente').textContent='_______________'
+  document.getElementById('p-fecha').textContent='—'
+  document.getElementById('p-validez').textContent='5 días'
+  document.getElementById('p-validez-cond').textContent='5'
+  document.getElementById('p-plazo-cond').textContent='7'
+  document.getElementById('p-just').innerHTML='<span class="doc-ph">Completa el formulario y genera la cotización.</span>'
+  document.getElementById('p-just').contentEditable='false'
+  document.getElementById('hint1').style.display='none'
+  document.getElementById('t-torre').style.display='none'
+  document.getElementById('p-torre-body').innerHTML=''
+  document.getElementById('p-perif-wrap').style.display='none'
+  document.getElementById('p-perif-body').innerHTML=''
+  document.getElementById('p-total-wrap').style.display='none'
+  document.getElementById('p-total-iva').style.display='none'
+  updateTotales()
+}
+function savePDF(){
+  const just=document.getElementById('p-just').textContent.trim()
+  if(!just||document.getElementById('p-just').querySelector('.doc-ph')){
+    toast('Genera la cotización primero');return
+  }
+  if(folioConfirmado===null){
+    folioConfirmado=document.getElementById('p-folio').textContent
+    consumirFolio(folioConfirmado)
+  }
+  const cliente=document.getElementById('p-cliente').textContent.trim()
+  const hoy=new Date()
+  const dd=String(hoy.getDate()).padStart(2,'0')
+  const mm=String(hoy.getMonth()+1).padStart(2,'0')
+  const aaaa=hoy.getFullYear()
+  const fechaStr=dd+'-'+mm+'-'+aaaa
+  const clienteLimpio=cliente.replace(/[^a-zA-ZáéíóúÁÉÍÓÚüÜñÑ\s]/g,'').trim()||'Cliente'
+  const filename=fechaStr+' - Cotización '+folioConfirmado+' - '+clienteLimpio+'.pdf'
+  const el=document.getElementById('doc')
+  const opt={
+    margin:[13,15,13,15],
+    filename:filename,
+    image:{type:'jpeg',quality:0.98},
+    html2canvas:{scale:2,useCORS:true,letterRendering:true},
+    jsPDF:{unit:'mm',format:'a4',orientation:'portrait'}
+  }
+  toast('Generando PDF…')
+  html2pdf().set(opt).from(el).save().then(()=>toast('PDF guardado ✓'))
+}
+function switchTab(t){
+  const l=document.getElementById('left'),r=document.getElementById('right')
+  const tf=document.getElementById('tab-form'),tp=document.getElementById('tab-prev')
+  if(t==='form'){l.classList.add('tab-active');r.classList.remove('tab-active');tf.classList.add('active');tp.classList.remove('active')}
+  else{r.classList.add('tab-active');l.classList.remove('tab-active');tp.classList.add('active');tf.classList.remove('active');window.scrollTo(0,0)}
+}
+function logout(){localStorage.removeItem('tantecno_auth');window.location.href='login.html';}
+
+// Init
+(function init(){
+  const today=new Date().toISOString().split('T')[0]
+  document.getElementById('f-fecha').value=today
+  refreshApiStatus()
+  refreshFolioUI()
+  updateTotales()
+})()
+</script>
+
+</body>
+</html>
