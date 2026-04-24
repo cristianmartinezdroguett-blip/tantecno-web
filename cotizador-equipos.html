@@ -90,6 +90,10 @@ body.splitting iframe,body.splitting #left,body.splitting #right{pointer-events:
 .comp-row input:focus,.comp-row select:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-bg);}
 .comp-row input.price{font-family:var(--mono);font-size:11px;text-align:right;}
 .comp-row input.price::placeholder{color:var(--text3);}
+
+/* Precio sospechoso — borde rojo + fondo rosado, tooltip via atributo title */
+input.price.suspicious,input#ram-pu.suspicious{border-color:var(--red)!important;background:#fff5f4!important;box-shadow:0 0 0 2px rgba(192,57,43,.12);}
+input.price.suspicious:focus,input#ram-pu.suspicious:focus{box-shadow:0 0 0 3px rgba(192,57,43,.2);}
 .ram-block{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:10px;margin-bottom:7px;}
 .ram-block .ram-head{display:grid;grid-template-columns:70px 1fr;gap:6px;align-items:center;margin-bottom:6px;}
 .ram-block .ram-head input{background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:6px 9px;color:var(--text);font-family:var(--body);font-size:12px;outline:none;transition:.15s;}
@@ -593,6 +597,7 @@ function togglePerif(id){
   if(!on){document.getElementById('c-'+id).value='';document.getElementById('p-'+id).value=''}
   else{document.getElementById('c-'+id).focus()}
   updateTotales()
+  checkPrices()
 }
 function updateRAM(){
   const n=parseInt(document.getElementById('ram-n').value)||0
@@ -920,6 +925,69 @@ function mostrarValidacion(nivel,items){
   panel.style.display='block'
 }
 // ═══════════════════════════════════════════════════════════════
+// VALIDACIÓN DE PRECIOS SOSPECHOSOS (onblur)
+// ═══════════════════════════════════════════════════════════════
+// Reglas universales que no se desactualizan con el tiempo:
+//   1. < $5.000  → sospechoso (ningún componente real cuesta menos)
+//   2. > $3.000.000 → sospechoso (ni las GPU top actuales pasan de eso)
+//   3. Anómalo vs mediana → si un precio es <1/20 o >20× la mediana de
+//      los otros precios > 0, sospechoso (falta/sobra orden de magnitud)
+const PRICE_MIN=5000
+const PRICE_MAX=3000000
+const PRICE_ANOM_FACTOR=20
+const PRICE_SAFE_LOW=50000    // Si el precio está entre SAFE_LOW y PRICE_MAX,
+const PRICE_SAFE_HIGH=3000000 //   no se chequea anómalo vs mediana
+                              //   (evita marcar GPUs caras en PCs medios)
+
+function collectAllPriceInputs(){
+  // Todos los price inputs de torre + perif + RAM unit
+  const arr=[]
+  document.querySelectorAll('input.price').forEach(el=>arr.push(el))
+  const ramPu=document.getElementById('ram-pu')
+  if(ramPu)arr.push(ramPu)
+  return arr
+}
+function median(nums){
+  if(!nums.length)return 0
+  const sorted=[...nums].sort((a,b)=>a-b)
+  const mid=Math.floor(sorted.length/2)
+  return sorted.length%2?sorted[mid]:(sorted[mid-1]+sorted[mid])/2
+}
+function checkPrices(){
+  const inputs=collectAllPriceInputs()
+  const activeValues=inputs.filter(el=>{
+    // Para periféricos, solo considerar los que están habilitados (checkbox activo)
+    if(el.disabled)return false
+    const v=parseInt(el.value,10)||0
+    return v>0
+  }).map(el=>parseInt(el.value,10)||0)
+  const med=median(activeValues)
+  inputs.forEach(el=>{
+    if(el.disabled){el.classList.remove('suspicious');el.removeAttribute('title');return}
+    const v=parseInt(el.value,10)||0
+    if(v===0){el.classList.remove('suspicious');el.removeAttribute('title');return}
+    let reason=null
+    if(v<PRICE_MIN)reason='Precio muy bajo ($'+v.toLocaleString('es-CL')+'). ¿Faltó un cero?'
+    else if(v>PRICE_MAX)reason='Precio muy alto ($'+v.toLocaleString('es-CL')+'). ¿Sobra un cero?'
+    else if(v>=PRICE_SAFE_LOW&&v<=PRICE_SAFE_HIGH){
+      // En zona segura: no chequear anómalo (evita falsos positivos con GPU caras)
+    }
+    else if(med>0&&activeValues.length>=3){
+      if(v<med/PRICE_ANOM_FACTOR)reason='Muy bajo respecto a los otros componentes. ¿Faltó un cero?'
+      else if(v>med*PRICE_ANOM_FACTOR)reason='Muy alto respecto a los otros componentes. ¿Sobra un cero?'
+    }
+    if(reason){
+      el.classList.add('suspicious')
+      el.title='⚠ '+reason
+    }else{
+      el.classList.remove('suspicious')
+      el.removeAttribute('title')
+    }
+  })
+}
+
+
+// ═══════════════════════════════════════════════════════════════
 // FORMATEO INTELIGENTE DE COMPONENTES (onblur)
 // ═══════════════════════════════════════════════════════════════
 const TECH_DICT={
@@ -1051,6 +1119,8 @@ function limpiar(){
   document.querySelector('input[name="util-mode"][value="25"]').checked=true
   utilMode='25'
   document.getElementById('f-utilidad').readOnly=true
+  // Limpiar marks de precios sospechosos
+  collectAllPriceInputs().forEach(el=>{el.classList.remove('suspicious');el.removeAttribute('title')})
   document.getElementById('chk-iva').checked=false
   document.getElementById('iva-toggle').classList.remove('on')
   document.getElementById('val-panel').style.display='none'
@@ -1121,6 +1191,10 @@ function logout(){localStorage.removeItem('tantecno_auth');window.location.href=
   fmtIds.forEach(id=>{
     const el=document.getElementById(id)
     if(el)el.addEventListener('blur',()=>applySmartFormat(el))
+  })
+  // Validación de precios sospechosos: onblur en cada price input (incluye RAM unit)
+  collectAllPriceInputs().forEach(el=>{
+    el.addEventListener('blur',()=>checkPrices())
   })
 })();
 
