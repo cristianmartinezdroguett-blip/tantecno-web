@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Catálogo de Servicios · TANTECNO</title>
+<script>
+(function(){
+  if(localStorage.getItem('tantecno_auth') !== 'tantecno_internal_2026'){
+    window.location.href = 'login.html?redirect=catalogo.html';
+  }
+})();
+</script>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --bg:#f0f2f5;--bg2:#ffffff;--bg3:#f7f8fa;--surface:#f0f2f5;
+  --border:#d9dde3;--border-h:#bfc5cd;
+  --text:#1e2a3a;--text2:#5a6577;--text3:#8a95a5;
+  --accent:#1b3a5c;--accent-h:#254d78;--accent-bg:rgba(27,58,92,.08);
+  --mono:'JetBrains Mono',monospace;
+  --green:#0f8a5f;--green-bg:rgba(15,138,95,.08);
+  --yellow:#c08a00;--yellow-bg:rgba(192,138,0,.08);
+  --red:#c0392b;--red-bg:rgba(192,57,43,.06);
+  --radius:10px;
+}
+body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;}
+.pnl-header{background:var(--bg2);border-bottom:1px solid var(--border);box-shadow:0 1px 4px rgba(0,0,0,.04);padding:14px 24px;display:flex;justify-content:space-between;align-items:center;flex-shrink:0;}
+.pnl-brand{display:flex;align-items:center;gap:10px;}
+.pnl-brand .logo{font-weight:900;font-size:22px;letter-spacing:-.02em;color:var(--accent);}
+.pnl-brand .tag{font-family:var(--mono);font-size:10px;color:var(--text3);letter-spacing:.14em;text-transform:uppercase;padding:3px 9px;background:var(--bg3);border-radius:20px;font-weight:600;}
+.btn-back{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:7px 14px;color:var(--text2);font-family:'Outfit',sans-serif;font-size:12px;font-weight:500;cursor:pointer;transition:.15s;text-decoration:none;display:inline-flex;align-items:center;gap:4px;}
+.btn-back:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-bg);}
+.main-wrap{flex:1;padding:28px 24px;max-width:1100px;margin:0 auto;width:100%;}
+.page-title{margin-bottom:22px;}
+.page-title h1{font-size:24px;font-weight:800;color:var(--text);letter-spacing:-.02em;margin-bottom:4px;}
+.page-title p{font-size:14px;color:var(--text2);}
+.tabs{display:flex;gap:4px;background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:5px;margin-bottom:18px;width:fit-content;}
+.tab{padding:9px 18px;background:none;border:none;font-family:'Outfit',sans-serif;font-size:13px;font-weight:500;color:var(--text2);cursor:pointer;border-radius:7px;transition:.15s;display:flex;align-items:center;gap:8px;}
+.tab:hover{color:var(--text);background:var(--bg3);}
+.tab.active{background:var(--accent);color:#fff;font-weight:600;box-shadow:0 2px 6px rgba(27,58,92,.2);}
+.tab .count{font-family:var(--mono);font-size:10.5px;padding:2px 7px;background:rgba(255,255,255,.2);border-radius:10px;font-weight:600;}
+.tab:not(.active) .count{background:var(--bg3);color:var(--text3);}
+.panel{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:22px;box-shadow:0 1px 4px rgba(0,0,0,.03);}
+.panel-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;gap:14px;flex-wrap:wrap;}
+.panel-head h2{font-size:15px;font-weight:600;color:var(--text);}
+.panel-head .sub{font-size:12px;color:var(--text2);margin-top:2px;}
+.btn-primary{padding:9px 16px;background:var(--accent);color:#fff;border:none;border-radius:8px;font-family:'Outfit',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:.15s;display:inline-flex;align-items:center;gap:6px;box-shadow:0 2px 6px rgba(27,58,92,.2);}
+.btn-primary:hover{background:var(--accent-h);box-shadow:0 3px 10px rgba(27,58,92,.28);}
+.svc-list{display:flex;flex-direction:column;gap:8px;}
+.svc-item{display:grid;grid-template-columns:1fr 110px 200px;gap:14px;align-items:center;padding:14px 16px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;transition:.15s;}
+.svc-item:hover{border-color:var(--border-h);}
+.svc-info .svc-name{font-size:13.5px;font-weight:600;color:var(--text);margin-bottom:3px;display:flex;align-items:center;flex-wrap:wrap;gap:6px;}
+.svc-info .svc-desc{font-size:11.5px;color:var(--text2);line-height:1.45;}
+.svc-info .svc-ai{font-size:10.5px;color:var(--accent);margin-top:3px;font-style:italic;}
+.svc-info .svc-ai::before{content:"IA: ";font-family:var(--mono);font-style:normal;font-weight:600;font-size:9px;letter-spacing:.05em;}
+.svc-price{font-family:var(--mono);font-size:13px;font-weight:600;color:var(--green);text-align:right;}
+.svc-actions{display:flex;gap:6px;justify-content:flex-end;flex-wrap:wrap;}
+.btn-icon{padding:7px 10px;background:var(--bg2);border:1px solid var(--border);border-radius:6px;cursor:pointer;font-family:'Outfit',sans-serif;font-size:11.5px;font-weight:500;color:var(--text2);transition:.15s;white-space:nowrap;}
+.btn-icon:hover{background:var(--accent-bg);color:var(--accent);border-color:var(--accent);}
+.btn-icon.danger:hover{background:var(--red-bg);color:var(--red);border-color:var(--red);}
+.btn-icon.success:hover{background:var(--green-bg);color:var(--green);border-color:var(--green);}
+.svc-item.trashed{opacity:.9;background:#fff8f0;border-color:rgba(192,138,0,.22);}
+.svc-days{font-family:var(--mono);font-size:10.5px;color:var(--yellow);text-align:center;font-weight:600;background:var(--yellow-bg);padding:4px 8px;border-radius:6px;white-space:nowrap;}
+.svc-days.expire-soon{color:var(--red);background:var(--red-bg);}
+.empty{text-align:center;padding:40px 20px;color:var(--text3);}
+.empty-ico{font-size:36px;margin-bottom:10px;opacity:.4;}
+.empty-txt{font-size:13.5px;color:var(--text2);}
+.io-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+@media(max-width:720px){.io-grid{grid-template-columns:1fr;}}
+.io-card{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:18px;}
+.io-card h3{font-size:13.5px;font-weight:600;color:var(--text);margin-bottom:4px;}
+.io-card p{font-size:12px;color:var(--text2);line-height:1.5;margin-bottom:12px;}
+.io-card .btn-primary{width:100%;justify-content:center;}
+.modal-overlay{position:fixed;inset:0;background:rgba(30,42,58,.4);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);z-index:200;display:none;align-items:center;justify-content:center;padding:20px;}
+.modal-overlay.show{display:flex;}
+.modal-box{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:26px;width:100%;max-width:520px;box-shadow:0 8px 32px rgba(0,0,0,.12);max-height:90vh;overflow-y:auto;}
+.modal-title{font-size:18px;font-weight:700;color:var(--text);letter-spacing:-.01em;margin-bottom:4px;}
+.modal-sub{font-size:12.5px;color:var(--text2);margin-bottom:18px;line-height:1.5;}
+.modal-grid{display:grid;grid-template-columns:1fr 140px;gap:10px;}
+@media(max-width:540px){.modal-grid{grid-template-columns:1fr;}}
+.mrow{margin-bottom:10px;}
+.mrow label{display:block;font-family:var(--mono);font-size:9px;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px;font-weight:600;}
+.mrow label .opt{color:var(--text3);font-family:'Outfit',sans-serif;text-transform:none;letter-spacing:0;font-size:9px;font-weight:500;margin-left:4px;}
+.mrow input,.mrow textarea{width:100%;background:var(--bg2);border:1px solid var(--border);border-radius:7px;padding:9px 12px;color:var(--text);font-family:'Outfit',sans-serif;font-size:13px;outline:none;transition:.15s;}
+.mrow input:focus,.mrow textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-bg);}
+.mrow textarea{resize:vertical;min-height:60px;line-height:1.5;font-family:'Outfit',sans-serif;}
+.mrow input.mono{font-family:var(--mono);font-size:13px;}
+.mrow input:disabled{opacity:.6;background:var(--bg3);}
+.adv-toggle{background:none;border:none;color:var(--accent);font-family:'Outfit',sans-serif;font-size:12px;font-weight:500;cursor:pointer;padding:6px 0;margin:6px 0;}
+.adv-toggle:hover{text-decoration:underline;}
+.adv-section{display:none;border-top:1px solid var(--border);padding-top:14px;margin-top:8px;}
+.adv-section.show{display:block;}
+.modal-btns{display:flex;gap:8px;margin-top:18px;justify-content:flex-end;}
+.btn-cancel{padding:10px 16px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;color:var(--text2);font-family:'Outfit',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:.15s;}
+.btn-cancel:hover{background:var(--bg3);color:var(--text);border-color:var(--border-h);}
+.chk-row{display:flex;align-items:center;gap:8px;padding:8px 0;}
+.chk-row input{width:15px;height:15px;accent-color:var(--accent);cursor:pointer;}
+.chk-row label{margin:0;cursor:pointer;font-family:'Outfit',sans-serif;font-size:13px;color:var(--text);font-weight:500;letter-spacing:0;text-transform:none;}
+.pill-insumo{font-family:var(--mono);font-size:9.5px;color:var(--yellow);background:var(--yellow-bg);padding:2px 7px;border-radius:10px;font-weight:600;}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--text);color:#fff;font-family:'Outfit',sans-serif;font-size:12px;font-weight:500;padding:10px 18px;border-radius:8px;pointer-events:none;opacity:0;transition:opacity .25s;z-index:999;white-space:nowrap;box-shadow:0 4px 16px rgba(0,0,0,.2);}
+.toast.show{opacity:1;}
+.pnl-footer{padding:16px 24px;text-align:center;font-size:11px;color:var(--text3);border-top:1px solid var(--border);background:var(--bg2);}
+.pnl-footer b{color:var(--text2);font-weight:600;}
+.file-hidden{display:none;}
+</style>
+</head>
+<body>
+
+<header class="pnl-header">
+  <div class="pnl-brand">
+    <div class="logo">TANTECNO</div>
+    <div class="tag">Catálogo</div>
+  </div>
+  <div style="display:flex;align-items:center;gap:14px;">
+    <div style="display:flex;align-items:center;gap:7px;">
+      <div id="sb-dot" style="width:8px;height:8px;border-radius:50%;background:var(--text3);transition:.3s;"></div>
+      <span id="sb-txt" style="font-family:var(--mono);font-size:10.5px;color:var(--text3);font-weight:500;">Conectando…</span>
+    </div>
+    <a href="panel.html" class="btn-back">← Panel</a>
+  </div>
+</header>
+
+<main class="main-wrap">
+  <div class="page-title">
+    <h1>Catálogo de servicios</h1>
+    <p>Gestiona los servicios disponibles en el generador de informes. Los eliminados se pueden restaurar dentro de 30 días.</p>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" id="tab-active" onclick="switchTab('active')">Activos <span class="count" id="count-active">0</span></button>
+    <button class="tab" id="tab-trash" onclick="switchTab('trash')">Papelera <span class="count" id="count-trash">0</span></button>
+    <button class="tab" id="tab-io" onclick="switchTab('io')">Importar / Exportar</button>
+  </div>
+
+  <div class="panel" id="panel-active">
+    <div class="panel-head">
+      <div>
+        <h2>Servicios activos</h2>
+        <div class="sub">Los servicios aparecen en el catálogo del generador de informes.</div>
+      </div>
+      <button class="btn-primary" onclick="abrirNuevo()">+ Nuevo servicio</button>
+    </div>
+    <div class="svc-list" id="list-active"></div>
+  </div>
+
+  <div class="panel" id="panel-trash" style="display:none;">
+    <div class="panel-head">
+      <div>
+        <h2>Papelera</h2>
+        <div class="sub">Los servicios eliminados se conservan 30 días antes de eliminarse definitivamente.</div>
+      </div>
+    </div>
+    <div class="svc-list" id="list-trash"></div>
+  </div>
+
+  <div class="panel" id="panel-io" style="display:none;">
+    <div class="panel-head">
+      <div>
+        <h2>Respaldo del catálogo</h2>
+        <div class="sub">Exporta tu catálogo como JSON para moverlo entre dispositivos o como respaldo.</div>
+      </div>
+    </div>
+    <div class="io-grid">
+      <div class="io-card">
+        <h3>Exportar</h3>
+        <p>Descarga un JSON con todos los servicios activos y la papelera. Sirve como respaldo o para traspasar a otro equipo.</p>
+        <button class="btn-primary" onclick="exportar()">⬇ Exportar catálogo</button>
+      </div>
+      <div class="io-card">
+        <h3>Importar</h3>
+        <p>Carga un archivo JSON exportado previamente. <b>Reemplaza</b> el catálogo actual — el actual se guarda como respaldo automático.</p>
+        <button class="btn-primary" onclick="document.getElementById('file-imp').click()">⬆ Importar catálogo</button>
+        <input type="file" id="file-imp" class="file-hidden" accept=".json" onchange="importar(event)">
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<div class="modal-overlay" id="modal-edit">
+  <div class="modal-box">
+    <div class="modal-title" id="modal-title">Nuevo servicio</div>
+    <div class="modal-sub">Completa los datos del servicio. Los marcados con * son obligatorios.</div>
+
+    <div class="mrow">
+      <label>Nombre del servicio *</label>
+      <input type="text" id="e-n" placeholder="Ej: Formateo Windows 11">
+    </div>
+    <div class="mrow">
+      <label>Descripción *</label>
+      <textarea id="e-d" placeholder="Descripción breve que verá el cliente en la cotización" rows="3"></textarea>
+    </div>
+    <div class="modal-grid">
+      <div class="mrow">
+        <label>ID interno *<span class="opt">(sin espacios)</span></label>
+        <input type="text" id="e-id" class="mono" placeholder="Ej: fmt_win11">
+      </div>
+      <div class="mrow">
+        <label>Precio (CLP) *</label>
+        <input type="number" id="e-p" class="mono" placeholder="45000" min="0" step="1000">
+      </div>
+    </div>
+
+    <button class="adv-toggle" onclick="toggleAvanzado()" id="btn-adv">▸ Opciones avanzadas (IA, insumos)</button>
+    <div class="adv-section" id="adv-section">
+      <div class="mrow">
+        <label>Nombre que usa la IA en informes<span class="opt">opcional</span></label>
+        <input type="text" id="e-ain" placeholder="Ej: Diagnóstico avanzado con testeo de hardware">
+      </div>
+      <div class="mrow">
+        <label>Nota para la IA<span class="opt">opcional</span></label>
+        <input type="text" id="e-aino" placeholder="Ej: descontable si aprueba">
+      </div>
+      <div class="chk-row">
+        <input type="checkbox" id="e-ins">
+        <label for="e-ins">Requiere cotización de insumo (ej. pantalla — abre calculadora de margen)</label>
+      </div>
+    </div>
+
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="cerrarModal()">Cancelar</button>
+      <button class="btn-primary" onclick="guardarServicio()">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<footer class="pnl-footer">
+  TANTECNO CHILE SpA · <b>contacto@tantecno.cl</b> · +56 9 7103 6909 · Machalí
+</footer>
+
+<script>
+// ═══════════════════════════════════════════════════════════════
+// SUPABASE CONFIG
+// ═══════════════════════════════════════════════════════════════
+const SUPABASE_URL='https://wqgatoyouzckgmsilagz.supabase.co'
+const SUPABASE_ANON_KEY='sb_publishable_2Ar5UzQLYoLzmPYq_Xd71A_kaIOzMDc'  // ⚠️ Reemplaza con tu anon key real
+const TABLE='catalogo'
+const TRASH_DAYS=30
+
+// Estado de conexión (se muestra en UI)
+let isOnline=true
+
+// ═══════════════════════════════════════════════════════════════
+// STORAGE (Supabase)
+// ═══════════════════════════════════════════════════════════════
+async function sbFetch(path,opts={}){
+  const url=`${SUPABASE_URL}/rest/v1/${path}`
+  const headers={
+    'apikey':SUPABASE_ANON_KEY,
+    'Authorization':`Bearer ${SUPABASE_ANON_KEY}`,
+    'Content-Type':'application/json',
+    'Prefer':'return=representation',
+    ...(opts.headers||{})
+  }
+  const res=await fetch(url,{...opts,headers})
+  if(!res.ok){
+    const txt=await res.text()
+    throw new Error(`Supabase ${res.status}: ${txt}`)
+  }
+  // DELETE sin representation puede no devolver body
+  const ct=res.headers.get('content-type')||''
+  if(ct.includes('application/json'))return await res.json()
+  return null
+}
+
+// Mapeo Supabase → formato que usa el generador (mantener compatibilidad)
+function rowToItem(r){
+  const item={id:r.id,n:r.nombre,d:r.descripcion,p:r.precio}
+  if(r.ai_nombre)item.aiNombre=r.ai_nombre
+  if(r.ai_nota)item.aiNota=r.ai_nota
+  if(r.insumo)item.insumo=true
+  if(r.deleted_at)item.deletedAt=new Date(r.deleted_at).getTime()
+  if(r.orden!=null)item.orden=r.orden
+  return item
+}
+function itemToRow(item){
+  return {
+    id:item.id,
+    nombre:item.n,
+    descripcion:item.d,
+    precio:item.p,
+    ai_nombre:item.aiNombre||null,
+    ai_nota:item.aiNota||null,
+    insumo:!!item.insumo,
+    orden:item.orden||0
+  }
+}
+
+async function loadActive(){
+  try{
+    const rows=await sbFetch(`${TABLE}?deleted_at=is.null&order=orden.asc,created_at.asc`)
+    setOnline(true)
+    return rows.map(rowToItem)
+  }catch(e){
+    console.error('[TANTECNO] Error cargando activos:',e)
+    setOnline(false,e.message)
+    return []
+  }
+}
+async function loadTrash(){
+  try{
+    const rows=await sbFetch(`${TABLE}?deleted_at=not.is.null&order=deleted_at.desc`)
+    setOnline(true)
+    return rows.map(rowToItem)
+  }catch(e){
+    console.error('[TANTECNO] Error cargando papelera:',e)
+    setOnline(false,e.message)
+    return []
+  }
+}
+async function insertItem(item){
+  const row=itemToRow(item)
+  return await sbFetch(TABLE,{method:'POST',body:JSON.stringify(row)})
+}
+async function updateItem(id,item){
+  const row=itemToRow(item)
+  delete row.id  // no se actualiza el id
+  return await sbFetch(`${TABLE}?id=eq.${encodeURIComponent(id)}`,{method:'PATCH',body:JSON.stringify(row)})
+}
+async function softDelete(id){
+  return await sbFetch(`${TABLE}?id=eq.${encodeURIComponent(id)}`,{method:'PATCH',body:JSON.stringify({deleted_at:new Date().toISOString()})})
+}
+async function restoreItem(id){
+  return await sbFetch(`${TABLE}?id=eq.${encodeURIComponent(id)}`,{method:'PATCH',body:JSON.stringify({deleted_at:null})})
+}
+async function hardDelete(id){
+  return await sbFetch(`${TABLE}?id=eq.${encodeURIComponent(id)}`,{method:'DELETE'})
+}
+async function checkIdExists(id){
+  const rows=await sbFetch(`${TABLE}?id=eq.${encodeURIComponent(id)}&select=id`)
+  return rows.length>0
+}
+
+// Indicador de conexión (punto verde/rojo arriba)
+function setOnline(ok,msg){
+  isOnline=ok
+  const dot=document.getElementById('sb-dot')
+  const txt=document.getElementById('sb-txt')
+  if(!dot)return
+  if(ok){
+    dot.style.background='var(--green)'
+    dot.style.boxShadow='0 0 0 2px var(--green-bg)'
+    txt.textContent='Sincronizado con Supabase'
+    txt.style.color='var(--green)'
+  } else {
+    dot.style.background='var(--red)'
+    dot.style.boxShadow='0 0 0 2px var(--red-bg)'
+    txt.textContent='Sin conexión a Supabase'+(msg?` (${msg.slice(0,40)})`:'')
+    txt.style.color='var(--red)'
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════
+// UTILIDADES UI
+// ═══════════════════════════════════════════════════════════════
+const toast=msg=>{const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2800)}
+const fmtP=n=>'$'+(n||0).toLocaleString('es-CL')
+function escapeHtml(s){return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+
+function switchTab(t){
+  document.getElementById('tab-active').classList.toggle('active',t==='active')
+  document.getElementById('tab-trash').classList.toggle('active',t==='trash')
+  document.getElementById('tab-io').classList.toggle('active',t==='io')
+  document.getElementById('panel-active').style.display=t==='active'?'block':'none'
+  document.getElementById('panel-trash').style.display=t==='trash'?'block':'none'
+  document.getElementById('panel-io').style.display=t==='io'?'block':'none'
+}
+
+// Cache en memoria de la lista actual (para que abrirEditar no re-fetchee)
+let _activeCache=[]
+let _trashCache=[]
+
+async function renderActive(){
+  const c=document.getElementById('list-active')
+  c.innerHTML='<div class="empty"><div class="empty-txt">Cargando…</div></div>'
+  const list=await loadActive()
+  _activeCache=list
+  document.getElementById('count-active').textContent=list.length
+  if(!list.length){
+    if(!isOnline){
+      c.innerHTML='<div class="empty"><div class="empty-ico">⚠</div><div class="empty-txt">No hay conexión con Supabase. Verifica tu SUPABASE_ANON_KEY en el código.</div></div>'
+    } else {
+      c.innerHTML='<div class="empty"><div class="empty-ico">📋</div><div class="empty-txt">No hay servicios. Haz clic en "Nuevo servicio" para agregar el primero.</div></div>'
+    }
+    return
+  }
+  c.innerHTML=''
+  list.forEach(s=>{
+    const aiInfo=(s.aiNombre||s.aiNota)?`<div class="svc-ai">${escapeHtml(s.aiNombre||'')}${s.aiNombre&&s.aiNota?' · ':''}${escapeHtml(s.aiNota||'')}</div>`:''
+    const insumoTag=s.insumo?'<span class="pill-insumo">insumo</span>':''
+    const row=document.createElement('div')
+    row.className='svc-item'
+    row.innerHTML=`
+      <div class="svc-info">
+        <div class="svc-name">${escapeHtml(s.n)} ${insumoTag}</div>
+        <div class="svc-desc">${escapeHtml(s.d)}</div>
+        ${aiInfo}
+      </div>
+      <div class="svc-price">${fmtP(s.p)}</div>
+      <div class="svc-actions">
+        <button class="btn-icon" data-action="edit">✎ Editar</button>
+        <button class="btn-icon danger" data-action="del">🗑 Eliminar</button>
+      </div>`
+    row.querySelector('[data-action=edit]').onclick=()=>abrirEditar(s.id)
+    row.querySelector('[data-action=del]').onclick=()=>eliminar(s.id)
+    c.appendChild(row)
+  })
+}
+
+async function renderTrash(){
+  const c=document.getElementById('list-trash')
+  c.innerHTML='<div class="empty"><div class="empty-txt">Cargando…</div></div>'
+  const list=await loadTrash()
+  _trashCache=list
+  document.getElementById('count-trash').textContent=list.length
+  if(!list.length){
+    c.innerHTML='<div class="empty"><div class="empty-ico">🗑</div><div class="empty-txt">La papelera está vacía.</div></div>'
+    return
+  }
+  c.innerHTML=''
+  const ahora=Date.now()
+  list.forEach(s=>{
+    const dias=Math.ceil(TRASH_DAYS-(ahora-s.deletedAt)/(1000*60*60*24))
+    const pronto=dias<=3
+    const row=document.createElement('div')
+    row.className='svc-item trashed'
+    row.innerHTML=`
+      <div class="svc-info">
+        <div class="svc-name">${escapeHtml(s.n)}</div>
+        <div class="svc-desc">${escapeHtml(s.d)}</div>
+      </div>
+      <div class="svc-days ${pronto?'expire-soon':''}">${dias} ${dias===1?'día':'días'}</div>
+      <div class="svc-actions">
+        <button class="btn-icon success" data-action="restore">↺ Restaurar</button>
+        <button class="btn-icon danger" data-action="purge">✕ Eliminar ya</button>
+      </div>`
+    row.querySelector('[data-action=restore]').onclick=()=>restaurar(s.id)
+    row.querySelector('[data-action=purge]').onclick=()=>eliminarDefinitivo(s.id)
+    c.appendChild(row)
+  })
+}
+
+async function renderAll(){await renderActive();await renderTrash()}
+
+// ═══════════════════════════════════════════════════════════════
+// MODAL EDITAR / NUEVO
+// ═══════════════════════════════════════════════════════════════
+let editId=null  // null = nuevo; string = editando ese id
+
+function abrirNuevo(){
+  editId=null
+  document.getElementById('modal-title').textContent='Nuevo servicio'
+  document.getElementById('e-n').value=''
+  document.getElementById('e-d').value=''
+  document.getElementById('e-id').value=''
+  document.getElementById('e-p').value=''
+  document.getElementById('e-ain').value=''
+  document.getElementById('e-aino').value=''
+  document.getElementById('e-ins').checked=false
+  document.getElementById('e-id').disabled=false
+  document.getElementById('adv-section').classList.remove('show')
+  document.getElementById('btn-adv').textContent='▸ Opciones avanzadas (IA, insumos)'
+  document.getElementById('modal-edit').classList.add('show')
+  setTimeout(()=>document.getElementById('e-n').focus(),100)
+}
+function abrirEditar(id){
+  const s=_activeCache.find(x=>x.id===id)
+  if(!s){toast('Servicio no encontrado');return}
+  editId=id
+  document.getElementById('modal-title').textContent='Editar servicio'
+  document.getElementById('e-n').value=s.n||''
+  document.getElementById('e-d').value=s.d||''
+  document.getElementById('e-id').value=s.id||''
+  document.getElementById('e-id').disabled=true
+  document.getElementById('e-p').value=s.p||0
+  document.getElementById('e-ain').value=s.aiNombre||''
+  document.getElementById('e-aino').value=s.aiNota||''
+  document.getElementById('e-ins').checked=!!s.insumo
+  const hasAdv=s.aiNombre||s.aiNota||s.insumo
+  document.getElementById('adv-section').classList.toggle('show',!!hasAdv)
+  document.getElementById('btn-adv').textContent=hasAdv?'▾ Opciones avanzadas (IA, insumos)':'▸ Opciones avanzadas (IA, insumos)'
+  document.getElementById('modal-edit').classList.add('show')
+}
+function cerrarModal(){document.getElementById('modal-edit').classList.remove('show')}
+function toggleAvanzado(){
+  const adv=document.getElementById('adv-section')
+  const btn=document.getElementById('btn-adv')
+  adv.classList.toggle('show')
+  btn.textContent=(adv.classList.contains('show')?'▾':'▸')+' Opciones avanzadas (IA, insumos)'
+}
+async function guardarServicio(){
+  const n=document.getElementById('e-n').value.trim()
+  const d=document.getElementById('e-d').value.trim()
+  const id=document.getElementById('e-id').value.trim()
+  const p=parseInt(document.getElementById('e-p').value)||0
+  const ain=document.getElementById('e-ain').value.trim()
+  const aino=document.getElementById('e-aino').value.trim()
+  const ins=document.getElementById('e-ins').checked
+  if(!n){toast('Falta el nombre');return}
+  if(!d){toast('Falta la descripción');return}
+  if(!id){toast('Falta el ID interno');return}
+  if(!/^[a-z0-9_]+$/i.test(id)){toast('El ID solo puede tener letras, números y _');return}
+  if(p<=0){toast('El precio debe ser mayor a 0');return}
+
+  const nuevo={id,n,d,p}
+  if(ain)nuevo.aiNombre=ain
+  if(aino)nuevo.aiNota=aino
+  if(ins)nuevo.insumo=true
+
+  try{
+    if(editId===null){
+      // Verificar id único
+      const exists=await checkIdExists(id)
+      if(exists){toast('Ya existe un servicio con ese ID');return}
+      await insertItem(nuevo)
+      toast('Servicio agregado ✓')
+    } else {
+      await updateItem(editId,nuevo)
+      toast('Servicio actualizado ✓')
+    }
+    cerrarModal()
+    await renderAll()
+  }catch(e){
+    console.error(e)
+    toast('Error al guardar: '+e.message.slice(0,60))
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════
+// ELIMINAR / RESTAURAR
+// ═══════════════════════════════════════════════════════════════
+async function eliminar(id){
+  const s=_activeCache.find(x=>x.id===id)
+  if(!s)return
+  if(!confirm(`¿Mover "${s.n}" a la papelera?\n\nPodrás restaurarlo durante 30 días.`))return
+  try{
+    await softDelete(id)
+    toast('Movido a papelera ✓')
+    await renderAll()
+  }catch(e){
+    console.error(e)
+    toast('Error al eliminar: '+e.message.slice(0,60))
+  }
+}
+async function restaurar(id){
+  const s=_trashCache.find(x=>x.id===id)
+  if(!s)return
+  try{
+    await restoreItem(id)
+    toast('Servicio restaurado ✓')
+    await renderAll()
+  }catch(e){
+    console.error(e)
+    toast('Error al restaurar: '+e.message.slice(0,60))
+  }
+}
+async function eliminarDefinitivo(id){
+  const s=_trashCache.find(x=>x.id===id)
+  if(!s)return
+  if(!confirm(`Eliminar "${s.n}" DEFINITIVAMENTE.\n\nEsta acción no se puede deshacer. ¿Continuar?`))return
+  try{
+    await hardDelete(id)
+    toast('Eliminado definitivamente')
+    await renderAll()
+  }catch(e){
+    console.error(e)
+    toast('Error al eliminar: '+e.message.slice(0,60))
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════
+// EXPORTAR / IMPORTAR
+// ═══════════════════════════════════════════════════════════════
+async function exportar(){
+  try{
+    const activos=await loadActive()
+    const papelera=await loadTrash()
+    const payload={
+      version:2,
+      exported_at:new Date().toISOString(),
+      source:'supabase',
+      activos,
+      papelera
+    }
+    const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'})
+    const url=URL.createObjectURL(blob)
+    const hoy=new Date()
+    const stamp=`${hoy.getFullYear()}${String(hoy.getMonth()+1).padStart(2,'0')}${String(hoy.getDate()).padStart(2,'0')}`
+    const a=document.createElement('a')
+    a.href=url
+    a.download=`tantecno-catalogo-${stamp}.json`
+    document.body.appendChild(a)
+    a.click()
+    document.body.removeChild(a)
+    URL.revokeObjectURL(url)
+    toast('Catálogo exportado ✓')
+  }catch(e){
+    console.error(e)
+    toast('Error exportando: '+e.message.slice(0,60))
+  }
+}
+
+async function importar(evt){
+  const file=evt.target.files[0]
+  if(!file)return
+  const reader=new FileReader()
+  reader.onload=async e=>{
+    try{
+      const data=JSON.parse(e.target.result)
+      const activos=data.activos||data.active||[]
+      const papelera=data.papelera||data.trash||[]
+      if(!Array.isArray(activos)||!activos.length){
+        toast('Archivo inválido: falta la lista de servicios activos');return
+      }
+      const msg=`Importar ${activos.length} servicios activos y ${papelera.length} en papelera?\n\n⚠ IMPORTANTE:\n• Servicios con el mismo ID serán actualizados\n• Los que no existan se crearán nuevos\n• Los servicios actuales que NO estén en el archivo NO se tocan\n\n¿Continuar?`
+      if(!confirm(msg))return
+      let ok=0,err=0
+      for(const item of activos){
+        try{
+          const exists=await checkIdExists(item.id)
+          if(exists){
+            await updateItem(item.id,item)
+          } else {
+            await insertItem(item)
+          }
+          ok++
+        }catch(e){console.error('Import fallo',item.id,e);err++}
+      }
+      toast(`Importados ${ok} servicios${err?` (${err} con error)`:''} ✓`)
+      await renderAll()
+      switchTab('active')
+    }catch(err){
+      console.error(err)
+      toast('Error al leer el archivo: '+err.message.slice(0,60))
+    }
+    evt.target.value=''
+  }
+  reader.onerror=()=>toast('Error leyendo el archivo')
+  reader.readAsText(file,'UTF-8')
+}
+
+// ═══════════════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════════════
+document.addEventListener('keydown',e=>{if(e.key==='Escape')cerrarModal()})
+renderAll()
+</script>
+
+</body>
+</html>
