@@ -130,6 +130,8 @@ body.splitting iframe,body.splitting #left,body.splitting #right{pointer-events:
 .btn-g{width:100%;padding:12px;background:var(--accent);border:none;border-radius:8px;color:#fff;font-family:var(--body);font-size:14px;font-weight:600;cursor:pointer;transition:.15s;margin-bottom:4px;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 2px 6px rgba(27,58,92,.2);}
 .btn-g:hover{background:var(--accent-h);box-shadow:0 3px 10px rgba(27,58,92,.28);}
 .btn-g:disabled{opacity:.5;cursor:not-allowed;box-shadow:none;}
+.btn-preview{width:100%;padding:10px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;color:var(--text2);font-family:var(--body);font-size:13px;font-weight:500;cursor:pointer;transition:.15s;margin-bottom:6px;display:flex;align-items:center;justify-content:center;gap:8px;}
+.btn-preview:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-bg);}
 .spinner{width:13px;height:13px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;display:none;}
 .btn-g.loading .spinner{display:block;}
 .btn-g.loading .blbl{opacity:.6;}
@@ -411,6 +413,9 @@ table.ct td{border:1px solid #ccc;padding:4px 7px;vertical-align:top;line-height
   </div>
 
   <div class="lf">
+    <button class="btn-preview" id="btn-prev" onclick="previewSinIA()" title="Ver vista previa sin consumir IA">
+      👁 Vista previa sin IA
+    </button>
     <button class="btn-g" id="btn-gen" onclick="generar()">
       <div class="spinner" id="spinner"></div>
       <span class="blbl" id="blbl">Generar cotización</span>
@@ -672,7 +677,7 @@ function getSubComponentes(){
   const torre=leerTorre()
   const perif=leerPerif()
   let s=0
-  torre.forEach(c=>{if(c.nombre)s+=c.precio})
+  torre.forEach(c=>{s+=c.precio})
   perif.forEach(p=>{s+=p.precio})
   return s
 }
@@ -700,7 +705,8 @@ function calcularTotales(){
   const torre=leerTorre()
   const perif=leerPerif()
   let subComp=0
-  torre.forEach(c=>{if(c.nombre)subComp+=c.precio})
+  // Sumar cualquier precio > 0, con o sin nombre llenado (para cálculo en tiempo real)
+  torre.forEach(c=>{subComp+=c.precio})
   perif.forEach(p=>{subComp+=p.precio})
   const util=getUtilidad()
   const neto=subComp+util
@@ -826,6 +832,21 @@ Devuelve SOLO JSON válido sin markdown:
 // ═══════════════════════════════════════════════════════════════
 // APLICAR resultado al preview
 // ═══════════════════════════════════════════════════════════════
+function previewSinIA(){
+  // Llena el preview con datos del formulario SIN llamar a la IA
+  const cliente=document.getElementById('f-cliente').value.trim()||'—'
+  const torre=leerTorre()
+  const perif=leerPerif()
+  const tot=calcularTotales()
+  const fakeJson={
+    justificacion:'[Vista previa sin IA] — Al presionar "Generar cotización", aquí aparecerá el perfil de uso y justificación técnica generado por IA en base al brief del cliente.',
+    validacion_nivel:null,
+    validacion_items:[]
+  }
+  aplicar(cliente,torre,perif,tot,fakeJson)
+  toast('Vista previa generada (sin IA)')
+}
+
 function aplicar(cliente,torre,perif,tot,json){
   document.getElementById('p-cliente').textContent=cliente||'—'
   const fecha=document.getElementById('f-fecha').value
