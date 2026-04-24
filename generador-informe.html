@@ -93,6 +93,25 @@ body.splitting iframe,body.splitting #left,body.splitting #right{pointer-events:
 .sec-sep{font-family:var(--mono);font-size:9px;color:var(--text3);letter-spacing:.1em;text-transform:uppercase;margin:14px 0 6px;padding-top:12px;border-top:1px solid var(--border);font-weight:600;}
 .svc-sel-wrap{margin-bottom:6px;}
 .no-svc{font-size:11.5px;color:var(--text3);font-style:italic;padding:4px 0;}
+/* Buscador y ordenamiento del catálogo */
+.cat-search-row{display:flex;gap:6px;margin-bottom:6px;align-items:stretch;}
+.cat-search-wrap{flex:1;position:relative;display:flex;align-items:center;}
+.cat-search-ico{position:absolute;left:8px;font-size:11px;opacity:.55;pointer-events:none;}
+#cat-search{flex:1;padding:6px 26px 6px 26px;background:var(--bg2);border:1px solid var(--border);border-radius:6px;font-family:var(--body);font-size:12px;color:var(--text);outline:none;transition:.15s;width:100%;}
+#cat-search:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-bg);}
+#cat-search::placeholder{color:var(--text3);}
+.cat-search-clear{position:absolute;right:4px;background:none;border:none;color:var(--text3);font-size:16px;line-height:1;cursor:pointer;padding:2px 6px;border-radius:4px;display:none;transition:.15s;}
+.cat-search-clear:hover{color:var(--red);background:var(--red-bg);}
+.cat-search-wrap.has-text .cat-search-clear{display:block;}
+.cat-sort-btns{display:flex;gap:2px;}
+.cat-sort-btn{background:var(--bg2);border:1px solid var(--border);border-radius:5px;padding:5px 7px;font-family:var(--mono);font-size:10px;color:var(--text2);cursor:pointer;transition:.15s;min-width:26px;text-align:center;font-weight:600;}
+.cat-sort-btn:hover{border-color:var(--accent);color:var(--accent);}
+.cat-sort-btn.on{background:var(--accent);border-color:var(--accent);color:#fff;}
+.cat-empty{padding:16px 12px;text-align:center;color:var(--text3);font-size:12px;font-style:italic;}
+#left.compact .cat-search-row{flex-direction:column;gap:5px;}
+#left.compact .cat-sort-btns{justify-content:stretch;}
+#left.compact .cat-sort-btn{flex:1;}
+
 .cat-btn{display:flex;justify-content:space-between;align-items:center;width:100%;padding:7px 10px;margin-bottom:3px;background:var(--bg2);border:1px solid var(--border);border-radius:6px;cursor:pointer;text-align:left;transition:.15s;}
 .cat-btn:hover{background:var(--bg3);border-color:var(--border-h);}
 .cat-btn.on{background:var(--accent-bg);border-color:var(--accent);}
@@ -343,6 +362,20 @@ table.ct .dscrow td{background:#f0fdf4;color:#166534;font-size:9.5px;}
       <label>Descuento</label>
       <input type="number" id="f-dsc" value="0" min="0" max="100">
       <span style="font-family:var(--mono);font-size:10px;color:var(--accent);">%</span>
+    </div>
+    <div class="cat-search-row">
+      <div class="cat-search-wrap">
+        <span class="cat-search-ico">🔍</span>
+        <input type="text" id="cat-search" placeholder="Buscar servicio…" autocomplete="off">
+        <button type="button" class="cat-search-clear" id="cat-search-clear" title="Limpiar búsqueda">×</button>
+      </div>
+      <div class="cat-sort-btns">
+        <button type="button" class="cat-sort-btn on" data-sort="orig" title="Orden original">—</button>
+        <button type="button" class="cat-sort-btn" data-sort="az" title="Nombre A-Z">A↓</button>
+        <button type="button" class="cat-sort-btn" data-sort="za" title="Nombre Z-A">A↑</button>
+        <button type="button" class="cat-sort-btn" data-sort="pa" title="Precio menor a mayor">$↓</button>
+        <button type="button" class="cat-sort-btn" data-sort="pd" title="Precio mayor a menor">$↑</button>
+      </div>
     </div>
     <div id="cat-wrap"></div>
 
@@ -834,9 +867,39 @@ function renderHall(){
   })
 }
 let _modalItem=null
+// Estado de filtro y orden del catálogo
+let _catSearch=''
+let _catSort='orig'  // 'orig'|'az'|'za'|'pa'|'pd'
+function normalizeTxt(s){
+  return (s||'').toString().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+}
+function getFilteredCat(){
+  let list=[...CAT]
+  // Filtrar por texto (busca en nombre + descripción)
+  if(_catSearch){
+    const q=normalizeTxt(_catSearch)
+    list=list.filter(it=>{
+      const n=normalizeTxt(it.n)
+      const d=normalizeTxt(it.d)
+      return n.includes(q)||d.includes(q)
+    })
+  }
+  // Ordenar
+  if(_catSort==='az')list.sort((a,b)=>normalizeTxt(a.n).localeCompare(normalizeTxt(b.n)))
+  else if(_catSort==='za')list.sort((a,b)=>normalizeTxt(b.n).localeCompare(normalizeTxt(a.n)))
+  else if(_catSort==='pa')list.sort((a,b)=>(a.p||0)-(b.p||0))
+  else if(_catSort==='pd')list.sort((a,b)=>(b.p||0)-(a.p||0))
+  // 'orig' mantiene orden de CAT (Supabase)
+  return list
+}
 function renderCat(){
   const c=document.getElementById('cat-wrap');c.innerHTML=''
-  CAT.forEach(item=>{
+  const list=getFilteredCat()
+  if(!list.length){
+    c.innerHTML=`<div class="cat-empty">Ningún servicio coincide con "${_catSearch}"</div>`
+    return
+  }
+  list.forEach(item=>{
     const on=selS.find(s=>s.id===item.id)
     const btn=document.createElement('button');btn.className='cat-btn'+(on?' on':'')
     btn.innerHTML=`<span class="cn">${item.n}</span><span class="cp">${item.insumo?'+ insumo':fmt(item.p)}</span>`
@@ -960,6 +1023,37 @@ document.getElementById('r-finf').value=today
 refreshApiStatus();renderHall();renderCat()
 // Sincronizar catálogo desde Supabase en background (no bloquea render inicial)
 sincronizarDesdeSupabase()
+
+// Listeners del buscador y botones de orden del catálogo
+;(function catSearchInit(){
+  const inp=document.getElementById('cat-search')
+  const clear=document.getElementById('cat-search-clear')
+  const wrap=inp&&inp.parentElement
+  if(inp){
+    inp.addEventListener('input',()=>{
+      _catSearch=inp.value.trim()
+      if(wrap)wrap.classList.toggle('has-text',_catSearch.length>0)
+      renderCat()
+    })
+  }
+  if(clear){
+    clear.addEventListener('click',()=>{
+      inp.value=''
+      _catSearch=''
+      if(wrap)wrap.classList.remove('has-text')
+      renderCat()
+      inp.focus()
+    })
+  }
+  document.querySelectorAll('.cat-sort-btn').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      document.querySelectorAll('.cat-sort-btn').forEach(b=>b.classList.remove('on'))
+      btn.classList.add('on')
+      _catSort=btn.dataset.sort
+      renderCat()
+    })
+  })
+})();
 
 // ═══ GUARDAR PDF ═══
 function savePDF(){
