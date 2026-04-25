@@ -1137,39 +1137,40 @@ async function generarPDFDinamico(filename){
     hintsToHide.forEach((h,i)=>{h.style.display=hintsOriginal[i]||'block'})
   }
   try{
-    console.log('[PDF] Capturando contenido…')
-    // Patrón correcto html2pdf 0.10.1: el canvas vive en this.prop.canvas
-    // tras .toCanvas(). Usamos .then(function(){...}) para acceder al worker.
-    const worker=html2pdf().set({
-      html2canvas:{scale:2,useCORS:true,letterRendering:true,backgroundColor:'#ffffff'}
-    }).from(el).toCanvas()
+    console.log('[PDF] Pasada 1: midiendo contenido…')
+    // PASADA 1: solo capturar canvas para conocer dimensiones reales.
+    // El bundle de html2pdf NO expone jsPDF como global, así que NO podemos
+    // construir un jsPDF a mano. Tenemos que dejar que html2pdf lo haga
+    // internamente, pero pasándole el formato dinámico calculado.
+    const opts={html2canvas:{scale:2,useCORS:true,letterRendering:true,backgroundColor:'#ffffff'}}
+    const w1=html2pdf().set(opts).from(el).toCanvas()
     let canvas=null
-    await worker.then(function(){canvas=this.prop.canvas})
+    await w1.then(function(){canvas=this.prop.canvas})
     if(!canvas||!canvas.width||!canvas.height){
       throw new Error('html2pdf no devolvió un canvas válido')
     }
     console.log('[PDF] Canvas capturado:',canvas.width,'x',canvas.height,'px')
-    // Calcular dimensiones del PDF en mm (ancho A4 fijo, alto dinámico)
     const pageWidthMm=210
     const pageHeightMm=(canvas.height*pageWidthMm)/canvas.width
     console.log('[PDF] Página resultante:',pageWidthMm,'x',pageHeightMm.toFixed(1),'mm')
-    // Resolver constructor jsPDF de varias formas posibles
-    let JsPDFCtor=null
-    if(window.jspdf&&window.jspdf.jsPDF)JsPDFCtor=window.jspdf.jsPDF
-    else if(window.jsPDF)JsPDFCtor=window.jsPDF
-    if(!JsPDFCtor){
-      console.error('[PDF] window.jspdf:',window.jspdf,'window.jsPDF:',window.jsPDF)
-      throw new Error('jsPDF no está disponible globalmente')
+    console.log('[PDF] Pasada 2: generando PDF con formato dinámico…')
+    // PASADA 2: dejar que html2pdf maneje el flujo completo con el formato calculado.
+    // Pasamos un blob de salida y lo devolvemos; quien llama decide si guardar
+    // o abrir en pestaña.
+    const w2=html2pdf().set({
+      margin:0,
+      filename:filename,
+      image:{type:'jpeg',quality:0.95},
+      html2canvas:{scale:2,useCORS:true,letterRendering:true,backgroundColor:'#ffffff'},
+      jsPDF:{unit:'mm',format:[pageWidthMm,pageHeightMm],orientation:'portrait'},
+      pagebreak:{mode:['avoid-all']}
+    }).from(el)
+    const blob=await w2.outputPdf('blob')
+    if(!blob||!(blob instanceof Blob)){
+      throw new Error('html2pdf no devolvió un Blob válido')
     }
-    const pdf=new JsPDFCtor({
-      unit:'mm',
-      format:[pageWidthMm,pageHeightMm],
-      orientation:'portrait'
-    })
-    const imgData=canvas.toDataURL('image/jpeg',0.95)
-    pdf.addImage(imgData,'JPEG',0,0,pageWidthMm,pageHeightMm)
-    console.log('[PDF] PDF generado correctamente')
-    return pdf
+    console.log('[PDF] PDF generado correctamente, tamaño:',blob.size,'bytes')
+    return blob
   }finally{
     restore()
   }
@@ -1197,8 +1198,16 @@ function savePDF(){
   const clienteLimpio=cliente.replace(/[^a-zA-ZáéíóúÁÉÍÓÚüÜñÑ\s]/g,'').trim()||'Cliente'
   const filename=fechaStr+' - Informe Técnico N°'+nit+' - '+clienteLimpio+'.pdf'
   toast('Generando PDF…')
-  generarPDFDinamico(filename).then(pdf=>{
-    pdf.save(filename)
+  generarPDFDinamico(filename).then(blob=>{
+    // Descargar el blob como archivo
+    const url=URL.createObjectURL(blob)
+    const a=document.createElement('a')
+    a.href=url
+    a.download=filename
+    document.body.appendChild(a)
+    a.click()
+    document.body.removeChild(a)
+    setTimeout(()=>URL.revokeObjectURL(url),5000)
     toast('PDF guardado ✓')
   }).catch(err=>{
     console.error('[PDF]',err)
@@ -1214,8 +1223,7 @@ function previsualizarPDF(){
     toast('Genera el informe primero');return
   }
   toast('Generando vista previa…')
-  generarPDFDinamico('preview.pdf').then(pdf=>{
-    const blob=pdf.output('blob')
+  generarPDFDinamico('preview.pdf').then(blob=>{
     const url=URL.createObjectURL(blob)
     const w=window.open(url,'_blank')
     if(!w){
