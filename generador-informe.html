@@ -452,11 +452,11 @@ table.ct .dscrow td{background:#f0fdf4;color:#166534;font-size:9.5px;}
     </div>
 
     <div class="doc-sh">Descripción del problema e intervención</div>
-    <div class="edit-hint" id="hint1">editable — clic para modificar</div>
+
     <div class="doc-sb" id="p-s1"><span class="doc-ph">Completa el formulario y genera el informe.</span></div>
 
     <div class="doc-sh">Resultado y validación operativa</div>
-    <div class="edit-hint" id="hint2">editable — clic para modificar</div>
+
     <div class="doc-sb" id="p-s2"><span class="doc-ph">Esta sección se completará automáticamente.</span></div>
 
     <div id="p-svc-wrap" style="display:none;">
@@ -843,8 +843,6 @@ function aplicar(j){
   const s1=document.getElementById('p-s1'),s2=document.getElementById('p-s2')
   s1.textContent=j.s1||'';s2.textContent=j.s2||''
   s1.contentEditable='true';s2.contentEditable='true'
-  document.getElementById('hint1').style.display='block'
-  document.getElementById('hint2').style.display='block'
   // Auto-agregar servicios detectados por IA — SOLO si vienen con id válido y no hay duplicado por familia
   if(j.servicios&&j.servicios.length){
     j.servicios.forEach(svc=>{
@@ -1068,8 +1066,6 @@ function limpiar(){
   document.getElementById('p-s2').innerHTML='<span class="doc-ph">Esta sección se completará automáticamente.</span>'
   document.getElementById('p-s1').contentEditable='false'
   document.getElementById('p-s2').contentEditable='false'
-  document.getElementById('hint1').style.display='none'
-  document.getElementById('hint2').style.display='none'
   document.getElementById('btn-cierre').style.display='none'
 }
 function switchTab(t){
@@ -1121,17 +1117,54 @@ sincronizarDesdeSupabase()
 })();
 
 // ═══ GUARDAR PDF ═══
+// Genera un PDF de UNA SOLA PÁGINA con altura dinámica según el contenido.
+// Esto evita los saltos de página feos. Pensado para envío 100% digital.
+async function generarPDFDinamico(filename){
+  const el=document.getElementById('doc')
+  el.classList.add('printing')
+  // Ocultar hints con inline style por si quedaron de versiones anteriores
+  const hintsToHide=el.querySelectorAll('.edit-hint')
+  const hintsOriginal=[]
+  hintsToHide.forEach((h,i)=>{
+    hintsOriginal[i]=h.style.display
+    h.style.display='none'
+  })
+  function restore(){
+    el.classList.remove('printing')
+    hintsToHide.forEach((h,i)=>{h.style.display=hintsOriginal[i]||'block'})
+  }
+  try{
+    // 1. Capturar el div como canvas
+    const canvas=await html2canvas(el,{scale:2,useCORS:true,letterRendering:true,backgroundColor:'#ffffff'})
+    // 2. Calcular dimensiones en mm
+    //    Ancho fijo A4 = 210mm. Alto proporcional al canvas.
+    const pageWidthMm=210
+    const pageHeightMm=(canvas.height*pageWidthMm)/canvas.width
+    // 3. Crear PDF custom con esa altura
+    const {jsPDF}=window.jspdf||window
+    const pdf=new jsPDF({
+      unit:'mm',
+      format:[pageWidthMm,pageHeightMm],
+      orientation:'portrait'
+    })
+    // 4. Insertar la imagen del canvas ocupando toda la "página"
+    const imgData=canvas.toDataURL('image/jpeg',0.95)
+    pdf.addImage(imgData,'JPEG',0,0,pageWidthMm,pageHeightMm)
+    return pdf
+  }finally{
+    restore()
+  }
+}
+
 function savePDF(){
   const s1=document.getElementById('p-s1').textContent.trim()
   if(!s1||document.getElementById('p-s1').querySelector('.doc-ph')){
     toast('Genera el informe primero');return
   }
   // Confirmar el folio solo la PRIMERA vez que se guarda este informe.
-  // Si el usuario guarda el mismo informe dos veces (corrigió algo), usa el mismo folio.
   if(folioConfirmado===null){
     const folioActual=parseInt(document.getElementById('f-ot').value)||getOT()
     folioConfirmado=folioActual
-    // Avanza el contador para que el PRÓXIMO informe use el siguiente número.
     saveOT(folioActual+1)
     document.getElementById('p-ot').textContent=String(folioActual)
   }
@@ -1144,32 +1177,11 @@ function savePDF(){
   const fechaStr=dd+'-'+mm+'-'+aaaa
   const clienteLimpio=cliente.replace(/[^a-zA-ZáéíóúÁÉÍÓÚüÜñÑ\s]/g,'').trim()||'Cliente'
   const filename=fechaStr+' - Informe Técnico N°'+nit+' - '+clienteLimpio+'.pdf'
-  const el=document.getElementById('doc')
-  // OCULTAR hints de edición durante la captura (html2canvas ignora @media print)
-  el.classList.add('printing')
-  const opt={
-    margin:[13,15,13,15],
-    filename:filename,
-    image:{type:'jpeg',quality:0.98},
-    html2canvas:{scale:2,useCORS:true,letterRendering:true},
-    jsPDF:{unit:'mm',format:'a4',orientation:'portrait'},
-    pagebreak:{mode:['avoid-all','css','legacy']}
-  }
   toast('Generando PDF…')
-  // Ocultar hints con inline style (gana sobre el style:block que puso aplicar())
-  const hintsToHide=el.querySelectorAll('.edit-hint')
-  const hintsOriginal=[]
-  hintsToHide.forEach((h,i)=>{
-    hintsOriginal[i]=h.style.display
-    h.style.display='none'
-  })
-  html2pdf().set(opt).from(el).save().then(()=>{
-    el.classList.remove('printing')
-    hintsToHide.forEach((h,i)=>{h.style.display=hintsOriginal[i]||'block'})
+  generarPDFDinamico(filename).then(pdf=>{
+    pdf.save(filename)
     toast('PDF guardado ✓')
   }).catch(err=>{
-    el.classList.remove('printing')
-    hintsToHide.forEach((h,i)=>{h.style.display=hintsOriginal[i]||'block'})
     console.error('[PDF]',err)
     toast('Error al generar PDF')
   })
@@ -1177,43 +1189,21 @@ function savePDF(){
 
 function previsualizarPDF(){
   // Genera el PDF en memoria (sin descargar) y lo abre en nueva pestaña.
-  // No incrementa folio, no consume IA. Útil para chequear encuadre antes de guardar.
+  // No incrementa folio, no consume IA. Útil para chequear el formato antes de guardar.
   const s1=document.getElementById('p-s1').textContent.trim()
   if(!s1||document.getElementById('p-s1').querySelector('.doc-ph')){
     toast('Genera el informe primero');return
   }
-  const el=document.getElementById('doc')
-  el.classList.add('printing')
-  const hintsToHide=el.querySelectorAll('.edit-hint')
-  const hintsOriginal=[]
-  hintsToHide.forEach((h,i)=>{
-    hintsOriginal[i]=h.style.display
-    h.style.display='none'
-  })
-  const opt={
-    margin:[13,15,13,15],
-    image:{type:'jpeg',quality:0.98},
-    html2canvas:{scale:2,useCORS:true,letterRendering:true},
-    jsPDF:{unit:'mm',format:'a4',orientation:'portrait'},
-    pagebreak:{mode:['avoid-all','css','legacy']}
-  }
   toast('Generando vista previa…')
-  function restore(){
-    el.classList.remove('printing')
-    hintsToHide.forEach((h,i)=>{h.style.display=hintsOriginal[i]||'block'})
-  }
-  // Genera el PDF como blob y lo abre en nueva ventana
-  html2pdf().set(opt).from(el).outputPdf('blob').then(blob=>{
+  generarPDFDinamico('preview.pdf').then(pdf=>{
+    const blob=pdf.output('blob')
     const url=URL.createObjectURL(blob)
     const w=window.open(url,'_blank')
     if(!w){
       toast('El navegador bloqueó la ventana. Permite popups o usa "Guardar PDF"')
     }
-    restore()
-    // Liberar el blob después de un rato (el navegador ya tiene el PDF abierto)
     setTimeout(()=>URL.revokeObjectURL(url),60000)
   }).catch(err=>{
-    restore()
     console.error('[PDF preview]',err)
     toast('Error generando vista previa')
   })
