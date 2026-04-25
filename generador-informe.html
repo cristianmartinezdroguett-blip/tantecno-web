@@ -1121,8 +1121,11 @@ sincronizarDesdeSupabase()
 // Esto evita los saltos de página feos. Pensado para envío 100% digital.
 async function generarPDFDinamico(filename){
   const el=document.getElementById('doc')
+  if(!el){throw new Error('No se encontró el elemento #doc')}
+  if(typeof html2pdf==='undefined'){
+    throw new Error('html2pdf no está cargado')
+  }
   el.classList.add('printing')
-  // Ocultar hints con inline style por si quedaron de versiones anteriores
   const hintsToHide=el.querySelectorAll('.edit-hint')
   const hintsOriginal=[]
   hintsToHide.forEach((h,i)=>{
@@ -1134,22 +1137,34 @@ async function generarPDFDinamico(filename){
     hintsToHide.forEach((h,i)=>{h.style.display=hintsOriginal[i]||'block'})
   }
   try{
-    // 1. Capturar el div como canvas
-    const canvas=await html2canvas(el,{scale:2,useCORS:true,letterRendering:true,backgroundColor:'#ffffff'})
-    // 2. Calcular dimensiones en mm
-    //    Ancho fijo A4 = 210mm. Alto proporcional al canvas.
+    console.log('[PDF] Capturando contenido…')
+    // Usar la API de html2pdf que SÍ expone el bundle
+    // .toCanvas() internamente llama a html2canvas con las opciones dadas
+    const worker=html2pdf().set({
+      html2canvas:{scale:2,useCORS:true,letterRendering:true,backgroundColor:'#ffffff'}
+    }).from(el)
+    const canvas=await worker.toCanvas().get('canvas')
+    console.log('[PDF] Canvas capturado:',canvas.width,'x',canvas.height,'px')
+    // Calcular dimensiones del PDF en mm (ancho A4 fijo, alto dinámico)
     const pageWidthMm=210
     const pageHeightMm=(canvas.height*pageWidthMm)/canvas.width
-    // 3. Crear PDF custom con esa altura
-    const {jsPDF}=window.jspdf||window
-    const pdf=new jsPDF({
+    console.log('[PDF] Página resultante:',pageWidthMm,'x',pageHeightMm.toFixed(1),'mm')
+    // Resolver constructor jsPDF de varias formas posibles
+    let JsPDFCtor=null
+    if(window.jspdf&&window.jspdf.jsPDF)JsPDFCtor=window.jspdf.jsPDF
+    else if(window.jsPDF)JsPDFCtor=window.jsPDF
+    if(!JsPDFCtor){
+      console.error('[PDF] window.jspdf:',window.jspdf,'window.jsPDF:',window.jsPDF)
+      throw new Error('jsPDF no está disponible globalmente')
+    }
+    const pdf=new JsPDFCtor({
       unit:'mm',
       format:[pageWidthMm,pageHeightMm],
       orientation:'portrait'
     })
-    // 4. Insertar la imagen del canvas ocupando toda la "página"
     const imgData=canvas.toDataURL('image/jpeg',0.95)
     pdf.addImage(imgData,'JPEG',0,0,pageWidthMm,pageHeightMm)
+    console.log('[PDF] PDF generado correctamente')
     return pdf
   }finally{
     restore()
