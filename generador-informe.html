@@ -164,6 +164,18 @@ body.splitting iframe,body.splitting #left,body.splitting #right{pointer-events:
 .editable-meta:hover{background:rgba(27,58,92,.06);outline:1px dotted rgba(27,58,92,.3);}
 .editable-meta:focus{outline:1px dashed var(--accent);background:#f8fbff;}
 @media print{.editable-meta{background:none!important;outline:none!important;}}
+
+/* Modo impresión / PDF (html2canvas no respeta @media print, usamos clase) */
+.doc.printing .edit-hint{display:none!important;}
+.doc.printing .editable-meta{background:none!important;outline:none!important;border:none!important;cursor:default!important;}
+/* Saltos de página: no cortar elementos importantes */
+.doc table.ct,
+.doc .doc-pay-box,
+.doc .doc-firma,
+.doc .doc-meta,
+.doc .doc-cond{page-break-inside:avoid;break-inside:avoid;}
+.doc .doc-sh{page-break-after:avoid;break-after:avoid;}
+.doc .doc-pay-box,.doc .doc-firma{page-break-before:auto;}
 .doc-ph{font-family:Arial,sans-serif;font-size:10px;color:#bbb;font-style:italic;}
 .edit-hint{font-family:'Courier New',monospace;font-size:8px;color:var(--accent);letter-spacing:.06em;text-transform:uppercase;margin-bottom:3px;display:none;}
 table.ct{width:100%;border-collapse:collapse;font-size:10px;margin-bottom:4px;}
@@ -555,7 +567,7 @@ let CAT=cargarCatalogo()
 // consultamos Supabase y si hay novedades actualizamos CAT + localStorage + re-renderizamos.
 // Si no hay red o falla Supabase, se usa lo que haya en localStorage (modo offline).
 const SB_URL='https://wqgatoyouzckgmsilagz.supabase.co'
-const SB_KEY='sb_publishable_2Ar5UzQLYoLzmPYq_Xd71A_kaIOzMDc'  // ⚠️ Reemplaza con tu anon key real
+const SB_KEY='sb_publishable_2Ar5UzQLYoLzmPYq_Xd71A_kaIOzMDc'
 const SB_TABLE='catalogo'
 
 function rowToItem(r){
@@ -1104,15 +1116,25 @@ function savePDF(){
   const clienteLimpio=cliente.replace(/[^a-zA-ZáéíóúÁÉÍÓÚüÜñÑ\s]/g,'').trim()||'Cliente'
   const filename=fechaStr+' - Informe Técnico N°'+nit+' - '+clienteLimpio+'.pdf'
   const el=document.getElementById('doc')
+  // OCULTAR hints de edición durante la captura (html2canvas ignora @media print)
+  el.classList.add('printing')
   const opt={
     margin:[13,15,13,15],
     filename:filename,
     image:{type:'jpeg',quality:0.98},
     html2canvas:{scale:2,useCORS:true,letterRendering:true},
-    jsPDF:{unit:'mm',format:'a4',orientation:'portrait'}
+    jsPDF:{unit:'mm',format:'a4',orientation:'portrait'},
+    pagebreak:{mode:['avoid-all','css','legacy']}
   }
   toast('Generando PDF…')
-  html2pdf().set(opt).from(el).save().then(()=>toast('PDF guardado ✓'))
+  html2pdf().set(opt).from(el).save().then(()=>{
+    el.classList.remove('printing')
+    toast('PDF guardado ✓')
+  }).catch(err=>{
+    el.classList.remove('printing')
+    console.error('[PDF]',err)
+    toast('Error al generar PDF')
+  })
 }
 
 // ═══ MICRÓFONO ═══
