@@ -4,13 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Panel · TANTECNO</title>
-<script>
-(function(){
-  if(localStorage.getItem('tantecno_auth') !== 'tantecno_internal_2026'){
-    window.location.href = 'login.html?redirect=panel.html';
-  }
-})();
-</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="auth.js"></script>
+<script>tantecnoAuth.requireLogin('panel.html')</script>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -202,8 +198,7 @@ body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);min-
 <script>
 function logout(){
   if(!confirm('¿Cerrar sesión?'))return
-  localStorage.removeItem('tantecno_auth')
-  window.location.href='login.html'
+  tantecnoAuth.signOut()
 }
 </script>
 

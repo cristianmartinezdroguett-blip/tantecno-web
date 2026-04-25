@@ -4,13 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Catálogo de Servicios · TANTECNO</title>
-<script>
-(function(){
-  if(localStorage.getItem('tantecno_auth') !== 'tantecno_internal_2026'){
-    window.location.href = 'login.html?redirect=catalogo.html';
-  }
-})();
-</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="auth.js"></script>
+<script>tantecnoAuth.requireLogin('catalogo.html')</script>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -321,7 +317,7 @@ body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);min-
 // SUPABASE CONFIG
 // ═══════════════════════════════════════════════════════════════
 const SUPABASE_URL='https://wqgatoyouzckgmsilagz.supabase.co'
-const SUPABASE_ANON_KEY='sb_publishable_2Ar5UzQLYoLzmPYq_Xd71A_kaIOzMDc'  // ⚠️ Reemplaza con tu anon key real
+const SUPABASE_ANON_KEY='sb_publishable_2Ar5UzQLYoLzmPYq_Xd71A_kaIOzMDc'
 const TABLE='catalogo'
 const TRASH_DAYS=30
 
