@@ -1138,12 +1138,16 @@ async function generarPDFDinamico(filename){
   }
   try{
     console.log('[PDF] Capturando contenido…')
-    // Usar la API de html2pdf que SÍ expone el bundle
-    // .toCanvas() internamente llama a html2canvas con las opciones dadas
+    // Patrón correcto html2pdf 0.10.1: el canvas vive en this.prop.canvas
+    // tras .toCanvas(). Usamos .then(function(){...}) para acceder al worker.
     const worker=html2pdf().set({
       html2canvas:{scale:2,useCORS:true,letterRendering:true,backgroundColor:'#ffffff'}
-    }).from(el)
-    const canvas=await worker.toCanvas().get('canvas')
+    }).from(el).toCanvas()
+    let canvas=null
+    await worker.then(function(){canvas=this.prop.canvas})
+    if(!canvas||!canvas.width||!canvas.height){
+      throw new Error('html2pdf no devolvió un canvas válido')
+    }
     console.log('[PDF] Canvas capturado:',canvas.width,'x',canvas.height,'px')
     // Calcular dimensiones del PDF en mm (ancho A4 fijo, alto dinámico)
     const pageWidthMm=210
