@@ -486,6 +486,7 @@ table.ct .dscrow td{background:#f0fdf4;color:#166534;font-size:9.5px;}
   </div>
 
   <div class="pbar">
+    <button class="btn-p blue" onclick="previsualizarPDF()" title="Ver el PDF antes de guardar (no descarga)">👁 Previsualizar PDF</button>
     <button class="btn-p dark" onclick="savePDF()">⬇ Guardar PDF</button>
     <button class="btn-p blue" id="btn-cierre" onclick="convertirCierre()" style="display:none;">✓ Convertir a informe de cierre</button>
     <button class="btn-p amber" onclick="limpiar()">↺ Nuevo informe</button>
@@ -844,25 +845,43 @@ function aplicar(j){
   s1.contentEditable='true';s2.contentEditable='true'
   document.getElementById('hint1').style.display='block'
   document.getElementById('hint2').style.display='block'
-  // Auto-agregar servicios detectados por IA
+  // Auto-agregar servicios detectados por IA — SOLO si vienen con id válido y no hay duplicado por familia
   if(j.servicios&&j.servicios.length){
     j.servicios.forEach(svc=>{
-      // BUG FIX: si svc.id está vacío, '.includes("")' devuelve true SIEMPRE.
-      // Eso hacía que matcheara con el primer servicio del catálogo. Ahora se requiere id válido.
       const idValido=svc.id&&svc.id.trim().length>0
       const nombreValido=svc.nombre&&svc.nombre.trim().length>=4
       let match=null
+      // 1. Buscar match por id exacto (el más confiable)
       if(idValido){
-        match=CAT.find(c=>c.id===svc.id||c.n.toLowerCase().includes(svc.id.toLowerCase()))
+        match=CAT.find(c=>c.id===svc.id)
       }
-      if(!match&&nombreValido){
-        match=CAT.find(c=>c.n.toLowerCase().includes(svc.nombre.toLowerCase().slice(0,8)))
+      // 2. Si no, buscar por id substring (más laxo, solo si id es razonablemente largo)
+      if(!match&&idValido&&svc.id.trim().length>=3){
+        match=CAT.find(c=>c.n.toLowerCase().includes(svc.id.toLowerCase()))
       }
-      if(match&&!selS.find(s=>s.id===match.id)){
+      // 3. Si no, buscar por nombre (mínimo 8 caracteres para evitar falsos positivos)
+      if(!match&&nombreValido&&svc.nombre.trim().length>=8){
+        const nombreNorm=svc.nombre.toLowerCase().slice(0,12)
+        match=CAT.find(c=>c.n.toLowerCase().includes(nombreNorm))
+      }
+      // 4. Antes de agregar, verificar que no hay otro servicio "de la misma familia" ya agregado.
+      //    Familia = primera palabra significativa del nombre (RAM, SSD, NVMe, etc.)
+      //    Esto evita que la IA agregue "RAM 4GB" cuando ya tienes "RAM 8GB" agregada.
+      function getFamilia(nombre){
+        return (nombre||'').toLowerCase()
+          .replace(/módulo |modulo /,'')  // quitar prefijo "Módulo"
+          .split(/\s+/)[0]||''             // primera palabra
+      }
+      const yaTieneFamilia=match
+        ? selS.some(s=>getFamilia(s.n)===getFamilia(match.n))
+        : false
+      if(match&&!selS.find(s=>s.id===match.id)&&!yaTieneFamilia){
         selS.push({...match,pe:svc.valor||match.p})
       } else if(!match&&nombreValido&&svc.valor){
-        const customId='custom_'+Date.now()+'_'+Math.random().toString(36).slice(2,5)
-        if(!selS.find(s=>s.nombre===svc.nombre)){
+        // Solo agregar custom si no hay nada similar ya
+        const yaTieneNombre=selS.some(s=>(s.n||'').toLowerCase()===svc.nombre.toLowerCase())
+        if(!yaTieneNombre){
+          const customId='custom_'+Date.now()+'_'+Math.random().toString(36).slice(2,5)
           selS.push({id:customId,n:svc.nombre,d:svc.descripcion||svc.nombre,p:svc.valor,pe:svc.valor})
         }
       }
@@ -1153,6 +1172,50 @@ function savePDF(){
     hintsToHide.forEach((h,i)=>{h.style.display=hintsOriginal[i]||'block'})
     console.error('[PDF]',err)
     toast('Error al generar PDF')
+  })
+}
+
+function previsualizarPDF(){
+  // Genera el PDF en memoria (sin descargar) y lo abre en nueva pestaña.
+  // No incrementa folio, no consume IA. Útil para chequear encuadre antes de guardar.
+  const s1=document.getElementById('p-s1').textContent.trim()
+  if(!s1||document.getElementById('p-s1').querySelector('.doc-ph')){
+    toast('Genera el informe primero');return
+  }
+  const el=document.getElementById('doc')
+  el.classList.add('printing')
+  const hintsToHide=el.querySelectorAll('.edit-hint')
+  const hintsOriginal=[]
+  hintsToHide.forEach((h,i)=>{
+    hintsOriginal[i]=h.style.display
+    h.style.display='none'
+  })
+  const opt={
+    margin:[13,15,13,15],
+    image:{type:'jpeg',quality:0.98},
+    html2canvas:{scale:2,useCORS:true,letterRendering:true},
+    jsPDF:{unit:'mm',format:'a4',orientation:'portrait'},
+    pagebreak:{mode:['avoid-all','css','legacy']}
+  }
+  toast('Generando vista previa…')
+  function restore(){
+    el.classList.remove('printing')
+    hintsToHide.forEach((h,i)=>{h.style.display=hintsOriginal[i]||'block'})
+  }
+  // Genera el PDF como blob y lo abre en nueva ventana
+  html2pdf().set(opt).from(el).outputPdf('blob').then(blob=>{
+    const url=URL.createObjectURL(blob)
+    const w=window.open(url,'_blank')
+    if(!w){
+      toast('El navegador bloqueó la ventana. Permite popups o usa "Guardar PDF"')
+    }
+    restore()
+    // Liberar el blob después de un rato (el navegador ya tiene el PDF abierto)
+    setTimeout(()=>URL.revokeObjectURL(url),60000)
+  }).catch(err=>{
+    restore()
+    console.error('[PDF preview]',err)
+    toast('Error generando vista previa')
   })
 }
 
