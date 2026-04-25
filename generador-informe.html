@@ -160,6 +160,10 @@ body.splitting iframe,body.splitting #left,body.splitting #right{pointer-events:
 .doc-sh{font-weight:700;font-size:11px;border-bottom:1px solid #ccc;padding-bottom:2px;margin:11px 0 5px;}
 .doc-sb{font-family:Georgia,serif;font-size:10.5px;line-height:1.68;text-align:justify;white-space:pre-line;}
 .doc-sb[contenteditable=true]:focus{outline:1px dashed var(--accent);border-radius:2px;background:#f8fbff;}
+.editable-meta{cursor:text;border-radius:2px;transition:background .15s;padding:0 2px;min-width:20px;display:inline-block;}
+.editable-meta:hover{background:rgba(27,58,92,.06);outline:1px dotted rgba(27,58,92,.3);}
+.editable-meta:focus{outline:1px dashed var(--accent);background:#f8fbff;}
+@media print{.editable-meta{background:none!important;outline:none!important;}}
 .doc-ph{font-family:Arial,sans-serif;font-size:10px;color:#bbb;font-style:italic;}
 .edit-hint{font-family:'Courier New',monospace;font-size:8px;color:var(--accent);letter-spacing:.06em;text-transform:uppercase;margin-bottom:3px;display:none;}
 table.ct{width:100%;border-collapse:collapse;font-size:10px;margin-bottom:4px;}
@@ -169,6 +173,13 @@ table.ct .tot td{background:#f1f5f9;font-weight:700;}
 table.ct .dscrow td{background:#f0fdf4;color:#166534;font-size:9.5px;}
 .doc-cond{font-size:9.5px;color:#333;line-height:1.6;margin-top:9px;padding-top:7px;border-top:1px solid #eee;}
 .doc-pago{font-size:9.5px;color:#333;line-height:1.6;margin-top:5px;}
+.doc-pay-box{margin-top:8px;border:1.5px solid #0f172a;border-radius:4px;padding:10px 14px;background:#f8fafc;}
+.doc-pay-box .pay-title{font-family:Arial,Helvetica,sans-serif;font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#0f172a;margin-bottom:6px;padding-bottom:4px;border-bottom:1px solid #cbd5e1;}
+.doc-pay-box table{width:100%;border-collapse:collapse;font-size:10px;}
+.doc-pay-box table td{padding:2px 0;vertical-align:top;}
+.doc-pay-box table td.lbl{width:120px;color:#555;font-weight:600;font-family:Arial,Helvetica,sans-serif;}
+.doc-pay-box table td.val{color:#111;font-family:'Courier New',monospace;}
+.doc-pay-box .pay-foot{font-size:9px;color:#555;margin-top:7px;padding-top:6px;border-top:1px solid #e2e8f0;font-style:italic;font-family:Arial,Helvetica,sans-serif;}
 .doc-firma{margin-top:9px;padding-top:7px;border-top:1px solid #ccc;font-size:10.5px;}
 .pbar{display:flex;justify-content:center;gap:8px;margin-top:14px;flex-wrap:wrap;}
 .btn-p{padding:8px 16px;border:none;border-radius:6px;cursor:pointer;font-size:12px;font-family:var(--body);transition:.15s;}
@@ -250,6 +261,8 @@ table.ct .dscrow td{background:#f0fdf4;color:#166534;font-size:9.5px;}
   .doc-hdr{padding-bottom:8px;margin-bottom:10px;flex-wrap:wrap;gap:6px;}
   .doc-hdr>div:last-child{text-align:left;width:100%;}
   table.ct th,table.ct td{padding:3px 5px;font-size:9.5px;}
+  .doc-pay-box{padding:8px 10px;}
+  .doc-pay-box table td.lbl{width:90px;}
   .pbar{padding:10px;gap:6px;}
   .btn-p{font-size:11px;padding:9px 12px;}
   .tab-btn{padding:11px 6px;font-size:9.5px;}
@@ -414,14 +427,14 @@ table.ct .dscrow td{background:#f0fdf4;color:#166534;font-size:9.5px;}
     </div>
 
     <div class="doc-meta">
-      <div class="doc-ot">Informe Técnico N° <span id="p-ot">____</span></div>
-      <div class="dm"><b>Cliente:</b> <span id="p-cliente">_______________</span></div>
-      <div class="dm"><b>Equipo:</b> <span id="p-equipo">_______________</span></div>
+      <div class="doc-ot">Informe Técnico N° <span id="p-ot" class="editable-meta" contenteditable="true" spellcheck="false" title="Clic para editar">____</span></div>
+      <div class="dm"><b>Cliente:</b> <span id="p-cliente" class="editable-meta" contenteditable="true" spellcheck="false" title="Clic para editar">_______________</span></div>
+      <div class="dm"><b>Equipo:</b> <span id="p-equipo" class="editable-meta" contenteditable="true" spellcheck="false" title="Clic para editar">_______________</span></div>
       <div class="dm-grid">
-        <div class="dm"><b>Fecha recepción:</b> <span id="p-frecep">—</span></div>
-        <div class="dm"><b>Fecha informe:</b> <span id="p-finf">—</span></div>
-        <div class="dm"><b>Estado físico:</b> <span id="p-estado">—</span></div>
-        <div class="dm"><b>Accesorios:</b> <span id="p-acc">—</span></div>
+        <div class="dm"><b>Fecha recepción:</b> <span id="p-frecep" class="editable-meta" contenteditable="true" spellcheck="false" title="Clic para editar">—</span></div>
+        <div class="dm"><b>Fecha informe:</b> <span id="p-finf" class="editable-meta" contenteditable="true" spellcheck="false" title="Clic para editar">—</span></div>
+        <div class="dm"><b>Estado físico:</b> <span id="p-estado" class="editable-meta" contenteditable="true" spellcheck="false" title="Clic para editar">—</span></div>
+        <div class="dm"><b>Accesorios:</b> <span id="p-acc" class="editable-meta" contenteditable="true" spellcheck="false" title="Clic para editar">—</span></div>
       </div>
       <div class="dm"><b>Encargado técnico:</b> Cristián Martínez — TANTECNO</div>
     </div>
@@ -444,7 +457,18 @@ table.ct .dscrow td{background:#f0fdf4;color:#166534;font-size:9.5px;}
 
     <div class="doc-cond"><b>Condiciones:</b> Los trabajos se ejecutarán únicamente una vez aprobada la cotización. Plazo estimado: 24 a 48 horas hábiles. Todo equipo no retirado en 6 meses se entenderá en abandono. En caso de requerir documento tributario, se emite boleta de honorarios — el valor indicado corresponde al monto neto más la retención legal vigente.</div>
 
-    <div class="doc-pago"><b>Pago (100% al aprobar):</b> TANTECNO CHILE SpA · RUT 77.356.819-7 · Mercado Pago · Cuenta Vista N° 1009023876 · <a href="mailto:cristian.martinez.droguett@gmail.com" style="color:inherit;text-decoration:none;">cristian.martinez.droguett@gmail.com</a></div>
+    <div class="doc-pay-box">
+      <div class="pay-title">Datos para transferencia / pago</div>
+      <table>
+        <tr><td class="lbl">Banco</td><td class="val">Mercado Pago</td></tr>
+        <tr><td class="lbl">Razón social</td><td class="val">TANTECNO CHILE SpA</td></tr>
+        <tr><td class="lbl">RUT</td><td class="val">77.356.819-7</td></tr>
+        <tr><td class="lbl">Tipo de cuenta</td><td class="val">Cuenta Vista</td></tr>
+        <tr><td class="lbl">N° de cuenta</td><td class="val">1009023876</td></tr>
+        <tr><td class="lbl">Correo</td><td class="val">contacto@tantecno.cl</td></tr>
+      </table>
+      <div class="pay-foot">También disponible mediante link de pago de Mercado Pago.</div>
+    </div>
 
     <div class="doc-firma"><b>Atentamente,</b><br>Cristián Martínez Droguett<br>TANTECNO — Optimización de Equipos Computacionales</div>
   </div>
