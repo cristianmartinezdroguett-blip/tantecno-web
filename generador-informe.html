@@ -847,10 +847,20 @@ function aplicar(j){
   // Auto-agregar servicios detectados por IA
   if(j.servicios&&j.servicios.length){
     j.servicios.forEach(svc=>{
-      const match=CAT.find(c=>c.n.toLowerCase().includes(svc.id||'')||svc.nombre&&c.n.toLowerCase().includes(svc.nombre.toLowerCase().slice(0,8)))
+      // BUG FIX: si svc.id está vacío, '.includes("")' devuelve true SIEMPRE.
+      // Eso hacía que matcheara con el primer servicio del catálogo. Ahora se requiere id válido.
+      const idValido=svc.id&&svc.id.trim().length>0
+      const nombreValido=svc.nombre&&svc.nombre.trim().length>=4
+      let match=null
+      if(idValido){
+        match=CAT.find(c=>c.id===svc.id||c.n.toLowerCase().includes(svc.id.toLowerCase()))
+      }
+      if(!match&&nombreValido){
+        match=CAT.find(c=>c.n.toLowerCase().includes(svc.nombre.toLowerCase().slice(0,8)))
+      }
       if(match&&!selS.find(s=>s.id===match.id)){
         selS.push({...match,pe:svc.valor||match.p})
-      } else if(!match&&svc.nombre&&svc.valor){
+      } else if(!match&&nombreValido&&svc.valor){
         const customId='custom_'+Date.now()+'_'+Math.random().toString(36).slice(2,5)
         if(!selS.find(s=>s.nombre===svc.nombre)){
           selS.push({id:customId,n:svc.nombre,d:svc.descripcion||svc.nombre,p:svc.valor,pe:svc.valor})
@@ -1127,11 +1137,20 @@ function savePDF(){
     pagebreak:{mode:['avoid-all','css','legacy']}
   }
   toast('Generando PDF…')
+  // Ocultar hints con inline style (gana sobre el style:block que puso aplicar())
+  const hintsToHide=el.querySelectorAll('.edit-hint')
+  const hintsOriginal=[]
+  hintsToHide.forEach((h,i)=>{
+    hintsOriginal[i]=h.style.display
+    h.style.display='none'
+  })
   html2pdf().set(opt).from(el).save().then(()=>{
     el.classList.remove('printing')
+    hintsToHide.forEach((h,i)=>{h.style.display=hintsOriginal[i]||'block'})
     toast('PDF guardado ✓')
   }).catch(err=>{
     el.classList.remove('printing')
+    hintsToHide.forEach((h,i)=>{h.style.display=hintsOriginal[i]||'block'})
     console.error('[PDF]',err)
     toast('Error al generar PDF')
   })
