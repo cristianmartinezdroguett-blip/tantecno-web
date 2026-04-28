@@ -329,18 +329,9 @@ let isOnline=true
 // ═══════════════════════════════════════════════════════════════
 async function sbFetch(path,opts={}){
   const url=`${SUPABASE_URL}/rest/v1/${path}`
-  // Obtener JWT del usuario logueado (cae a anon key si no hay sesión).
-  // Esto permite que RLS validar al usuario en cada request.
-  let authToken=SUPABASE_ANON_KEY
-  try{
-    if(window.tantecnoSb){
-      const {data}=await window.tantecnoSb.auth.getSession()
-      if(data&&data.session&&data.session.access_token)authToken=data.session.access_token
-    }
-  }catch(e){console.warn('[catalogo] no se pudo leer sesión, usando anon key:',e)}
   const headers={
     'apikey':SUPABASE_ANON_KEY,
-    'Authorization':`Bearer ${authToken}`,
+    'Authorization':`Bearer ${SUPABASE_ANON_KEY}`,
     'Content-Type':'application/json',
     'Prefer':'return=representation',
     ...(opts.headers||{})

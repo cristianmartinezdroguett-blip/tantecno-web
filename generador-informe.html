@@ -187,8 +187,7 @@ table.ct .dscrow td{background:#f0fdf4;color:#166534;font-size:9.5px;}
 .doc-pay-box table td{padding:2px 0;vertical-align:top;}
 .doc-pay-box table td.lbl{width:120px;color:#555;font-weight:600;font-family:Arial,Helvetica,sans-serif;}
 .doc-pay-box table td.val{color:#111;font-family:'Courier New',monospace;}
-.doc-pay-box .pay-foot{font-size:9.5px;color:#334155;margin-top:7px;padding-top:6px;border-top:1px solid #e2e8f0;font-family:Arial,Helvetica,sans-serif;line-height:1.45;}
-.doc-pay-box .pay-link{color:#0f172a;font-weight:700;text-decoration:underline;font-family:'Courier New',monospace;letter-spacing:.01em;}
+.doc-pay-box .pay-foot{font-size:9px;color:#555;margin-top:7px;padding-top:6px;border-top:1px solid #e2e8f0;font-style:italic;font-family:Arial,Helvetica,sans-serif;}
 .doc-firma{margin-top:9px;padding-top:7px;border-top:1px solid #ccc;font-size:10.5px;}
 .pbar{display:flex;justify-content:center;gap:8px;margin-top:14px;flex-wrap:wrap;}
 .btn-p{padding:8px 16px;border:none;border-radius:6px;cursor:pointer;font-size:12px;font-family:var(--body);transition:.15s;}
@@ -385,10 +384,6 @@ table.ct .dscrow td{background:#f0fdf4;color:#166534;font-size:9.5px;}
       <input type="number" id="f-dsc" value="0" min="0" max="100">
       <span style="font-family:var(--mono);font-size:10px;color:var(--accent);">%</span>
     </div>
-    <label style="display:flex;align-items:center;gap:8px;margin-bottom:10px;font-size:11px;color:var(--text2);cursor:pointer;padding:7px 10px;background:var(--bg3);border:1px solid var(--border);border-radius:6px;font-family:var(--body);user-select:none;">
-      <input type="checkbox" id="f-diag-desc" style="margin:0;cursor:pointer;flex-shrink:0;">
-      <span>Descontar diagnóstico previo (<span id="lbl-diag-monto">$29.900</span>)</span>
-    </label>
     <div class="cat-search-row">
       <div class="cat-search-wrap">
         <span class="cat-search-ico">🔍</span>
@@ -468,7 +463,7 @@ table.ct .dscrow td{background:#f0fdf4;color:#166534;font-size:9.5px;}
       </table>
     </div>
 
-    <div class="doc-cond"><b>Condiciones:</b> La aprobación de la presente cotización y el inicio de los trabajos requiere el pago anticipado del 100% del valor cotizado. El diagnóstico técnico ya pagado se descuenta del total. Plazo estimado: 24 a 48 horas hábiles. Todo equipo no retirado en 6 meses se entenderá en abandono. En caso de requerir documento tributario, se emite boleta de honorarios — el valor indicado corresponde al monto neto más la retención legal vigente.</div>
+    <div class="doc-cond"><b>Condiciones:</b> Los trabajos se ejecutarán únicamente una vez aprobada la cotización. Plazo estimado: 24 a 48 horas hábiles. Todo equipo no retirado en 6 meses se entenderá en abandono. En caso de requerir documento tributario, se emite boleta de honorarios — el valor indicado corresponde al monto neto más la retención legal vigente.</div>
 
     <div class="doc-pay-box">
       <div class="pay-title">Datos para transferencia / pago</div>
@@ -480,7 +475,7 @@ table.ct .dscrow td{background:#f0fdf4;color:#166534;font-size:9.5px;}
         <tr><td class="lbl">N° de cuenta</td><td class="val">1009023876</td></tr>
         <tr><td class="lbl">Correo</td><td class="val">contacto@tantecno.cl</td></tr>
       </table>
-      <div class="pay-foot">¿Pagas con tarjeta? Ingresa el monto y completa el pago en: <a href="https://link.mercadopago.cl/tantecnopago" class="pay-link" target="_blank" rel="noopener">link.mercadopago.cl/tantecnopago</a></div>
+      <div class="pay-foot">También disponible mediante link de pago de Mercado Pago.</div>
     </div>
 
     <div class="doc-firma"><b>Atentamente,</b><br>Cristián Martínez Droguett<br>TANTECNO — Optimización de Equipos Computacionales</div>
@@ -515,7 +510,7 @@ table.ct .dscrow td{background:#f0fdf4;color:#166534;font-size:9.5px;}
 // En primera ejecución, se migra este fallback hardcoded a localStorage.
 // Si el usuario edita el catálogo en catalogo.html, los cambios se reflejan aquí automáticamente.
 const CAT_FALLBACK=[
-  {id:"diag",n:"Diagnóstico técnico",aiNota:"descontable si aprueba",d:"Evaluación completa del equipo. Se descuenta del total si el cliente aprueba la intervención",p:29900},
+  {id:"diag",n:"Diagnóstico técnico",aiNota:"descontable si aprueba",d:"Evaluación completa del equipo. Se descuenta del total si el cliente aprueba la intervención",p:15000},
   {id:"fmt",n:"Formateo Windows 11",aiNota:"respaldo completo incluido",d:"Instalación limpia SO, drivers, Chrome, PDF Reader, antivirus Windows Defender. Respaldo completo de información local incluido (excluye archivos solo en nube sin copia local)",p:45000},
   {id:"fmt_rb_extra",n:"Respaldo adicional sobre 30 GB",aiNota:"por tramo",d:"Por cada 30 GB adicionales de respaldo que superen la capacidad del equipo",p:5000},
   {id:"mant_normal",n:"Limpieza interna + pasta térmica",aiNota:"normal",d:"Notebook o PC normal: limpieza interna completa, cambio pasta disipadora CPU, reapriete de placa",p:25000},
@@ -586,19 +581,11 @@ async function sincronizarDesdeSupabase(){
   const dot=document.getElementById('sync-dot')
   if(dot){dot.className='sync-dot loading';dot.title='Sincronizando catálogo…'}
   try{
-    // Obtener JWT del usuario logueado (RLS lo necesita).
-    let authToken=SB_KEY
-    try{
-      if(window.tantecnoSb){
-        const {data}=await window.tantecnoSb.auth.getSession()
-        if(data&&data.session&&data.session.access_token)authToken=data.session.access_token
-      }
-    }catch(e){console.warn('[TANTECNO] no se pudo leer sesión:',e)}
     const url=`${SB_URL}/rest/v1/${SB_TABLE}?deleted_at=is.null&order=orden.asc,created_at.asc`
     const res=await fetch(url,{
       headers:{
         'apikey':SB_KEY,
-        'Authorization':`Bearer ${authToken}`
+        'Authorization':`Bearer ${SB_KEY}`
       }
     })
     if(!res.ok)throw new Error('HTTP '+res.status)
@@ -754,7 +741,7 @@ REGLAS DE SERVICIOS:
 - Si el cliente menciona un precio distinto al catálogo, usa el precio mencionado por el cliente
 - El testeo exhaustivo (AIDA64, MemTest64, etc.) SOLO se incluye como "Diagnóstico avanzado con testeo de hardware" cuando el caso lo justifica: equipos con BSOD recurrentes, fallas intermitentes graves, o cuando el técnico menciona explícitamente que realizó testeo prolongado. No lo incluyas en casos simples de formateo o mantención
 - Servicios con componentes (SSD, RAM) llevan siempre en la descripción: "Sujeto a disponibilidad — plazo estimado 3 a 5 días hábiles"
-- El diagnóstico técnico de $29.900 se descuenta del total si el cliente aprueba el trabajo — mencionarlo en la descripción
+- El diagnóstico técnico de $15.000 se descuenta del total si el cliente aprueba el trabajo — mencionarlo en la descripción
 
 Devuelve SOLO JSON válido sin markdown:
 {"cliente":"","equipo":"","fecha_recep":"DD-MM-YYYY o vacio","fecha_inf":"DD-MM-YYYY o vacio","estado":"","accesorios":"","tipo":"cot|post|nr","s1":"","s2":"","servicios":[{"nombre":"nombre del servicio","valor":35000,"descripcion":"detalle breve"}]}`
@@ -1038,25 +1025,13 @@ function renderPrevSvc(){
   wrap.style.display='block';tb.innerHTML='';let sub=0
   selS.forEach(s=>{sub+=s.pe||0;tb.insertAdjacentHTML('beforeend',`<tr><td><b>${s.n}</b></td><td>${s.d}</td><td style="text-align:right;font-family:monospace;white-space:nowrap;">${fmt(s.pe)}</td></tr>`)})
   const dsc=parseFloat(document.getElementById('f-dsc').value)||0
-  // Lee el precio del diagnóstico desde el catálogo (puede venir de Supabase actualizado).
-  const itemDiag=CAT.find(x=>x.id==='diag')
-  const diagMonto=itemDiag?(itemDiag.p||0):29900
-  const diagOn=document.getElementById('f-diag-desc')?.checked||false
-  // Mantén sincronizado el label del checkbox con el monto real del catálogo.
-  const lblM=document.getElementById('lbl-diag-monto')
-  if(lblM)lblM.textContent=fmt(diagMonto)
-  let tot=sub
-  let dscMonto=0
   if(dsc>0){
-    dscMonto=Math.round(sub*dsc/100)
-    tot=sub-dscMonto
-    tb.insertAdjacentHTML('beforeend',`<tr class="dscrow"><td colspan="2" style="text-align:right;">Descuento ${dsc}%:</td><td style="text-align:right;font-family:monospace;">– ${fmt(dscMonto)}</td></tr>`)
+    const d=Math.round(sub*dsc/100),tot=sub-d
+    tb.insertAdjacentHTML('beforeend',`<tr class="dscrow"><td colspan="2" style="text-align:right;">Descuento ${dsc}%:</td><td style="text-align:right;font-family:monospace;">– ${fmt(d)}</td></tr>`)
+    tb.insertAdjacentHTML('beforeend',`<tr class="tot"><td colspan="2" style="text-align:right;">Total general:</td><td style="text-align:right;font-family:monospace;">${fmt(tot)}</td></tr>`)
+  } else {
+    tb.insertAdjacentHTML('beforeend',`<tr class="tot"><td colspan="2" style="text-align:right;">Total general:</td><td style="text-align:right;font-family:monospace;">${fmt(sub)}</td></tr>`)
   }
-  if(diagOn&&diagMonto>0){
-    tot=tot-diagMonto
-    tb.insertAdjacentHTML('beforeend',`<tr class="dscrow"><td colspan="2" style="text-align:right;">Diagnóstico previo descontado:</td><td style="text-align:right;font-family:monospace;">– ${fmt(diagMonto)}</td></tr>`)
-  }
-  tb.insertAdjacentHTML('beforeend',`<tr class="tot"><td colspan="2" style="text-align:right;">Total general:</td><td style="text-align:right;font-family:monospace;">${fmt(tot)}</td></tr>`)
 }
 function limpiar(){
   if(!confirm('¿Nuevo informe? Se perderán los datos actuales.'))return
@@ -1071,7 +1046,6 @@ function limpiar(){
   document.getElementById('r-problema').value=''
   document.getElementById('r-acc').value='Solo cargador'
   document.getElementById('f-dsc').value='0'
-  document.getElementById('f-diag-desc').checked=false
   const today=new Date().toISOString().split('T')[0]
   document.getElementById('r-frecep').value=today
   document.getElementById('r-finf').value=today
@@ -1100,7 +1074,6 @@ function logout(){tantecnoAuth.signOut()}
 document.getElementById('f-ot').value=String(getOT())
 document.getElementById('f-ot').addEventListener('change',function(){saveOT(parseInt(this.value)||getOT())})
 document.getElementById('f-dsc').addEventListener('input',renderPrevSvc)
-document.getElementById('f-diag-desc').addEventListener('change',renderPrevSvc)
 const today=new Date().toISOString().split('T')[0]
 document.getElementById('r-frecep').value=today
 document.getElementById('r-finf').value=today
@@ -1160,40 +1133,35 @@ async function generarPDFDinamico(filename){
     hintsToHide.forEach((h,i)=>{h.style.display=hintsOriginal[i]||'block'})
   }
   try{
-    console.log('[PDF] Pasada 1: midiendo contenido…')
-    // PASADA 1: solo capturar canvas para conocer dimensiones reales.
-    // El bundle de html2pdf NO expone jsPDF como global, así que NO podemos
-    // construir un jsPDF a mano. Tenemos que dejar que html2pdf lo haga
-    // internamente, pero pasándole el formato dinámico calculado.
-    const opts={html2canvas:{scale:2,useCORS:true,letterRendering:true,backgroundColor:'#ffffff'}}
-    const w1=html2pdf().set(opts).from(el).toCanvas()
-    let canvas=null
-    await w1.then(function(){canvas=this.prop.canvas})
-    if(!canvas||!canvas.width||!canvas.height){
-      throw new Error('html2pdf no devolvió un canvas válido')
-    }
+    console.log('[PDF] Capturando contenido…')
+    // Usar la API de html2pdf que SÍ expone el bundle
+    // .toCanvas() internamente llama a html2canvas con las opciones dadas
+    const worker=html2pdf().set({
+      html2canvas:{scale:2,useCORS:true,letterRendering:true,backgroundColor:'#ffffff'}
+    }).from(el)
+    const canvas=await worker.toCanvas().get('canvas')
     console.log('[PDF] Canvas capturado:',canvas.width,'x',canvas.height,'px')
+    // Calcular dimensiones del PDF en mm (ancho A4 fijo, alto dinámico)
     const pageWidthMm=210
     const pageHeightMm=(canvas.height*pageWidthMm)/canvas.width
     console.log('[PDF] Página resultante:',pageWidthMm,'x',pageHeightMm.toFixed(1),'mm')
-    console.log('[PDF] Pasada 2: generando PDF con formato dinámico…')
-    // PASADA 2: dejar que html2pdf maneje el flujo completo con el formato calculado.
-    // Pasamos un blob de salida y lo devolvemos; quien llama decide si guardar
-    // o abrir en pestaña.
-    const w2=html2pdf().set({
-      margin:0,
-      filename:filename,
-      image:{type:'jpeg',quality:0.95},
-      html2canvas:{scale:2,useCORS:true,letterRendering:true,backgroundColor:'#ffffff'},
-      jsPDF:{unit:'mm',format:[pageWidthMm,pageHeightMm],orientation:'portrait'},
-      pagebreak:{mode:['avoid-all']}
-    }).from(el)
-    const blob=await w2.outputPdf('blob')
-    if(!blob||!(blob instanceof Blob)){
-      throw new Error('html2pdf no devolvió un Blob válido')
+    // Resolver constructor jsPDF de varias formas posibles
+    let JsPDFCtor=null
+    if(window.jspdf&&window.jspdf.jsPDF)JsPDFCtor=window.jspdf.jsPDF
+    else if(window.jsPDF)JsPDFCtor=window.jsPDF
+    if(!JsPDFCtor){
+      console.error('[PDF] window.jspdf:',window.jspdf,'window.jsPDF:',window.jsPDF)
+      throw new Error('jsPDF no está disponible globalmente')
     }
-    console.log('[PDF] PDF generado correctamente, tamaño:',blob.size,'bytes')
-    return blob
+    const pdf=new JsPDFCtor({
+      unit:'mm',
+      format:[pageWidthMm,pageHeightMm],
+      orientation:'portrait'
+    })
+    const imgData=canvas.toDataURL('image/jpeg',0.95)
+    pdf.addImage(imgData,'JPEG',0,0,pageWidthMm,pageHeightMm)
+    console.log('[PDF] PDF generado correctamente')
+    return pdf
   }finally{
     restore()
   }
@@ -1221,16 +1189,8 @@ function savePDF(){
   const clienteLimpio=cliente.replace(/[^a-zA-ZáéíóúÁÉÍÓÚüÜñÑ\s]/g,'').trim()||'Cliente'
   const filename=fechaStr+' - Informe Técnico N°'+nit+' - '+clienteLimpio+'.pdf'
   toast('Generando PDF…')
-  generarPDFDinamico(filename).then(blob=>{
-    // Descargar el blob como archivo
-    const url=URL.createObjectURL(blob)
-    const a=document.createElement('a')
-    a.href=url
-    a.download=filename
-    document.body.appendChild(a)
-    a.click()
-    document.body.removeChild(a)
-    setTimeout(()=>URL.revokeObjectURL(url),5000)
+  generarPDFDinamico(filename).then(pdf=>{
+    pdf.save(filename)
     toast('PDF guardado ✓')
   }).catch(err=>{
     console.error('[PDF]',err)
@@ -1246,7 +1206,8 @@ function previsualizarPDF(){
     toast('Genera el informe primero');return
   }
   toast('Generando vista previa…')
-  generarPDFDinamico('preview.pdf').then(blob=>{
+  generarPDFDinamico('preview.pdf').then(pdf=>{
+    const blob=pdf.output('blob')
     const url=URL.createObjectURL(blob)
     const w=window.open(url,'_blank')
     if(!w){
