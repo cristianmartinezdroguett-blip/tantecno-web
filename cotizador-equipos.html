@@ -187,11 +187,15 @@ table.ct td{border:1px solid #ccc;padding:4px 7px;vertical-align:top;line-height
 .btn-p.amber{background:var(--bg2);color:var(--text2);border:1px solid var(--border);font-size:11px;}.btn-p.amber:hover{background:var(--red-bg);color:var(--red);border-color:var(--red);}
 .btn-p.wa{background:#25d366;color:#fff;border:1px solid #25d366;box-shadow:0 2px 6px rgba(37,211,102,.25);}
 .btn-p.wa:hover{background:#1ebe5a;border-color:#1ebe5a;}
-.wa-wrap{position:relative;display:inline-block;}
-.wa-menu{display:none;position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);background:var(--bg2);border:1px solid var(--border);border-radius:8px;box-shadow:0 4px 16px rgba(0,0,0,.12);padding:4px;min-width:220px;z-index:50;}
-.wa-menu.show{display:flex;flex-direction:column;gap:2px;}
-.wa-menu button{background:none;border:none;padding:9px 12px;text-align:left;border-radius:5px;font-family:var(--body);font-size:12.5px;color:var(--text);cursor:pointer;transition:.12s;white-space:nowrap;}
-.wa-menu button:hover{background:var(--accent-bg);color:var(--accent);}
+.btn-p.draft{background:var(--bg2);color:var(--accent);border:1px solid var(--accent);}
+.btn-p.draft:hover{background:var(--accent-bg);}
+.draft-chip{background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:5px 8px;display:inline-flex;align-items:center;gap:6px;font-size:11.5px;color:var(--text);transition:.15s;}
+.draft-chip:hover{border-color:var(--accent);}
+.draft-chip-name{cursor:pointer;font-weight:500;}
+.draft-chip-name:hover{color:var(--accent);}
+.draft-chip-date{font-family:var(--mono);font-size:9.5px;color:var(--text3);}
+.draft-chip-x{background:none;border:none;cursor:pointer;color:var(--text3);font-size:14px;line-height:1;padding:0 2px;border-radius:3px;transition:.12s;}
+.draft-chip-x:hover{color:var(--red);background:var(--red-bg);}
 @page{size:A4 portrait;margin:13mm 15mm;}
 @media print{
   #left,.pbar,.edit-hint{display:none!important;}
@@ -361,12 +365,25 @@ table.ct td{border:1px solid #ccc;padding:4px 7px;vertical-align:top;line-height
   <div class="lb">
 
     <div class="sec-sep">Cliente y brief</div>
+
+    <!-- Banner de borradores guardados en la nube -->
+    <div id="drafts-banner" style="display:none;background:var(--accent-bg);border:1px solid var(--accent);border-radius:8px;padding:10px 12px;margin-bottom:12px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;">
+        <span style="font-family:var(--mono);font-size:10px;color:var(--accent);letter-spacing:.06em;text-transform:uppercase;font-weight:700;">📂 Borradores guardados</span>
+        <button type="button" id="drafts-close" style="background:none;border:none;color:var(--accent);cursor:pointer;font-size:14px;padding:0 4px;" title="Ocultar">×</button>
+      </div>
+      <div id="drafts-list" style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;"></div>
+    </div>
+
     <div class="r2">
       <div class="rf"><label>Cliente</label><input id="f-cliente" placeholder="Nombre completo"></div>
-      <div class="rf"><label>Fecha</label><input type="date" id="f-fecha"></div>
+      <div class="rf"><label>Teléfono</label><input id="f-tel" placeholder="+56 9 ..." inputmode="tel" autocomplete="off"></div>
     </div>
     <div class="r2">
+      <div class="rf"><label>Fecha</label><input type="date" id="f-fecha"></div>
       <div class="rf"><label>Validez (días)</label><input type="number" id="f-validez" value="5" min="1" max="90"></div>
+    </div>
+    <div class="r2">
       <div class="rf"><label>Plazo entrega (días hábiles)</label><input type="number" id="f-plazo" value="7" min="1" max="60"></div>
     </div>
     <div class="rf">
@@ -548,39 +565,9 @@ table.ct td{border:1px solid #ccc;padding:4px 7px;vertical-align:top;line-height
 
   <div class="pbar">
     <button class="btn-p dark" onclick="savePDF()">⬇ Guardar PDF</button>
-    <div class="wa-wrap">
-      <button class="btn-p wa" onclick="toggleWaMenu(event)">💬 WhatsApp ▾</button>
-      <div class="wa-menu" id="wa-menu">
-        <button onclick="abrirWa('business-web')">🟢 WhatsApp Business (web)</button>
-        <button onclick="abrirWa('normal-web')">💬 WhatsApp Normal (web)</button>
-        <button onclick="abrirWa('app')">📱 App instalada</button>
-      </div>
-    </div>
+    <button class="btn-p wa" onclick="abrirWa()" title="Abre web.whatsapp.com con el mensaje pre-armado">💬 WhatsApp</button>
+    <button class="btn-p draft" onclick="guardarEnNube()" title="Guarda este borrador en Supabase para retomarlo desde otro equipo">💾 Guardar borrador</button>
     <button class="btn-p amber" onclick="limpiar()">↺ Nueva cotización</button>
-  </div>
-</div>
-
-<!-- ═══ MODAL WHATSAPP ═══ -->
-<div class="modal-overlay" id="modal-wa">
-  <div class="modal-box" style="max-width:480px;">
-    <div class="modal-title">Enviar por WhatsApp</div>
-    <div class="modal-sub" id="wa-sub">Verifica el número y el mensaje antes de abrir.</div>
-
-    <div class="mrow">
-      <label>Número del cliente</label>
-      <input id="wa-tel" placeholder="+56 9 ..." autocomplete="off">
-      <div style="font-size:10px;color:var(--text3);margin-top:4px;">Formato: con código país (+56). Ej: +56912345678</div>
-    </div>
-
-    <div class="mrow">
-      <label>Mensaje</label>
-      <textarea id="wa-msg" rows="4" style="resize:vertical;font-family:var(--body);"></textarea>
-    </div>
-
-    <div class="modal-btns">
-      <button class="btn-cancel" onclick="cerrarModalWa()">Cancelar</button>
-      <button class="btn-primary" onclick="confirmarWa()">Abrir WhatsApp</button>
-    </div>
   </div>
 </div>
 
@@ -1225,6 +1212,7 @@ function limpiar(){
   folioConfirmado=null
   refreshFolioUI()
   document.getElementById('f-cliente').value=''
+  document.getElementById('f-tel').value=''
   document.getElementById('f-brief').value=''
   document.getElementById('f-notas').value=''
   document.getElementById('f-validez').value='5'
@@ -1269,6 +1257,8 @@ function limpiar(){
   document.getElementById('p-total-iva').style.display='none'
   updateTotales()
   limpiarBorradorCotizador()
+  _nubeIdActual=null
+  if(typeof renderBannerBorradores==='function')renderBannerBorradores()
 }
 function savePDF(){
   const just=document.getElementById('p-just').textContent.trim()
@@ -1302,7 +1292,7 @@ function descargarPDF(){
     jsPDF:{unit:'mm',format:'a4',orientation:'portrait'}
   }
   toast('Generando PDF…')
-  return html2pdf().set(opt).from(el).save().then(()=>toast('PDF guardado ✓'))
+  return html2pdf().set(opt).from(el).save().then(()=>{toast('PDF guardado ✓');marcarCompletadoNube()})
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -1312,8 +1302,10 @@ function abrirModalCRM(){
   // Pre-llenar nombre desde el campo Cliente del formulario
   const nombrePrev=document.getElementById('f-cliente').value.trim()
   document.getElementById('crm-nombre').value=nombrePrev
+  // Pre-llenar teléfono desde el campo Teléfono del formulario
+  const telPrev=document.getElementById('f-tel').value.trim()
+  document.getElementById('crm-telefono').value=telPrev
   // Reset otros campos
-  document.getElementById('crm-telefono').value=''
   document.getElementById('crm-email').value=''
   document.getElementById('crm-rut').value=''
   // Reset tipo a persona
@@ -1323,7 +1315,8 @@ function abrirModalCRM(){
   // Foco en el primer campo vacío relevante
   setTimeout(()=>{
     if(!nombrePrev)document.getElementById('crm-nombre').focus()
-    else document.getElementById('crm-telefono').focus()
+    else if(!telPrev)document.getElementById('crm-telefono').focus()
+    else document.getElementById('crm-email').focus()
   },80)
 }
 
@@ -1518,29 +1511,20 @@ function switchTab(t){
 function logout(){tantecnoAuth.signOut()}
 
 // ═══════════════════════════════════════════════════════════════
-// WHATSAPP — menú + modal
+// WHATSAPP — abrir directo con mensaje pre-armado
 // ═══════════════════════════════════════════════════════════════
-let _waModo='business-web' // business-web | normal-web | app
-function toggleWaMenu(ev){
-  ev.stopPropagation()
-  const m=document.getElementById('wa-menu')
-  m.classList.toggle('show')
+function normalizarTelefono(raw){
+  let t=(raw||'').replace(/[^0-9]/g,'')
+  if(t.startsWith('0'))t=t.slice(1)
+  if(t.length===8)t='569'+t
+  else if(t.length===9&&t.startsWith('9'))t='56'+t
+  return t
 }
-document.addEventListener('click',e=>{
-  const m=document.getElementById('wa-menu')
-  if(!m)return
-  if(!m.contains(e.target)&&!e.target.closest('.btn-p.wa')){
-    m.classList.remove('show')
-  }
-})
-function abrirWa(modo){
-  _waModo=modo
-  document.getElementById('wa-menu').classList.remove('show')
-  // Pre-llenar teléfono desde el modal CRM (si se completó)
-  const telCRM=document.getElementById('crm-telefono')
-  const telPrev=telCRM&&telCRM.value.trim()?telCRM.value.trim():''
-  document.getElementById('wa-tel').value=telPrev
-  // Pre-llenar mensaje
+function abrirWa(){
+  const telRaw=document.getElementById('f-tel').value.trim()
+  if(!telRaw){toast('Falta el teléfono del cliente');return}
+  const tel=normalizarTelefono(telRaw)
+  if(tel.length<10){toast('Teléfono inválido');return}
   const cliente=document.getElementById('p-cliente').textContent.trim()
   const folio=document.getElementById('p-folio').textContent.trim()
   const nombreCorto=cliente&&cliente!=='_______________'?cliente.split(/\s+/)[0]:''
@@ -1551,53 +1535,198 @@ function abrirWa(modo){
   if(folioTxt)msg+=' la cotización N° '+folioTxt
   else msg+=' la cotización'
   msg+=' de TANTECNO. Cualquier consulta me avisas.'
-  document.getElementById('wa-msg').value=msg
-  // Sub texto según modo
-  const subs={
-    'business-web':'Abrirá web.whatsapp.com — asegúrate de tener sesión activa con tu cuenta Business.',
-    'normal-web':'Abrirá web.whatsapp.com — asegúrate de tener sesión activa con tu cuenta normal.',
-    'app':'Abrirá la app de WhatsApp instalada (escritorio o móvil).'
-  }
-  document.getElementById('wa-sub').textContent=subs[modo]||''
-  document.getElementById('modal-wa').classList.add('show')
-  setTimeout(()=>{
-    if(!telPrev)document.getElementById('wa-tel').focus()
-    else document.getElementById('wa-msg').focus()
-  },80)
-}
-function cerrarModalWa(){
-  document.getElementById('modal-wa').classList.remove('show')
-}
-function normalizarTelefono(raw){
-  // Quita todo lo que no sea número, y elimina prefijo + si lo hay (wa.me lo agrega)
-  let t=(raw||'').replace(/[^0-9]/g,'')
-  // Si empieza con 0, lo quitamos (formato local)
-  if(t.startsWith('0'))t=t.slice(1)
-  // Si tiene 8 dígitos chilenos sin código país, asumimos +56 9
-  if(t.length===8)t='569'+t
-  // Si tiene 9 dígitos y empieza con 9, asumimos chileno → 56 + número
-  else if(t.length===9&&t.startsWith('9'))t='56'+t
-  return t
-}
-function confirmarWa(){
-  const telRaw=document.getElementById('wa-tel').value.trim()
-  if(!telRaw){toast('Ingresa el número del cliente');return}
-  const tel=normalizarTelefono(telRaw)
-  if(tel.length<10){toast('Número inválido');return}
-  const msg=document.getElementById('wa-msg').value.trim()
-  const url=construirUrlWa(_waModo,tel,msg)
-  cerrarModalWa()
-  // Abrir en pestaña/ventana nueva
+  const url=`https://web.whatsapp.com/send?phone=${tel}&text=${encodeURIComponent(msg)}`
   window.open(url,'_blank')
 }
-function construirUrlWa(modo,tel,msg){
-  const txt=encodeURIComponent(msg||'')
-  if(modo==='app'){
-    return `whatsapp://send?phone=${tel}&text=${txt}`
+
+// ═══════════════════════════════════════════════════════════════
+// BORRADOR EN LA NUBE (Supabase)
+// Permite retomar el trabajo desde otro equipo.
+// ═══════════════════════════════════════════════════════════════
+let _nubeIdActual=null  // ID del borrador de Supabase que estamos editando, si lo hay
+const NUBE_TIPO='cotizacion'
+
+function snapshotCotizador(){
+  // Reusa la misma estructura que el guardado local
+  const snap={v:1,inputs:{},checks:{},util:utilMode}
+  DRAFT_INPUT_IDS.forEach(id=>{
+    const el=document.getElementById(id)
+    if(el)snap.inputs[id]=el.value
+  })
+  DRAFT_CHECKBOX_IDS.forEach(id=>{
+    const el=document.getElementById(id)
+    if(el)snap.checks[id]=!!el.checked
+  })
+  const just=document.getElementById('p-just')
+  if(just&&!just.querySelector('.doc-ph')&&just.textContent.trim()){
+    snap.justificacion=just.textContent
   }
-  // business-web y normal-web usan el mismo endpoint;
-  // la diferencia real es qué cuenta tiene el usuario activa en web.whatsapp.com.
-  return `https://web.whatsapp.com/send?phone=${tel}&text=${txt}`
+  return snap
+}
+function tituloDesdeSnapshot(snap){
+  const cliente=(snap.inputs&&snap.inputs['f-cliente']||'').trim()
+  if(cliente)return cliente
+  const brief=(snap.inputs&&snap.inputs['f-brief']||'').trim()
+  if(brief)return brief.slice(0,50)
+  return 'Cotización sin nombre'
+}
+async function guardarEnNube(){
+  const btns=document.querySelectorAll('.btn-p.draft')
+  btns.forEach(b=>{b.disabled=true;b.textContent='Guardando…'})
+  try{
+    const bearer=await getBearer()
+    if(bearer===SB_KEY){
+      toast('Inicia sesión para guardar en la nube');return
+    }
+    const snap=snapshotCotizador()
+    const titulo=tituloDesdeSnapshot(snap)
+    // Obtener user_id del JWT
+    const sess=await window.tantecnoSb.auth.getSession()
+    const userId=sess&&sess.data&&sess.data.session?sess.data.session.user.id:null
+    if(!userId)throw new Error('Sin sesión')
+    const headers={
+      'apikey':SB_KEY,
+      'Authorization':`Bearer ${bearer}`,
+      'Content-Type':'application/json',
+      'Prefer':'return=representation'
+    }
+    if(_nubeIdActual){
+      // UPDATE
+      const res=await fetch(`${SB_URL}/rest/v1/borradores?id=eq.${_nubeIdActual}`,{
+        method:'PATCH',headers,
+        body:JSON.stringify({titulo,contenido:snap})
+      })
+      if(!res.ok)throw new Error('PATCH '+res.status+': '+await res.text())
+      toast('Borrador actualizado en la nube ✓')
+    }else{
+      // INSERT
+      const res=await fetch(`${SB_URL}/rest/v1/borradores`,{
+        method:'POST',headers,
+        body:JSON.stringify({tipo:NUBE_TIPO,titulo,contenido:snap,estado:'activo',user_id:userId})
+      })
+      if(!res.ok)throw new Error('POST '+res.status+': '+await res.text())
+      const rows=await res.json()
+      _nubeIdActual=rows[0]&&rows[0].id||null
+      toast('Borrador guardado en la nube ✓')
+    }
+  }catch(e){
+    console.error('[nube]',e)
+    toast('No se pudo guardar en la nube')
+  }finally{
+    btns.forEach(b=>{b.disabled=false;b.textContent='💾 Guardar borrador'})
+  }
+}
+async function listarBorradoresNube(){
+  try{
+    const bearer=await getBearer()
+    if(bearer===SB_KEY)return []
+    const url=`${SB_URL}/rest/v1/borradores?tipo=eq.${NUBE_TIPO}&estado=eq.activo&deleted_at=is.null&order=updated_at.desc&select=id,titulo,updated_at`
+    const res=await fetch(url,{headers:{apikey:SB_KEY,Authorization:`Bearer ${bearer}`}})
+    if(!res.ok)return []
+    return await res.json()
+  }catch(e){console.warn('[list]',e);return []}
+}
+async function cargarBorradorNube(id){
+  try{
+    const bearer=await getBearer()
+    const url=`${SB_URL}/rest/v1/borradores?id=eq.${id}&select=id,titulo,contenido`
+    const res=await fetch(url,{headers:{apikey:SB_KEY,Authorization:`Bearer ${bearer}`}})
+    if(!res.ok)throw new Error('GET '+res.status)
+    const arr=await res.json()
+    if(!arr.length){toast('Borrador no encontrado');return}
+    const b=arr[0]
+    // Aplicar el snapshot al formulario reusando la lógica de restore local
+    aplicarSnapshotCotizador(b.contenido)
+    _nubeIdActual=b.id
+    document.getElementById('drafts-banner').style.display='none'
+    toast('Borrador cargado: '+(b.titulo||'sin nombre'))
+  }catch(e){
+    console.error('[load]',e)
+    toast('No se pudo cargar el borrador')
+  }
+}
+async function descartarBorradorNube(id,nombre){
+  if(!confirm(`¿Descartar el borrador "${nombre||'sin nombre'}"?\n\nNo se puede deshacer.`))return
+  try{
+    const bearer=await getBearer()
+    const res=await fetch(`${SB_URL}/rest/v1/borradores?id=eq.${id}`,{
+      method:'PATCH',
+      headers:{apikey:SB_KEY,Authorization:`Bearer ${bearer}`,'Content-Type':'application/json'},
+      body:JSON.stringify({estado:'descartado',deleted_at:new Date().toISOString()})
+    })
+    if(!res.ok)throw new Error('descartar '+res.status)
+    if(_nubeIdActual===id)_nubeIdActual=null
+    await renderBannerBorradores()
+    toast('Borrador descartado')
+  }catch(e){
+    console.error('[descartar]',e)
+    toast('No se pudo descartar')
+  }
+}
+async function marcarCompletadoNube(){
+  if(!_nubeIdActual)return
+  try{
+    const bearer=await getBearer()
+    await fetch(`${SB_URL}/rest/v1/borradores?id=eq.${_nubeIdActual}`,{
+      method:'PATCH',
+      headers:{apikey:SB_KEY,Authorization:`Bearer ${bearer}`,'Content-Type':'application/json'},
+      body:JSON.stringify({estado:'completado',completed_at:new Date().toISOString()})
+    })
+    _nubeIdActual=null
+  }catch(e){console.warn('[completar]',e)}
+}
+async function renderBannerBorradores(){
+  const banner=document.getElementById('drafts-banner')
+  const list=document.getElementById('drafts-list')
+  if(!banner||!list)return
+  const arr=await listarBorradoresNube()
+  if(!arr.length){banner.style.display='none';return}
+  list.innerHTML=''
+  arr.forEach(b=>{
+    const fecha=new Date(b.updated_at).toLocaleDateString('es-CL',{day:'2-digit',month:'short'})
+    const chip=document.createElement('div')
+    chip.className='draft-chip'
+    chip.innerHTML=`<span class="draft-chip-name">${escapeHtml(b.titulo||'sin nombre')}</span><span class="draft-chip-date">${fecha}</span><button class="draft-chip-x" title="Descartar">×</button>`
+    chip.querySelector('.draft-chip-name').onclick=()=>cargarBorradorNube(b.id)
+    chip.querySelector('.draft-chip-x').onclick=()=>descartarBorradorNube(b.id,b.titulo)
+    list.appendChild(chip)
+  })
+  banner.style.display='block'
+}
+function aplicarSnapshotCotizador(snap){
+  if(!snap||!snap.inputs)return
+  Object.keys(snap.inputs).forEach(id=>{
+    const el=document.getElementById(id)
+    if(el)el.value=snap.inputs[id]
+  })
+  Object.keys(snap.checks||{}).forEach(id=>{
+    const el=document.getElementById(id)
+    if(el)el.checked=!!snap.checks[id]
+  })
+  // Habilitar inputs de periféricos según checkbox
+  LBL_PERIF.forEach(x=>{
+    const chk=document.getElementById('chk-'+x.k)
+    if(chk&&chk.checked){
+      document.getElementById('c-'+x.k).disabled=false
+      document.getElementById('p-'+x.k).disabled=false
+    }
+  })
+  if(snap.util){
+    utilMode=snap.util
+    const r=document.querySelector(`input[name="util-mode"][value="${snap.util}"]`)
+    if(r)r.checked=true
+    document.getElementById('f-utilidad').readOnly=(snap.util!=='manual')
+  }
+  if(typeof updateIvaToggle==='function')updateIvaToggle()
+  if(typeof updateRAM==='function')updateRAM()
+  updateTotales()
+  if(snap.justificacion){
+    const cliente=document.getElementById('f-cliente').value.trim()||'—'
+    const torre=leerTorre()
+    const perif=leerPerif()
+    const tot=calcularTotales()
+    aplicar(cliente,torre,perif,tot,{justificacion:snap.justificacion,validacion_nivel:null,validacion_items:[]})
+  }
 }
 
 // Init
@@ -1606,7 +1735,7 @@ function construirUrlWa(modo,tel,msg){
 // ═══════════════════════════════════════════════════════════════
 const DRAFT_KEY='tantecno_cotizador_draft'
 const DRAFT_INPUT_IDS=[
-  'f-cliente','f-fecha','f-validez','f-plazo','f-brief','f-notas','f-utilidad',
+  'f-cliente','f-tel','f-fecha','f-validez','f-plazo','f-brief','f-notas','f-utilidad',
   'c-cpu','p-cpu','c-mb','p-mb',
   'c-ram','ram-n','ram-pu',
   'c-ssd','p-ssd','c-gab','p-gab','c-fte','p-fte','c-so','p-so',
@@ -1738,8 +1867,6 @@ function activarAutoGuardadoCotizador(){
     if(e.key==='Escape'){
       const m=document.getElementById('modal-crm')
       if(m&&m.classList.contains('show'))cerrarModalCRM()
-      const w=document.getElementById('modal-wa')
-      if(w&&w.classList.contains('show'))cerrarModalWa()
     }
   })
   const overlay=document.getElementById('modal-crm')
@@ -1748,17 +1875,27 @@ function activarAutoGuardadoCotizador(){
       if(e.target===overlay)cerrarModalCRM()
     })
   }
-  const overlayWa=document.getElementById('modal-wa')
-  if(overlayWa){
-    overlayWa.addEventListener('click',e=>{
-      if(e.target===overlayWa)cerrarModalWa()
-    })
-  }
   // Restaurar borrador si existe (sobreescribe la fecha por defecto)
   const restaurado=restaurarBorradorCotizador()
   if(restaurado)toast('Borrador anterior recuperado')
   // Activar auto-guardado de cambios futuros
   activarAutoGuardadoCotizador()
+  // Banner de borradores en la nube
+  const closeBtn=document.getElementById('drafts-close')
+  if(closeBtn)closeBtn.addEventListener('click',()=>{
+    document.getElementById('drafts-banner').style.display='none'
+  })
+  // Si la URL trae ?borrador=ID, cargarlo directo en vez de mostrar banner
+  const params=new URLSearchParams(window.location.search)
+  const borradorId=params.get('borrador')
+  if(borradorId){
+    cargarBorradorNube(borradorId).then(()=>{
+      // Limpiar query string para que un refresh no recargue
+      history.replaceState({},'',window.location.pathname)
+    })
+  } else {
+    if(typeof renderBannerBorradores==='function')renderBannerBorradores()
+  }
 })();
 
 // ═══════════════════════════════════════════════════════════════
