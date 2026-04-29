@@ -581,11 +581,21 @@ async function sincronizarDesdeSupabase(){
   const dot=document.getElementById('sync-dot')
   if(dot){dot.className='sync-dot loading';dot.title='Sincronizando catálogo…'}
   try{
+    // Obtener JWT del usuario logueado (RLS valida auth.uid() server-side)
+    let bearer=SB_KEY
+    if(window.tantecnoSb){
+      try{
+        const {data}=await window.tantecnoSb.auth.getSession()
+        if(data&&data.session&&data.session.access_token){
+          bearer=data.session.access_token
+        }
+      }catch(e){console.warn('[TANTECNO] No se pudo obtener JWT, usando anon key:',e.message)}
+    }
     const url=`${SB_URL}/rest/v1/${SB_TABLE}?deleted_at=is.null&order=orden.asc,created_at.asc`
     const res=await fetch(url,{
       headers:{
         'apikey':SB_KEY,
-        'Authorization':`Bearer ${SB_KEY}`
+        'Authorization':`Bearer ${bearer}`
       }
     })
     if(!res.ok)throw new Error('HTTP '+res.status)
