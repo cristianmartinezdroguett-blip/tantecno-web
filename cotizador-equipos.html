@@ -79,19 +79,31 @@ body.splitting iframe,body.splitting #left,body.splitting #right{pointer-events:
 .rf textarea{resize:none;line-height:1.5;}
 .rf select option{background:var(--bg2);color:var(--text);}
 .r2{display:grid;grid-template-columns:1fr 1fr;gap:7px;}
-.comp-row{display:grid;grid-template-columns:70px 1fr 90px;gap:6px;align-items:center;margin-bottom:5px;}
+.comp-row{display:grid;grid-template-columns:70px 1fr 90px 28px;gap:6px;align-items:center;margin-bottom:5px;}
 .comp-row .comp-lbl{font-family:var(--mono);font-size:9.5px;color:var(--text2);letter-spacing:.05em;text-transform:uppercase;font-weight:600;}
 .comp-row .comp-lbl.req::after{content:"*";color:var(--accent);margin-left:2px;}
 .comp-row input,.comp-row select{background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:6px 9px;color:var(--text);font-family:var(--body);font-size:12px;outline:none;transition:.15s;}
 .comp-row input:focus,.comp-row select:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-bg);}
 .comp-row input.price{font-family:var(--mono);font-size:11px;text-align:right;}
 .comp-row input.price::placeholder{color:var(--text3);}
+.lnk-btn{background:var(--bg2);border:1px solid var(--border);border-radius:6px;cursor:pointer;font-size:14px;padding:0;height:28px;display:flex;align-items:center;justify-content:center;color:var(--text3);transition:.12s;}
+.lnk-btn:hover{background:var(--bg3);border-color:var(--accent);color:var(--accent);}
+.lnk-btn.has-link{color:var(--accent);background:var(--accent-bg);border-color:var(--accent);}
+.lnk-btn.pcx{color:#0f8a5f;background:rgba(15,138,95,.08);border-color:#0f8a5f;}
+.lnk-row{display:none;grid-template-columns:70px 1fr;gap:6px;align-items:center;margin:-2px 0 7px 0;padding-left:0;}
+.lnk-row.show{display:grid;}
+.lnk-row .lnk-lbl{font-family:var(--mono);font-size:9px;color:var(--text3);letter-spacing:.05em;text-transform:uppercase;font-weight:600;}
+.lnk-row input{background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:5px 9px;color:var(--text);font-family:var(--mono);font-size:11px;outline:none;transition:.15s;}
+.lnk-row input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-bg);}
+.lnk-tag{font-family:var(--mono);font-size:9px;color:var(--text3);margin-top:2px;padding-left:74px;letter-spacing:.04em;}
+.lnk-tag.pcx{color:#0f8a5f;}
+.lnk-tag.ml{color:#fbbf24;}
 
 /* Precio sospechoso — borde rojo + fondo rosado, tooltip via atributo title */
 input.price.suspicious,input#ram-pu.suspicious{border-color:var(--red)!important;background:#fff5f4!important;box-shadow:0 0 0 2px rgba(192,57,43,.12);}
 input.price.suspicious:focus,input#ram-pu.suspicious:focus{box-shadow:0 0 0 3px rgba(192,57,43,.2);}
 .ram-block{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:10px;margin-bottom:7px;}
-.ram-block .ram-head{display:grid;grid-template-columns:70px 1fr;gap:6px;align-items:center;margin-bottom:6px;}
+.ram-block .ram-head{display:grid;grid-template-columns:70px 1fr 28px;gap:6px;align-items:center;margin-bottom:6px;}
 .ram-block .ram-head input{background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:6px 9px;color:var(--text);font-family:var(--body);font-size:12px;outline:none;transition:.15s;}
 .ram-block .ram-head input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-bg);}
 .ram-row{display:grid;grid-template-columns:70px 90px 90px 1fr;gap:6px;align-items:center;}
@@ -275,7 +287,7 @@ table.ct td{border:1px solid #ccc;padding:4px 7px;vertical-align:top;line-height
 #left.compact .api-save{font-size:9.5px;padding:5px 9px;}
 #left.compact .lb{padding:10px 12px;}
 /* Filas de componentes: etiqueta+nombre en fila, precio ancho completo abajo */
-#left.compact .comp-row{grid-template-columns:60px 1fr;gap:5px 6px;margin-bottom:7px;}
+#left.compact .comp-row{grid-template-columns:60px 1fr 28px;gap:5px 6px;margin-bottom:7px;}
 #left.compact .comp-row input.price{grid-column:1 / -1;margin-top:2px;}
 #left.compact .comp-row .comp-lbl{font-size:9px;}
 /* RAM rediseñada compacta */
@@ -391,14 +403,18 @@ table.ct td{border:1px solid #ccc;padding:4px 7px;vertical-align:top;line-height
     </div>
 
     <div class="sec-sep">Torre (obligatorio)</div>
-    <div class="comp-row"><span class="comp-lbl req">CPU</span><input id="c-cpu" placeholder="Ej: Ryzen 5 5600G"><input id="p-cpu" class="price" type="number" placeholder="0" min="0" step="1000" oninput="updateTotales()"></div>
-    <div class="comp-row"><span class="comp-lbl req">Placa</span><input id="c-mb" placeholder="Ej: ASRock A520M-HDV"><input id="p-mb" class="price" type="number" placeholder="0" min="0" step="1000" oninput="updateTotales()"></div>
+    <div class="comp-row"><span class="comp-lbl req">CPU</span><input id="c-cpu" placeholder="Ej: Ryzen 5 5600G"><input id="p-cpu" class="price" type="number" placeholder="0" min="0" step="1000" oninput="updateTotales()"><button type="button" class="lnk-btn" data-k="cpu" onclick="toggleLnk('cpu')" title="Agregar link del producto">🔗</button></div>
+    <div class="lnk-row" data-k="cpu" id="lnk-row-cpu"><span class="lnk-lbl">Link</span><input type="text" id="lnk-cpu" placeholder="Pega URL de PC Express, ML, etc." oninput="onLinkInput('cpu')"></div>
+    <div class="comp-row"><span class="comp-lbl req">Placa</span><input id="c-mb" placeholder="Ej: ASRock A520M-HDV"><input id="p-mb" class="price" type="number" placeholder="0" min="0" step="1000" oninput="updateTotales()"><button type="button" class="lnk-btn" data-k="mb" onclick="toggleLnk('mb')" title="Agregar link del producto">🔗</button></div>
+    <div class="lnk-row" data-k="mb" id="lnk-row-mb"><span class="lnk-lbl">Link</span><input type="text" id="lnk-mb" placeholder="Pega URL de PC Express, ML, etc." oninput="onLinkInput('mb')"></div>
 
     <div class="ram-block">
       <div class="ram-head">
         <span class="comp-lbl req" style="font-family:var(--mono);font-size:9.5px;color:var(--text3);letter-spacing:.05em;text-transform:uppercase;">RAM</span>
         <input id="c-ram" placeholder="Ej: Kingston Fury 8GB DDR4 3200MHz">
+        <button type="button" class="lnk-btn" data-k="ram" onclick="toggleLnk('ram')" title="Agregar link del producto">🔗</button>
       </div>
+      <div class="lnk-row" data-k="ram" id="lnk-row-ram"><span class="lnk-lbl">Link</span><input type="text" id="lnk-ram" placeholder="Pega URL de PC Express, ML, etc." oninput="onLinkInput('ram')"></div>
       <div class="ram-row">
         <span class="ram-lbl">Módulos</span>
         <input id="ram-n" type="number" value="2" min="1" max="4" step="1" oninput="updateRAM()">
@@ -407,15 +423,22 @@ table.ct td{border:1px solid #ccc;padding:4px 7px;vertical-align:top;line-height
       </div>
     </div>
 
-    <div class="comp-row"><span class="comp-lbl req">SSD/NVMe</span><input id="c-ssd" placeholder="Ej: NVMe 500 GB Kingston NV2"><input id="p-ssd" class="price" type="number" placeholder="0" min="0" step="1000" oninput="updateTotales()"></div>
-    <div class="comp-row"><span class="comp-lbl req">Gabinete</span><input id="c-gab" placeholder="Ej: Gabinete ATX con 3 fans"><input id="p-gab" class="price" type="number" placeholder="0" min="0" step="1000" oninput="updateTotales()"></div>
-    <div class="comp-row"><span class="comp-lbl req">Fuente</span><input id="c-fte" placeholder="Ej: EVGA 550W 80+ Bronze"><input id="p-fte" class="price" type="number" placeholder="0" min="0" step="1000" oninput="updateTotales()"></div>
+    <div class="comp-row"><span class="comp-lbl req">SSD/NVMe</span><input id="c-ssd" placeholder="Ej: NVMe 500 GB Kingston NV2"><input id="p-ssd" class="price" type="number" placeholder="0" min="0" step="1000" oninput="updateTotales()"><button type="button" class="lnk-btn" data-k="ssd" onclick="toggleLnk('ssd')" title="Agregar link del producto">🔗</button></div>
+    <div class="lnk-row" data-k="ssd" id="lnk-row-ssd"><span class="lnk-lbl">Link</span><input type="text" id="lnk-ssd" placeholder="Pega URL de PC Express, ML, etc." oninput="onLinkInput('ssd')"></div>
+    <div class="comp-row"><span class="comp-lbl req">Gabinete</span><input id="c-gab" placeholder="Ej: Gabinete ATX con 3 fans"><input id="p-gab" class="price" type="number" placeholder="0" min="0" step="1000" oninput="updateTotales()"><button type="button" class="lnk-btn" data-k="gab" onclick="toggleLnk('gab')" title="Agregar link del producto">🔗</button></div>
+    <div class="lnk-row" data-k="gab" id="lnk-row-gab"><span class="lnk-lbl">Link</span><input type="text" id="lnk-gab" placeholder="Pega URL de PC Express, ML, etc." oninput="onLinkInput('gab')"></div>
+    <div class="comp-row"><span class="comp-lbl req">Fuente</span><input id="c-fte" placeholder="Ej: EVGA 550W 80+ Bronze"><input id="p-fte" class="price" type="number" placeholder="0" min="0" step="1000" oninput="updateTotales()"><button type="button" class="lnk-btn" data-k="fte" onclick="toggleLnk('fte')" title="Agregar link del producto">🔗</button></div>
+    <div class="lnk-row" data-k="fte" id="lnk-row-fte"><span class="lnk-lbl">Link</span><input type="text" id="lnk-fte" placeholder="Pega URL de PC Express, ML, etc." oninput="onLinkInput('fte')"></div>
 
     <div class="sec-sep">Torre (opcional)</div>
-    <div class="comp-row"><span class="comp-lbl">GPU</span><input id="c-gpu" placeholder="Si no hay, se asume integrada"><input id="p-gpu" class="price" type="number" placeholder="0" min="0" step="1000" oninput="updateTotales()"></div>
-    <div class="comp-row"><span class="comp-lbl">HDD</span><input id="c-hdd" placeholder="Ej: WD Blue 1 TB (respaldos)"><input id="p-hdd" class="price" type="number" placeholder="0" min="0" step="1000" oninput="updateTotales()"></div>
-    <div class="comp-row"><span class="comp-lbl">Refrig.</span><input id="c-cool" placeholder="Si no hay, disipador stock"><input id="p-cool" class="price" type="number" placeholder="0" min="0" step="1000" oninput="updateTotales()"></div>
-    <div class="comp-row"><span class="comp-lbl">SO</span><input id="c-so" placeholder="Ej: Windows 11 Home / Linux / Sin SO"><input id="p-so" class="price" type="number" placeholder="0" min="0" step="1000" oninput="updateTotales()"></div>
+    <div class="comp-row"><span class="comp-lbl">GPU</span><input id="c-gpu" placeholder="Si no hay, se asume integrada"><input id="p-gpu" class="price" type="number" placeholder="0" min="0" step="1000" oninput="updateTotales()"><button type="button" class="lnk-btn" data-k="gpu" onclick="toggleLnk('gpu')" title="Agregar link del producto">🔗</button></div>
+    <div class="lnk-row" data-k="gpu" id="lnk-row-gpu"><span class="lnk-lbl">Link</span><input type="text" id="lnk-gpu" placeholder="Pega URL de PC Express, ML, etc." oninput="onLinkInput('gpu')"></div>
+    <div class="comp-row"><span class="comp-lbl">HDD</span><input id="c-hdd" placeholder="Ej: WD Blue 1 TB (respaldos)"><input id="p-hdd" class="price" type="number" placeholder="0" min="0" step="1000" oninput="updateTotales()"><button type="button" class="lnk-btn" data-k="hdd" onclick="toggleLnk('hdd')" title="Agregar link del producto">🔗</button></div>
+    <div class="lnk-row" data-k="hdd" id="lnk-row-hdd"><span class="lnk-lbl">Link</span><input type="text" id="lnk-hdd" placeholder="Pega URL de PC Express, ML, etc." oninput="onLinkInput('hdd')"></div>
+    <div class="comp-row"><span class="comp-lbl">Refrig.</span><input id="c-cool" placeholder="Si no hay, disipador stock"><input id="p-cool" class="price" type="number" placeholder="0" min="0" step="1000" oninput="updateTotales()"><button type="button" class="lnk-btn" data-k="cool" onclick="toggleLnk('cool')" title="Agregar link del producto">🔗</button></div>
+    <div class="lnk-row" data-k="cool" id="lnk-row-cool"><span class="lnk-lbl">Link</span><input type="text" id="lnk-cool" placeholder="Pega URL de PC Express, ML, etc." oninput="onLinkInput('cool')"></div>
+    <div class="comp-row"><span class="comp-lbl">SO</span><input id="c-so" placeholder="Ej: Windows 11 Home / Linux / Sin SO"><input id="p-so" class="price" type="number" placeholder="0" min="0" step="1000" oninput="updateTotales()"><button type="button" class="lnk-btn" data-k="so" onclick="toggleLnk('so')" title="Agregar link del producto">🔗</button></div>
+    <div class="lnk-row" data-k="so" id="lnk-row-so"><span class="lnk-lbl">Link</span><input type="text" id="lnk-so" placeholder="Pega URL de PC Express, ML, etc." oninput="onLinkInput('so')"></div>
 
     <div class="sec-sep">Periféricos (marca para incluir)</div>
     <div class="perif-row"><input type="checkbox" id="chk-mon" onchange="togglePerif('mon')"><input type="text" id="c-mon" placeholder="Monitor" disabled><input type="number" id="p-mon" class="price" placeholder="0" min="0" step="1000" disabled oninput="updateTotales()"></div>
@@ -480,6 +503,7 @@ table.ct td{border:1px solid #ccc;padding:4px 7px;vertical-align:top;line-height
       <button class="btn-sm" onclick="limpiar()">↺ Nueva</button>
       <button class="btn-sm" onclick="savePDF()">⬇ Guardar PDF</button>
     </div>
+    <button class="btn-sm" style="width:100%;margin-top:5px;" onclick="abrirExportPCX()" title="Exporta lista de compra con códigos PC Express, sin precios">📦 Exportar lista PC Express</button>
     <div class="tip" id="tip-ia">✦ IA activa</div>
   </div>
 </div>
@@ -566,6 +590,23 @@ table.ct td{border:1px solid #ccc;padding:4px 7px;vertical-align:top;line-height
     <button class="btn-p wa" onclick="abrirWa()" title="Abre web.whatsapp.com con el mensaje pre-armado">💬 WhatsApp</button>
     <button class="btn-p draft" onclick="guardarEnNube()" title="Guarda este borrador en Supabase para retomarlo desde otro equipo">💾 Guardar borrador</button>
     <button class="btn-p amber" onclick="limpiar()">↺ Nueva cotización</button>
+  </div>
+</div>
+
+<!-- ═══ MODAL EXPORTAR LISTA PC EXPRESS ═══ -->
+<div class="modal-overlay" id="modal-pcx">
+  <div class="modal-box" style="max-width:560px;">
+    <div class="modal-title">📦 Lista de compra — PC Express</div>
+    <div class="modal-sub" id="pcx-sub">Códigos detectados desde los links pegados. Cantidad y nombre del componente, sin precios.</div>
+
+    <div id="pcx-list-wrap" style="background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:12px;margin-bottom:14px;max-height:340px;overflow-y:auto;">
+      <pre id="pcx-list" style="font-family:var(--mono);font-size:12px;color:var(--text);white-space:pre-wrap;line-height:1.6;margin:0;"></pre>
+    </div>
+
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="cerrarModalPCX()">Cerrar</button>
+      <button class="btn-primary" id="btn-pcx-copiar" onclick="copiarListaPCX()">📋 Copiar al portapapeles</button>
+    </div>
   </div>
 </div>
 
@@ -1210,6 +1251,19 @@ function limpiar(){
   refreshFolioUI()
   document.getElementById('f-cliente').value=''
   document.getElementById('f-tel').value=''
+  // Limpiar todos los links de componentes
+  if(typeof COMP_KEYS!=='undefined'){
+    COMP_KEYS.forEach(k=>{
+      const inp=document.getElementById('lnk-'+k)
+      if(inp)inp.value=''
+      const row=document.getElementById('lnk-row-'+k)
+      if(row)row.classList.remove('show')
+      const btn=document.querySelector(`.lnk-btn[data-k="${k}"]`)
+      if(btn)btn.classList.remove('has-link','pcx')
+      const tag=document.querySelector(`.lnk-tag[data-k="${k}"]`)
+      if(tag)tag.remove()
+    })
+  }
   document.getElementById('f-brief').value=''
   document.getElementById('f-notas').value=''
   document.getElementById('f-validez').value='5'
@@ -1403,8 +1457,24 @@ function encolarCotizacionPendiente(datos){
 function armarComponentesJSON(torre,perif,tot){
   const brief=document.getElementById('f-brief').value.trim()
   const just=document.getElementById('p-just').textContent.trim()
+  // Mapear cada item de torre con su link (si existe)
+  const torreConLinks=torre.filter(c=>c.nombre).map(c=>{
+    const item={k:c.k,label:c.label,nombre:c.nombre,precio:c.precio}
+    const inpL=document.getElementById('lnk-'+c.k)
+    if(inpL&&inpL.value.trim()){
+      const url=inpL.value.trim()
+      item.link=url
+      const store=detectStore(url)
+      if(store)item.tienda=store
+      if(store==='pcx'){
+        const code=extractPcxCode(url)
+        if(code)item.codigo_pcx=code
+      }
+    }
+    return item
+  })
   return {
-    torre:torre.filter(c=>c.nombre).map(c=>({k:c.k,label:c.label,nombre:c.nombre,precio:c.precio})),
+    torre:torreConLinks,
     perifericos:perif.map(p=>({k:p.k,label:p.label,nombre:p.nombre,precio:p.precio})),
     subtotal_componentes:tot.subComp,
     utilidad:tot.util,
@@ -1534,6 +1604,147 @@ function abrirWa(){
   const url=`https://web.whatsapp.com/send?phone=${tel}&text=${encodeURIComponent(msg)}`
   window.open(url,'_blank')
 }
+
+// ═══════════════════════════════════════════════════════════════
+// LINKS DE COMPONENTES + EXPORT PC EXPRESS
+// Detecta automáticamente el código de PC Express desde la URL.
+// ═══════════════════════════════════════════════════════════════
+const COMP_LABELS={cpu:'CPU',mb:'Placa',ram:'RAM',ssd:'SSD/NVMe',gab:'Gabinete',fte:'Fuente',gpu:'GPU',hdd:'HDD',cool:'Refrigeración',so:'Sistema operativo'}
+const COMP_KEYS=Object.keys(COMP_LABELS)
+
+function toggleLnk(k){
+  const row=document.getElementById('lnk-row-'+k)
+  if(!row)return
+  row.classList.toggle('show')
+  if(row.classList.contains('show')){
+    setTimeout(()=>{document.getElementById('lnk-'+k).focus()},80)
+  }
+}
+function detectStore(url){
+  if(!url)return null
+  const u=url.toLowerCase()
+  if(u.includes('pc-express.cl')||u.includes('tienda.pc-express'))return 'pcx'
+  if(u.includes('mercadolibre.cl')||u.includes('mercadolibre.com')||u.includes('articulo.mercadoli'))return 'ml'
+  if(u.includes('amazon.'))return 'amazon'
+  if(u.includes('falabella.com'))return 'falabella'
+  if(u.includes('paris.cl'))return 'paris'
+  if(u.includes('ripley.cl'))return 'ripley'
+  return 'otro'
+}
+function extractPcxCode(url){
+  if(!url)return null
+  // PC Express usa product_id en query string: ?...&product_id=12345&...
+  const m=url.match(/[?&]product_id=(\d+)/i)
+  if(m)return m[1]
+  // Algunas URLs antiguas usan /producto/12345-nombre
+  const m2=url.match(/\/producto\/(\d+)/i)
+  if(m2)return m2[1]
+  return null
+}
+function onLinkInput(k){
+  const inp=document.getElementById('lnk-'+k)
+  const btn=document.querySelector(`.lnk-btn[data-k="${k}"]`)
+  if(!inp||!btn)return
+  const url=inp.value.trim()
+  // Limpiar tag anterior
+  const oldTag=document.querySelector(`.lnk-tag[data-k="${k}"]`)
+  if(oldTag)oldTag.remove()
+  if(!url){
+    btn.classList.remove('has-link','pcx')
+    return
+  }
+  const store=detectStore(url)
+  // Marcar el botón según tienda
+  btn.classList.remove('pcx','has-link')
+  if(store==='pcx'){
+    btn.classList.add('pcx')
+    const code=extractPcxCode(url)
+    const tag=document.createElement('div')
+    tag.className='lnk-tag pcx'
+    tag.dataset.k=k
+    tag.textContent=code?`✓ PC Express · código ${code}`:`⚠ PC Express · sin código detectado en la URL`
+    inp.parentElement.appendChild(tag)
+  } else if(store){
+    btn.classList.add('has-link')
+    const tag=document.createElement('div')
+    tag.className='lnk-tag'
+    tag.dataset.k=k
+    const labels={ml:'Mercado Libre',amazon:'Amazon',falabella:'Falabella',paris:'Paris',ripley:'Ripley',otro:'Link externo'}
+    tag.textContent='🔗 '+(labels[store]||'Link externo')
+    if(store==='ml')tag.classList.add('ml')
+    inp.parentElement.appendChild(tag)
+  }
+}
+
+function abrirExportPCX(){
+  const items=[]
+  COMP_KEYS.forEach(k=>{
+    const inpL=document.getElementById('lnk-'+k)
+    if(!inpL||!inpL.value.trim())return
+    const url=inpL.value.trim()
+    if(detectStore(url)!=='pcx')return
+    const code=extractPcxCode(url)
+    if(!code)return
+    const nombre=(document.getElementById('c-'+k)||{value:''}).value.trim()||COMP_LABELS[k]
+    // RAM tiene cantidad
+    let cant=1
+    if(k==='ram'){
+      const rn=document.getElementById('ram-n')
+      if(rn)cant=parseInt(rn.value)||1
+    }
+    items.push({k,code,nombre,cant,url})
+  })
+  const sub=document.getElementById('pcx-sub')
+  const list=document.getElementById('pcx-list')
+  const btnCopiar=document.getElementById('btn-pcx-copiar')
+  if(!items.length){
+    sub.textContent='No hay productos con código de PC Express en esta cotización. Pega un link de pc-express.cl en cualquier componente para que aparezcan aquí.'
+    list.textContent='(vacío)'
+    btnCopiar.disabled=true
+    btnCopiar.style.opacity='.5'
+  } else {
+    sub.textContent=`${items.length} ${items.length===1?'producto':'productos'} de PC Express. Cantidad · código · nombre.`
+    const lineas=items.map(it=>`${it.cant}× ${it.code} — ${it.nombre}`)
+    list.textContent=lineas.join('\n')
+    btnCopiar.disabled=false
+    btnCopiar.style.opacity='1'
+  }
+  document.getElementById('modal-pcx').classList.add('show')
+}
+function cerrarModalPCX(){
+  document.getElementById('modal-pcx').classList.remove('show')
+}
+async function copiarListaPCX(){
+  const txt=document.getElementById('pcx-list').textContent
+  if(!txt||txt==='(vacío)')return
+  try{
+    await navigator.clipboard.writeText(txt)
+    toast('Lista copiada al portapapeles ✓')
+    cerrarModalPCX()
+  }catch(e){
+    // Fallback antiguo
+    const ta=document.createElement('textarea')
+    ta.value=txt;document.body.appendChild(ta);ta.select()
+    try{document.execCommand('copy');toast('Lista copiada ✓');cerrarModalPCX()}
+    catch(err){toast('No se pudo copiar — selecciona el texto manualmente')}
+    document.body.removeChild(ta)
+  }
+}
+// Cerrar modal PCX con Escape o clic en overlay
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){
+    const m=document.getElementById('modal-pcx')
+    if(m&&m.classList.contains('show'))cerrarModalPCX()
+  }
+})
+;(function pcxOverlayInit(){
+  const ov=document.getElementById('modal-pcx')
+  if(ov){
+    ov.addEventListener('click',e=>{
+      if(e.target===ov)cerrarModalPCX()
+    })
+  }
+})();
 
 // ═══════════════════════════════════════════════════════════════
 // BORRADOR EN LA NUBE (Supabase)
@@ -1718,10 +1929,18 @@ function aplicarComponentesCotizacion(cot){
     const inpP=document.getElementById('p-'+t.k)
     if(inpN)inpN.value=t.nombre||''
     if(inpP)inpP.value=t.precio||''
+    // Heredar link si lo había
+    if(t.link){
+      const inpL=document.getElementById('lnk-'+t.k)
+      if(inpL){
+        inpL.value=t.link
+        if(typeof onLinkInput==='function')onLinkInput(t.k)
+        const row=document.getElementById('lnk-row-'+t.k)
+        if(row)row.classList.add('show')
+      }
+    }
     // Casos especiales: RAM tiene cantidad/unidad
     if(t.k==='ram'){
-      // Si el nombre incluye "x" probablemente sea formato "Kingston Fury 16GB DDR4"
-      // No hay cantidad guardada explícita; dejamos cantidad=1, precio unitario=precio total
       const ramN=document.getElementById('ram-n')
       const ramPu=document.getElementById('ram-pu')
       if(ramN)ramN.value='1'
@@ -1824,6 +2043,17 @@ function aplicarSnapshotCotizador(snap){
     const tot=calcularTotales()
     aplicar(cliente,torre,perif,tot,{justificacion:snap.justificacion,validacion_nivel:null,validacion_items:[]})
   }
+  // Re-evaluar links restaurados para regenerar tags y abrir filas que tengan link
+  if(typeof onLinkInput==='function'){
+    COMP_KEYS.forEach(k=>{
+      const inp=document.getElementById('lnk-'+k)
+      if(inp&&inp.value.trim()){
+        onLinkInput(k)
+        const row=document.getElementById('lnk-row-'+k)
+        if(row)row.classList.add('show')
+      }
+    })
+  }
 }
 
 // Init
@@ -1833,10 +2063,10 @@ function aplicarSnapshotCotizador(snap){
 const DRAFT_KEY='tantecno_cotizador_draft'
 const DRAFT_INPUT_IDS=[
   'f-cliente','f-tel','f-fecha','f-validez','f-plazo','f-brief','f-notas','f-utilidad',
-  'c-cpu','p-cpu','c-mb','p-mb',
-  'c-ram','ram-n','ram-pu',
-  'c-ssd','p-ssd','c-gab','p-gab','c-fte','p-fte','c-so','p-so',
-  'c-gpu','p-gpu','c-hdd','p-hdd','c-cool','p-cool',
+  'c-cpu','p-cpu','lnk-cpu','c-mb','p-mb','lnk-mb',
+  'c-ram','ram-n','ram-pu','lnk-ram',
+  'c-ssd','p-ssd','lnk-ssd','c-gab','p-gab','lnk-gab','c-fte','p-fte','lnk-fte','c-so','p-so','lnk-so',
+  'c-gpu','p-gpu','lnk-gpu','c-hdd','p-hdd','lnk-hdd','c-cool','p-cool','lnk-cool',
   'c-mon','p-mon','c-tec','p-tec','c-mou','p-mou','c-aud','p-aud','c-mp','p-mp','c-web','p-web'
 ]
 const DRAFT_CHECKBOX_IDS=['chk-mon','chk-tec','chk-mou','chk-aud','chk-mp','chk-web','chk-iva']
