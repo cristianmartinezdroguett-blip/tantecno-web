@@ -163,7 +163,6 @@ body.splitting iframe,body.splitting #left,body.splitting #right{pointer-events:
 @media print{.editable-meta{background:none!important;outline:none!important;}}
 
 /* Modo impresión / PDF (html2canvas no respeta @media print, usamos clase) */
-.doc.printing .edit-hint{display:none!important;}
 .doc.printing .editable-meta{background:none!important;outline:none!important;border:none!important;cursor:default!important;}
 /* Saltos de página: no cortar elementos importantes */
 .doc table.ct,
@@ -174,7 +173,6 @@ body.splitting iframe,body.splitting #left,body.splitting #right{pointer-events:
 .doc .doc-sh{page-break-after:avoid;break-after:avoid;}
 .doc .doc-pay-box,.doc .doc-firma{page-break-before:auto;}
 .doc-ph{font-family:Arial,sans-serif;font-size:10px;color:#bbb;font-style:italic;}
-.edit-hint{font-family:'Courier New',monospace;font-size:8px;color:var(--accent);letter-spacing:.06em;text-transform:uppercase;margin-bottom:3px;display:none;}
 table.ct{width:100%;border-collapse:collapse;font-size:10px;margin-bottom:4px;}
 table.ct th{background:#f1f5f9;border:1px solid #ccc;padding:4px 7px;text-align:left;font-weight:700;}
 table.ct td{border:1px solid #ccc;padding:4px 7px;vertical-align:top;line-height:1.45;}
@@ -208,7 +206,7 @@ table.ct .dscrow td{background:#f0fdf4;color:#166534;font-size:9.5px;}
 .draft-chip-x:hover{color:var(--red);background:var(--red-bg);}
 @page{size:A4 portrait;margin:13mm 15mm;}
 @media print{
-  #left,.pbar,.edit-hint{display:none!important;}
+  #left,.pbar{display:none!important;}
   #splitter{display:none!important;}
   body{background:#fff;display:block;}
   #right{background:#fff;padding:0;overflow:visible;}
@@ -468,14 +466,14 @@ table.ct .dscrow td{background:#f0fdf4;color:#166534;font-size:9.5px;}
     </div>
 
     <div class="doc-meta">
-      <div class="doc-ot">Informe Técnico N° <span id="p-ot" class="editable-meta" contenteditable="true" spellcheck="false" title="Clic para editar">____</span></div>
-      <div class="dm"><b>Cliente:</b> <span id="p-cliente" class="editable-meta" contenteditable="true" spellcheck="false" title="Clic para editar">_______________</span></div>
-      <div class="dm"><b>Equipo:</b> <span id="p-equipo" class="editable-meta" contenteditable="true" spellcheck="false" title="Clic para editar">_______________</span></div>
+      <div class="doc-ot">Informe Técnico N° <span id="p-ot" class="editable-meta" contenteditable="true" spellcheck="false">____</span></div>
+      <div class="dm"><b>Cliente:</b> <span id="p-cliente" class="editable-meta" contenteditable="true" spellcheck="false">_______________</span></div>
+      <div class="dm"><b>Equipo:</b> <span id="p-equipo" class="editable-meta" contenteditable="true" spellcheck="false">_______________</span></div>
       <div class="dm-grid">
-        <div class="dm"><b>Fecha recepción:</b> <span id="p-frecep" class="editable-meta" contenteditable="true" spellcheck="false" title="Clic para editar">—</span></div>
-        <div class="dm"><b>Fecha informe:</b> <span id="p-finf" class="editable-meta" contenteditable="true" spellcheck="false" title="Clic para editar">—</span></div>
-        <div class="dm"><b>Estado físico:</b> <span id="p-estado" class="editable-meta" contenteditable="true" spellcheck="false" title="Clic para editar">—</span></div>
-        <div class="dm"><b>Accesorios:</b> <span id="p-acc" class="editable-meta" contenteditable="true" spellcheck="false" title="Clic para editar">—</span></div>
+        <div class="dm"><b>Fecha recepción:</b> <span id="p-frecep" class="editable-meta" contenteditable="true" spellcheck="false">—</span></div>
+        <div class="dm"><b>Fecha informe:</b> <span id="p-finf" class="editable-meta" contenteditable="true" spellcheck="false">—</span></div>
+        <div class="dm"><b>Estado físico:</b> <span id="p-estado" class="editable-meta" contenteditable="true" spellcheck="false">—</span></div>
+        <div class="dm"><b>Accesorios:</b> <span id="p-acc" class="editable-meta" contenteditable="true" spellcheck="false">—</span></div>
       </div>
       <div class="dm"><b>Encargado técnico:</b> Cristián Martínez — TANTECNO</div>
     </div>
@@ -1799,15 +1797,8 @@ async function generarPDFDinamico(filename){
     throw new Error('html2pdf no está cargado')
   }
   el.classList.add('printing')
-  const hintsToHide=el.querySelectorAll('.edit-hint')
-  const hintsOriginal=[]
-  hintsToHide.forEach((h,i)=>{
-    hintsOriginal[i]=h.style.display
-    h.style.display='none'
-  })
   function restore(){
     el.classList.remove('printing')
-    hintsToHide.forEach((h,i)=>{h.style.display=hintsOriginal[i]||'block'})
   }
   try{
     // ── Pasada 1: medir alto real del contenido ──

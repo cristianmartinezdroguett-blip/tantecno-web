@@ -161,7 +161,6 @@ input.price.suspicious:focus,input#ram-pu.suspicious:focus{box-shadow:0 0 0 3px 
 .doc-sb{font-family:Georgia,serif;font-size:10.5px;line-height:1.68;text-align:justify;white-space:pre-line;}
 .doc-sb[contenteditable=true]:focus{outline:1px dashed #93c5fd;border-radius:2px;background:#f8fbff;}
 .doc-ph{font-family:Arial,sans-serif;font-size:10px;color:#bbb;font-style:italic;}
-.edit-hint{font-family:'Courier New',monospace;font-size:8px;color:#93c5fd;letter-spacing:.06em;text-transform:uppercase;margin-bottom:3px;display:none;}
 table.ct{width:100%;border-collapse:collapse;font-size:10px;margin-bottom:4px;}
 table.ct th{background:#f1f5f9;border:1px solid #ccc;padding:4px 7px;text-align:left;font-weight:700;}
 table.ct td{border:1px solid #ccc;padding:4px 7px;vertical-align:top;line-height:1.45;}
@@ -198,7 +197,7 @@ table.ct td{border:1px solid #ccc;padding:4px 7px;vertical-align:top;line-height
 .draft-chip-x:hover{color:var(--red);background:var(--red-bg);}
 @page{size:A4 portrait;margin:13mm 15mm;}
 @media print{
-  #left,.pbar,.edit-hint{display:none!important;}
+  #left,.pbar{display:none!important;}
   #splitter{display:none!important;}
   body{background:#fff;display:block;}
   #right{background:#fff;padding:0;overflow:visible;}
@@ -512,7 +511,6 @@ table.ct td{border:1px solid #ccc;padding:4px 7px;vertical-align:top;line-height
     </div>
 
     <div class="doc-sh">Perfil de uso y justificación</div>
-    <div class="edit-hint" id="hint1">editable — clic para modificar</div>
     <div class="doc-sb" id="p-just"><span class="doc-ph">Completa el formulario y genera la cotización.</span></div>
 
     <div class="doc-sh">Configuración propuesta</div>
@@ -980,7 +978,6 @@ function aplicar(cliente,torre,perif,tot,json){
   const just=document.getElementById('p-just')
   just.textContent=json.justificacion||''
   just.contentEditable='true'
-  document.getElementById('hint1').style.display='block'
 
   // Tabla torre SIN precios
   const tb=document.getElementById('p-torre-body')
@@ -1248,7 +1245,6 @@ function limpiar(){
   document.getElementById('p-plazo-cond').textContent='7'
   document.getElementById('p-just').innerHTML='<span class="doc-ph">Completa el formulario y genera la cotización.</span>'
   document.getElementById('p-just').contentEditable='false'
-  document.getElementById('hint1').style.display='none'
   document.getElementById('t-torre').style.display='none'
   document.getElementById('p-torre-body').innerHTML=''
   document.getElementById('p-perif-wrap').style.display='none'
@@ -1645,6 +1641,107 @@ async function cargarBorradorNube(id){
     toast('No se pudo cargar el borrador')
   }
 }
+async function duplicarDesdeNube(idCotizacion){
+  // Carga una cotización existente desde la tabla 'cotizaciones' y pre-llena el formulario.
+  // Folio NO se hereda — se asigna nuevo al guardar PDF.
+  try{
+    const bearer=await getBearer()
+    const url=`${SB_URL}/rest/v1/cotizaciones?id=eq.${idCotizacion}&select=*`
+    const res=await fetch(url,{headers:{apikey:SB_KEY,Authorization:`Bearer ${bearer}`}})
+    if(!res.ok)throw new Error('GET '+res.status)
+    const arr=await res.json()
+    if(!arr.length){toast('Cotización no encontrada');return}
+    const cot=arr[0]
+    aplicarComponentesCotizacion(cot)
+    // Pre-llenar nombre del cliente si lo había
+    if(cot.cliente_id){
+      try{
+        const cli=await fetch(`${SB_URL}/rest/v1/clientes?id=eq.${cot.cliente_id}&select=nombre,telefono`,{headers:{apikey:SB_KEY,Authorization:`Bearer ${bearer}`}})
+        if(cli.ok){
+          const c=(await cli.json())[0]
+          if(c){
+            document.getElementById('f-cliente').value=c.nombre||''
+            if(c.telefono)document.getElementById('f-tel').value=c.telefono
+          }
+        }
+      }catch(e){}
+    } else if(cot.empresa_id){
+      try{
+        const em=await fetch(`${SB_URL}/rest/v1/empresas?id=eq.${cot.empresa_id}&select=razon_social,telefono`,{headers:{apikey:SB_KEY,Authorization:`Bearer ${bearer}`}})
+        if(em.ok){
+          const e=(await em.json())[0]
+          if(e){
+            document.getElementById('f-cliente').value=e.razon_social||''
+            if(e.telefono)document.getElementById('f-tel').value=e.telefono
+          }
+        }
+      }catch(e){}
+    }
+    // Fecha actualizada a hoy (no la del original)
+    document.getElementById('f-fecha').valueAsDate=new Date()
+    // El folio nuevo se asigna automáticamente al guardar (no heredamos el viejo)
+    _nubeIdActual=null  // No vinculamos a ningún borrador
+    document.getElementById('drafts-banner').style.display='none'
+    toast('Cotización duplicada — revisa precios y guarda nuevo PDF')
+  }catch(e){
+    console.error('[duplicar]',e)
+    toast('No se pudo duplicar la cotización')
+  }
+}
+function aplicarComponentesCotizacion(cot){
+  // Reusa la estructura del JSON componentes y la mapea a los inputs del formulario.
+  const c=cot.componentes||{}
+  // Brief y notas
+  if(c.brief)document.getElementById('f-brief').value=c.brief
+  // Validez y plazo
+  if(c.validez_dias)document.getElementById('f-validez').value=c.validez_dias
+  if(c.plazo_dias)document.getElementById('f-plazo').value=c.plazo_dias
+  // Modo utilidad
+  if(c.util_modo){
+    utilMode=c.util_modo
+    const r=document.querySelector(`input[name="util-mode"][value="${c.util_modo}"]`)
+    if(r)r.checked=true
+    document.getElementById('f-utilidad').readOnly=(c.util_modo!=='manual')
+    if(c.util_modo==='manual'&&c.utilidad){
+      document.getElementById('f-utilidad').value=c.utilidad
+    }
+  }
+  // IVA visible
+  if(typeof c.iva_visible==='boolean'){
+    document.getElementById('chk-iva').checked=c.iva_visible
+    if(typeof updateIvaToggle==='function')updateIvaToggle()
+  }
+  // Componentes torre
+  const torre=c.torre||[]
+  torre.forEach(t=>{
+    const inpN=document.getElementById('c-'+t.k)
+    const inpP=document.getElementById('p-'+t.k)
+    if(inpN)inpN.value=t.nombre||''
+    if(inpP)inpP.value=t.precio||''
+    // Casos especiales: RAM tiene cantidad/unidad
+    if(t.k==='ram'){
+      // Si el nombre incluye "x" probablemente sea formato "Kingston Fury 16GB DDR4"
+      // No hay cantidad guardada explícita; dejamos cantidad=1, precio unitario=precio total
+      const ramN=document.getElementById('ram-n')
+      const ramPu=document.getElementById('ram-pu')
+      if(ramN)ramN.value='1'
+      if(ramPu)ramPu.value=t.precio||''
+    }
+  })
+  // Periféricos
+  const perif=c.perifericos||[]
+  perif.forEach(p=>{
+    const chk=document.getElementById('chk-'+p.k)
+    const inpN=document.getElementById('c-'+p.k)
+    const inpP=document.getElementById('p-'+p.k)
+    if(chk){chk.checked=true;if(inpN)inpN.disabled=false;if(inpP)inpP.disabled=false}
+    if(inpN)inpN.value=p.nombre||''
+    if(inpP)inpP.value=p.precio||''
+  })
+  if(typeof updateRAM==='function')updateRAM()
+  updateTotales()
+}
+
 async function descartarBorradorNube(id,nombre){
   if(!confirm(`¿Descartar el borrador "${nombre||'sin nombre'}"?\n\nNo se puede deshacer.`))return
   try{
@@ -1885,12 +1982,17 @@ function activarAutoGuardadoCotizador(){
   if(closeBtn)closeBtn.addEventListener('click',()=>{
     document.getElementById('drafts-banner').style.display='none'
   })
-  // Si la URL trae ?borrador=ID, cargarlo directo en vez de mostrar banner
+  // Si la URL trae ?borrador=ID o ?duplicar=ID, cargarlo directo en vez de mostrar banner
   const params=new URLSearchParams(window.location.search)
   const borradorId=params.get('borrador')
+  const duplicarId=params.get('duplicar')
   if(borradorId){
     cargarBorradorNube(borradorId).then(()=>{
       // Limpiar query string para que un refresh no recargue
+      history.replaceState({},'',window.location.pathname)
+    })
+  } else if(duplicarId){
+    duplicarDesdeNube(duplicarId).then(()=>{
       history.replaceState({},'',window.location.pathname)
     })
   } else {
