@@ -195,6 +195,13 @@ table.ct .dscrow td{background:#f0fdf4;color:#166534;font-size:9.5px;}
 .btn-p.dark{background:var(--accent);color:#fff;border:1px solid var(--accent);box-shadow:0 2px 6px rgba(27,58,92,.2);}.btn-p.dark:hover{background:var(--accent-h);}
 .btn-p.blue{background:var(--bg2);color:var(--accent);border:1px solid var(--accent);}.btn-p.blue:hover{background:var(--accent-bg);}
 .btn-p.amber{background:var(--bg2);color:var(--text2);border:1px solid var(--border);font-size:11px;}.btn-p.amber:hover{background:var(--red-bg);color:var(--red);border-color:var(--red);}
+.btn-p.wa{background:#25d366;color:#fff;border:1px solid #25d366;box-shadow:0 2px 6px rgba(37,211,102,.25);}
+.btn-p.wa:hover{background:#1ebe5a;border-color:#1ebe5a;}
+.wa-wrap{position:relative;display:inline-block;}
+.wa-menu{display:none;position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);background:var(--bg2);border:1px solid var(--border);border-radius:8px;box-shadow:0 4px 16px rgba(0,0,0,.12);padding:4px;min-width:220px;z-index:50;}
+.wa-menu.show{display:flex;flex-direction:column;gap:2px;}
+.wa-menu button{background:none;border:none;padding:9px 12px;text-align:left;border-radius:5px;font-family:var(--body);font-size:12.5px;color:var(--text);cursor:pointer;transition:.12s;white-space:nowrap;}
+.wa-menu button:hover{background:var(--accent-bg);color:var(--accent);}
 @page{size:A4 portrait;margin:13mm 15mm;}
 @media print{
   #left,.pbar,.edit-hint{display:none!important;}
@@ -489,8 +496,37 @@ table.ct .dscrow td{background:#f0fdf4;color:#166534;font-size:9.5px;}
   <div class="pbar">
     <button class="btn-p blue" onclick="previsualizarPDF()" title="Ver el PDF antes de guardar (no descarga)">👁 Previsualizar PDF</button>
     <button class="btn-p dark" onclick="savePDF()">⬇ Guardar PDF</button>
+    <div class="wa-wrap">
+      <button class="btn-p wa" onclick="toggleWaMenu(event)">💬 WhatsApp ▾</button>
+      <div class="wa-menu" id="wa-menu">
+        <button onclick="abrirWa('business-web')">🟢 WhatsApp Business (web)</button>
+        <button onclick="abrirWa('normal-web')">💬 WhatsApp Normal (web)</button>
+        <button onclick="abrirWa('app')">📱 App instalada</button>
+      </div>
+    </div>
     <button class="btn-p blue" id="btn-cierre" onclick="convertirCierre()" style="display:none;">✓ Convertir a informe de cierre</button>
     <button class="btn-p amber" onclick="limpiar()">↺ Nuevo informe</button>
+  </div>
+</div>
+
+<!-- ═══ MODAL WHATSAPP ═══ -->
+<div class="modal-overlay" id="modal-wa" style="display:none;">
+  <div class="modal-box" style="width:auto;max-width:480px;">
+    <div class="modal-title">Enviar por WhatsApp</div>
+    <div class="modal-sub" id="wa-sub">Verifica el número y el mensaje antes de abrir.</div>
+    <div style="margin-bottom:14px;">
+      <div class="modal-label">Número del cliente</div>
+      <input id="wa-tel" class="modal-input" style="font-size:14px;" placeholder="+56 9 ..." autocomplete="off">
+      <div style="font-size:10px;color:var(--text3);margin-top:-4px;margin-bottom:0;">Con código país (+56). Ej: +56912345678</div>
+    </div>
+    <div style="margin-bottom:14px;">
+      <div class="modal-label">Mensaje</div>
+      <textarea id="wa-msg" rows="4" class="modal-input" style="font-family:var(--body);font-size:13px;font-weight:400;resize:vertical;"></textarea>
+    </div>
+    <div class="modal-btns">
+      <button class="modal-cancel" onclick="cerrarModalWa()">Cancelar</button>
+      <button class="modal-ok" onclick="confirmarWa()">Abrir WhatsApp</button>
+    </div>
   </div>
 </div>
 
@@ -1110,6 +1146,7 @@ function limpiar(){
   document.getElementById('p-s1').contentEditable='false'
   document.getElementById('p-s2').contentEditable='false'
   document.getElementById('btn-cierre').style.display='none'
+  if(typeof limpiarBorradorGenerador==='function')limpiarBorradorGenerador()
 }
 function switchTab(t){
   const l=document.getElementById('left'),r=document.getElementById('right')
@@ -1118,6 +1155,90 @@ function switchTab(t){
   else{r.classList.add('tab-active');l.classList.remove('tab-active');tp.classList.add('active');tf.classList.remove('active');window.scrollTo(0,0)}
 }
 function logout(){tantecnoAuth.signOut()}
+
+// ═══════════════════════════════════════════════════════════════
+// WHATSAPP — menú + modal
+// ═══════════════════════════════════════════════════════════════
+let _waModo='business-web' // business-web | normal-web | app
+function toggleWaMenu(ev){
+  ev.stopPropagation()
+  const m=document.getElementById('wa-menu')
+  m.classList.toggle('show')
+}
+document.addEventListener('click',e=>{
+  const m=document.getElementById('wa-menu')
+  if(!m)return
+  if(!m.contains(e.target)&&!e.target.closest('.btn-p.wa')){
+    m.classList.remove('show')
+  }
+})
+function abrirWa(modo){
+  _waModo=modo
+  document.getElementById('wa-menu').classList.remove('show')
+  // Pre-llenar mensaje desde p-cliente y p-ot
+  const cliente=document.getElementById('p-cliente').textContent.trim()
+  const folio=document.getElementById('p-ot').textContent.trim()
+  const subtipo=document.getElementById('p-subtipo').textContent.trim()
+  const nombreCorto=cliente&&cliente!=='_______________'?cliente.split(/\s+/)[0]:''
+  const docTipo=subtipo==='POST-INTERVENCIÓN'?'el informe técnico':(subtipo==='DIAGNÓSTICO — NO REPARABLE'?'el diagnóstico':'la cotización')
+  let msg='Hola'
+  if(nombreCorto)msg+=' '+nombreCorto
+  msg+=', te envío '+docTipo
+  if(folio)msg+=' N° '+folio
+  msg+=' de TANTECNO. Cualquier consulta me avisas.'
+  document.getElementById('wa-tel').value=''
+  document.getElementById('wa-msg').value=msg
+  // Sub texto según modo
+  const subs={
+    'business-web':'Abrirá web.whatsapp.com — asegúrate de tener sesión activa con tu cuenta Business.',
+    'normal-web':'Abrirá web.whatsapp.com — asegúrate de tener sesión activa con tu cuenta normal.',
+    'app':'Abrirá la app de WhatsApp instalada (escritorio o móvil).'
+  }
+  document.getElementById('wa-sub').textContent=subs[modo]||''
+  document.getElementById('modal-wa').style.display='flex'
+  setTimeout(()=>document.getElementById('wa-tel').focus(),80)
+}
+function cerrarModalWa(){
+  document.getElementById('modal-wa').style.display='none'
+}
+function normalizarTelefono(raw){
+  let t=(raw||'').replace(/[^0-9]/g,'')
+  if(t.startsWith('0'))t=t.slice(1)
+  if(t.length===8)t='569'+t
+  else if(t.length===9&&t.startsWith('9'))t='56'+t
+  return t
+}
+function confirmarWa(){
+  const telRaw=document.getElementById('wa-tel').value.trim()
+  if(!telRaw){toast('Ingresa el número del cliente');return}
+  const tel=normalizarTelefono(telRaw)
+  if(tel.length<10){toast('Número inválido');return}
+  const msg=document.getElementById('wa-msg').value.trim()
+  const url=construirUrlWa(_waModo,tel,msg)
+  cerrarModalWa()
+  window.open(url,'_blank')
+}
+function construirUrlWa(modo,tel,msg){
+  const txt=encodeURIComponent(msg||'')
+  if(modo==='app')return `whatsapp://send?phone=${tel}&text=${txt}`
+  return `https://web.whatsapp.com/send?phone=${tel}&text=${txt}`
+}
+// Escape cierra el modal WhatsApp
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){
+    const w=document.getElementById('modal-wa')
+    if(w&&w.style.display==='flex')cerrarModalWa()
+  }
+})
+// Click en overlay cierra el modal
+;(function waOverlayInit(){
+  const ov=document.getElementById('modal-wa')
+  if(ov){
+    ov.addEventListener('click',e=>{
+      if(e.target===ov)cerrarModalWa()
+    })
+  }
+})();
 document.getElementById('f-ot').value=String(getOT())
 document.getElementById('f-ot').addEventListener('change',function(){saveOT(parseInt(this.value)||getOT())})
 document.getElementById('f-dsc').addEventListener('input',renderPrevSvc)
@@ -1158,6 +1279,132 @@ sincronizarDesdeSupabase()
       renderCat()
     })
   })
+})();
+
+// ═══════════════════════════════════════════════════════════════
+// AUTO-GUARDADO DEL BORRADOR (localStorage)
+// ═══════════════════════════════════════════════════════════════
+const DRAFT_KEY='tantecno_generador_draft'
+const DRAFT_INPUT_IDS=[
+  'f-ot','f-texto','f-dsc',
+  'r-cliente','r-equipo','r-frecep','r-finf','r-estado','r-acc','r-problema'
+]
+const DRAFT_CHECKBOX_IDS=['chk-diag']
+const DRAFT_EDITABLE_IDS=['p-cliente','p-equipo','p-frecep','p-finf','p-estado','p-acc','p-s1','p-s2']
+let _draftTimer=null
+function guardarBorradorGenerador(){
+  if(_draftTimer)clearTimeout(_draftTimer)
+  _draftTimer=setTimeout(()=>{
+    try{
+      const snap={v:1,ts:Date.now(),inputs:{},checks:{},editables:{},modo:modo,selH:Array.from(selH),selS:selS,subtipo:document.getElementById('p-subtipo').textContent}
+      DRAFT_INPUT_IDS.forEach(id=>{
+        const el=document.getElementById(id)
+        if(el)snap.inputs[id]=el.value
+      })
+      DRAFT_CHECKBOX_IDS.forEach(id=>{
+        const el=document.getElementById(id)
+        if(el)snap.checks[id]=!!el.checked
+      })
+      // Solo guardar editables si el preview ya se generó (s1 sin placeholder)
+      const s1=document.getElementById('p-s1')
+      const tieneInforme=s1&&!s1.querySelector('.doc-ph')&&s1.textContent.trim()
+      if(tieneInforme){
+        DRAFT_EDITABLE_IDS.forEach(id=>{
+          const el=document.getElementById(id)
+          if(el)snap.editables[id]=el.textContent
+        })
+        snap.previewActivo=true
+      }
+      localStorage.setItem(DRAFT_KEY,JSON.stringify(snap))
+    }catch(e){console.warn('[draft]',e)}
+  },400)
+}
+function restaurarBorradorGenerador(){
+  try{
+    const raw=localStorage.getItem(DRAFT_KEY)
+    if(!raw)return false
+    const snap=JSON.parse(raw)
+    if(!snap||!snap.inputs)return false
+    // Restaurar inputs
+    Object.keys(snap.inputs).forEach(id=>{
+      const el=document.getElementById(id)
+      if(el)el.value=snap.inputs[id]
+    })
+    Object.keys(snap.checks||{}).forEach(id=>{
+      const el=document.getElementById(id)
+      if(el)el.checked=!!snap.checks[id]
+    })
+    // Restaurar modo (ia/rap)
+    if(snap.modo&&typeof setMode==='function'){
+      setMode(snap.modo)
+    }
+    // Restaurar hallazgos seleccionados
+    if(Array.isArray(snap.selH)){
+      selH.clear()
+      snap.selH.forEach(id=>selH.add(id))
+      renderHall()
+    }
+    // Restaurar servicios seleccionados
+    if(Array.isArray(snap.selS)){
+      selS.length=0
+      snap.selS.forEach(s=>selS.push(s))
+      renderCat()
+      renderSelSvc()
+      renderPrevSvc()
+    }
+    // Si había preview activo, restaurar el render del PDF con los textos guardados
+    if(snap.previewActivo&&snap.editables){
+      const folioActual=parseInt(document.getElementById('f-ot').value)||getOT()
+      document.getElementById('p-ot').textContent=String(folioActual)
+      DRAFT_EDITABLE_IDS.forEach(id=>{
+        const el=document.getElementById(id)
+        if(el&&snap.editables[id]!=null)el.textContent=snap.editables[id]
+      })
+      // Habilitar contenteditable en s1 y s2
+      document.getElementById('p-s1').contentEditable='true'
+      document.getElementById('p-s2').contentEditable='true'
+      // Subtipo
+      if(snap.subtipo)document.getElementById('p-subtipo').textContent=snap.subtipo
+      // Mostrar botón de cierre si era cotización
+      if(snap.subtipo==='COTIZACIÓN'){
+        document.getElementById('btn-cierre').style.display='inline-block'
+      }
+    }
+    return true
+  }catch(e){console.warn('[draft restore]',e);return false}
+}
+function limpiarBorradorGenerador(){
+  try{localStorage.removeItem(DRAFT_KEY)}catch(e){}
+}
+function activarAutoGuardadoGenerador(){
+  DRAFT_INPUT_IDS.forEach(id=>{
+    const el=document.getElementById(id)
+    if(el){
+      el.addEventListener('input',guardarBorradorGenerador)
+      el.addEventListener('change',guardarBorradorGenerador)
+    }
+  })
+  DRAFT_CHECKBOX_IDS.forEach(id=>{
+    const el=document.getElementById(id)
+    if(el)el.addEventListener('change',guardarBorradorGenerador)
+  })
+  DRAFT_EDITABLE_IDS.forEach(id=>{
+    const el=document.getElementById(id)
+    if(el)el.addEventListener('input',guardarBorradorGenerador)
+  })
+  // Snapshot extra cuando cambian servicios o hallazgos: lo dispara el código existente.
+  // Hookeamos llamando a guardar después de cada renderSelSvc/renderHall mediante un wrapper:
+  const origRSS=renderSelSvc
+  window.renderSelSvc=function(){origRSS.apply(this,arguments);guardarBorradorGenerador()}
+  const origRH=renderHall
+  window.renderHall=function(){origRH.apply(this,arguments);guardarBorradorGenerador()}
+}
+
+// Restaurar borrador y activar auto-guardado
+;(function draftInit(){
+  const restaurado=restaurarBorradorGenerador()
+  if(restaurado)toast('Borrador anterior recuperado')
+  activarAutoGuardadoGenerador()
 })();
 
 // ═══ GUARDAR PDF ═══
