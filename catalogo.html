@@ -329,9 +329,19 @@ let isOnline=true
 // ═══════════════════════════════════════════════════════════════
 async function sbFetch(path,opts={}){
   const url=`${SUPABASE_URL}/rest/v1/${path}`
+  // Obtener JWT del usuario logueado (RLS valida auth.uid() server-side)
+  let bearer=SUPABASE_ANON_KEY
+  if(window.tantecnoSb){
+    try{
+      const {data}=await window.tantecnoSb.auth.getSession()
+      if(data&&data.session&&data.session.access_token){
+        bearer=data.session.access_token
+      }
+    }catch(e){console.warn('[catalogo] No se pudo obtener JWT, usando anon key:',e.message)}
+  }
   const headers={
     'apikey':SUPABASE_ANON_KEY,
-    'Authorization':`Bearer ${SUPABASE_ANON_KEY}`,
+    'Authorization':`Bearer ${bearer}`,
     'Content-Type':'application/json',
     'Prefer':'return=representation',
     ...(opts.headers||{})
