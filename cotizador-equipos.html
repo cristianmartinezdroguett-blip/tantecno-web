@@ -216,6 +216,39 @@ table.ct td{border:1px solid #ccc;padding:4px 7px;vertical-align:top;line-height
 .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--text);color:#fff;font-family:var(--body);font-size:12px;font-weight:500;padding:10px 18px;border-radius:8px;pointer-events:none;opacity:0;transition:opacity .25s;z-index:999;white-space:nowrap;box-shadow:0 4px 16px rgba(0,0,0,.2);}
 .toast.show{opacity:1;}
 
+/* ═══ MODAL CRM (Fase 3) ═══ */
+.modal-overlay{position:fixed;inset:0;background:rgba(30,42,58,.4);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);z-index:200;display:none;align-items:center;justify-content:center;padding:20px;}
+.modal-overlay.show{display:flex;}
+.modal-box{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:26px;width:100%;max-width:520px;box-shadow:0 8px 32px rgba(0,0,0,.12);max-height:90vh;overflow-y:auto;}
+.modal-title{font-size:18px;font-weight:700;color:var(--text);letter-spacing:-.01em;margin-bottom:4px;}
+.modal-sub{font-size:12.5px;color:var(--text2);margin-bottom:18px;line-height:1.5;}
+.modal-grid{display:grid;grid-template-columns:1fr 140px;gap:10px;}
+@media(max-width:540px){.modal-grid{grid-template-columns:1fr;}}
+.mrow{margin-bottom:10px;}
+.mrow label{display:block;font-family:var(--mono);font-size:9px;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px;font-weight:600;}
+.mrow label .opt{color:var(--text3);font-family:var(--body);text-transform:none;letter-spacing:0;font-size:9px;font-weight:500;margin-left:4px;}
+.mrow input,.mrow textarea{width:100%;background:var(--bg2);border:1px solid var(--border);border-radius:7px;padding:9px 12px;color:var(--text);font-family:var(--body);font-size:13px;outline:none;transition:.15s;}
+.mrow input:focus,.mrow textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-bg);}
+.mrow input.mono{font-family:var(--mono);font-size:13px;}
+.modal-btns{display:flex;gap:8px;margin-top:18px;justify-content:flex-end;}
+.btn-cancel{padding:10px 16px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;color:var(--text2);font-family:var(--body);font-size:13px;font-weight:500;cursor:pointer;transition:.15s;}
+.btn-cancel:hover{background:var(--bg3);color:var(--text);border-color:var(--border-h);}
+.btn-primary{padding:10px 18px;background:var(--accent);border:1px solid var(--accent);border-radius:8px;color:#fff;font-family:var(--body);font-size:13px;font-weight:600;cursor:pointer;transition:.15s;}
+.btn-primary:hover{background:var(--accent-h);}
+.btn-primary:disabled{opacity:.6;cursor:not-allowed;}
+.crm-tipo-row{display:grid;grid-template-columns:1fr 1fr;gap:6px;}
+.crm-tipo{position:relative;cursor:pointer;user-select:none;}
+.crm-tipo input{position:absolute;opacity:0;pointer-events:none;}
+.crm-tipo span{display:block;text-align:center;font-family:var(--body);font-size:13px;font-weight:500;color:var(--text2);background:var(--bg2);border:1px solid var(--border);border-radius:7px;padding:9px 8px;transition:.15s;}
+.crm-tipo:hover span{border-color:var(--border-h);color:var(--text);}
+.crm-tipo input:checked + span{background:var(--accent);border-color:var(--accent);color:#fff;}
+@media (max-width:540px){
+  .modal-overlay{padding:12px;align-items:flex-start;padding-top:40px;}
+  .modal-box{padding:20px;}
+  .modal-btns{flex-direction:column-reverse;}
+  .modal-btns .btn-cancel,.modal-btns .btn-primary{width:100%;}
+}
+
 /* ═══════════════════════════════════════════════════════════════
    MODO COMPACTO del #left (activado por JS cuando ancho <460px)
    Se aplica también cuando arrastras el splitter muy a la izquierda
@@ -512,9 +545,70 @@ table.ct td{border:1px solid #ccc;padding:4px 7px;vertical-align:top;line-height
   </div>
 </div>
 
+<!-- ═══ MODAL CRM (Fase 3) ═══ -->
+<div class="modal-overlay" id="modal-crm">
+  <div class="modal-box">
+    <div class="modal-title">Registrar cotización</div>
+    <div class="modal-sub">Estos datos quedan en el CRM. El nombre se usa también para el PDF.</div>
+
+    <div class="mrow">
+      <label>Tipo</label>
+      <div class="crm-tipo-row">
+        <label class="crm-tipo"><input type="radio" name="crm-tipo" value="persona" checked><span>Persona</span></label>
+        <label class="crm-tipo"><input type="radio" name="crm-tipo" value="empresa"><span>Empresa</span></label>
+      </div>
+    </div>
+
+    <div class="mrow">
+      <label id="crm-nombre-lbl">Nombre completo</label>
+      <input id="crm-nombre" placeholder="Nombre del cliente" autocomplete="off">
+    </div>
+
+    <div class="modal-grid">
+      <div class="mrow">
+        <label>Teléfono <span class="opt">(o email)</span></label>
+        <input id="crm-telefono" placeholder="+56 9 ..." autocomplete="off">
+      </div>
+      <div class="mrow">
+        <label>RUT <span class="opt">opcional</span></label>
+        <input id="crm-rut" class="mono" placeholder="12345678-9" autocomplete="off">
+      </div>
+    </div>
+
+    <div class="mrow">
+      <label>Email <span class="opt">(o teléfono)</span></label>
+      <input id="crm-email" type="email" placeholder="cliente@correo.cl" autocomplete="off">
+    </div>
+
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="cerrarModalCRM()">Cancelar</button>
+      <button class="btn-primary" id="btn-crm-guardar" onclick="confirmarCRMyDescargar()">Guardar y descargar</button>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
+// ═══════════════════════════════════════════════════════════════
+// SUPABASE — constantes y helper de bearer (Fase 3 CRM)
+// ═══════════════════════════════════════════════════════════════
+const SB_URL='https://wqgatoyouzckgmsilagz.supabase.co'
+const SB_KEY='sb_publishable_2Ar5UzQLYoLzmPYq_Xd71A_kaIOzMDc'
+
+async function getBearer(){
+  let bearer=SB_KEY
+  if(window.tantecnoSb){
+    try{
+      const {data}=await window.tantecnoSb.auth.getSession()
+      if(data&&data.session&&data.session.access_token){
+        bearer=data.session.access_token
+      }
+    }catch(e){console.warn('[TANTECNO] No se pudo obtener JWT:',e.message)}
+  }
+  return bearer
+}
+
 // ═══════════════════════════════════════════════════════════════
 // ESTADO Y UTILIDADES
 // ═══════════════════════════════════════════════════════════════
@@ -1141,6 +1235,12 @@ function savePDF(){
   if(!just||document.getElementById('p-just').querySelector('.doc-ph')){
     toast('Genera la cotización primero');return
   }
+  // Abrir modal CRM antes de descargar (Fase 3)
+  abrirModalCRM()
+}
+
+// Descarga el PDF (lógica original de savePDF, separada para reutilizar)
+function descargarPDF(){
   if(folioConfirmado===null){
     folioConfirmado=document.getElementById('p-folio').textContent
     consumirFolio(folioConfirmado)
@@ -1162,8 +1262,213 @@ function savePDF(){
     jsPDF:{unit:'mm',format:'a4',orientation:'portrait'}
   }
   toast('Generando PDF…')
-  html2pdf().set(opt).from(el).save().then(()=>toast('PDF guardado ✓'))
+  return html2pdf().set(opt).from(el).save().then(()=>toast('PDF guardado ✓'))
 }
+
+// ═══════════════════════════════════════════════════════════════
+// MODAL CRM — abrir, cerrar, validar, guardar (Fase 3)
+// ═══════════════════════════════════════════════════════════════
+function abrirModalCRM(){
+  // Pre-llenar nombre desde el campo Cliente del formulario
+  const nombrePrev=document.getElementById('f-cliente').value.trim()
+  document.getElementById('crm-nombre').value=nombrePrev
+  // Reset otros campos
+  document.getElementById('crm-telefono').value=''
+  document.getElementById('crm-email').value=''
+  document.getElementById('crm-rut').value=''
+  // Reset tipo a persona
+  document.querySelector('input[name="crm-tipo"][value="persona"]').checked=true
+  actualizarLabelNombreCRM()
+  document.getElementById('modal-crm').classList.add('show')
+  // Foco en el primer campo vacío relevante
+  setTimeout(()=>{
+    if(!nombrePrev)document.getElementById('crm-nombre').focus()
+    else document.getElementById('crm-telefono').focus()
+  },80)
+}
+
+function cerrarModalCRM(){
+  document.getElementById('modal-crm').classList.remove('show')
+}
+
+function actualizarLabelNombreCRM(){
+  const tipo=document.querySelector('input[name="crm-tipo"]:checked').value
+  const lbl=document.getElementById('crm-nombre-lbl')
+  const inp=document.getElementById('crm-nombre')
+  if(tipo==='empresa'){
+    lbl.textContent='Razón social'
+    inp.placeholder='Nombre de la empresa'
+  }else{
+    lbl.textContent='Nombre completo'
+    inp.placeholder='Nombre del cliente'
+  }
+}
+
+async function confirmarCRMyDescargar(){
+  const tipo=document.querySelector('input[name="crm-tipo"]:checked').value
+  const nombre=document.getElementById('crm-nombre').value.trim()
+  const telefono=document.getElementById('crm-telefono').value.trim()
+  const email=document.getElementById('crm-email').value.trim()
+  const rut=document.getElementById('crm-rut').value.trim()
+
+  if(!nombre){toast('Ingresa el nombre');return}
+  if(!telefono&&!email){toast('Ingresa al menos teléfono o email');return}
+
+  // Sincronizar nombre del modal al campo Cliente del formulario y al PDF
+  document.getElementById('f-cliente').value=nombre
+  document.getElementById('p-cliente').textContent=nombre
+
+  const btn=document.getElementById('btn-crm-guardar')
+  btn.disabled=true;btn.textContent='Guardando…'
+
+  try{
+    const folioCRM=await guardarCotizacionCRM({tipo,nombre,telefono,email,rut})
+    if(folioCRM){
+      toast('Cotización registrada: '+folioCRM)
+    }else{
+      toast('Guardado local (sin conexión) — descargando PDF')
+    }
+  }catch(e){
+    console.error('[TANTECNO] Error guardando CRM:',e)
+    // Encolar para reintento futuro
+    encolarCotizacionPendiente(arguments_capturados())
+    toast('No se pudo guardar en CRM — quedó en cola local')
+  }finally{
+    btn.disabled=false;btn.textContent='Guardar y descargar'
+    cerrarModalCRM()
+    // Siempre descargar PDF, exitoso o no (decisión 1a)
+    await descargarPDF()
+  }
+}
+
+// Captura datos para encolar — declarado como función separada para que
+// el handler de error pueda reconstruir el payload sin problemas de closure
+function arguments_capturados(){
+  return {
+    tipo:document.querySelector('input[name="crm-tipo"]:checked').value,
+    nombre:document.getElementById('crm-nombre').value.trim(),
+    telefono:document.getElementById('crm-telefono').value.trim(),
+    email:document.getElementById('crm-email').value.trim(),
+    rut:document.getElementById('crm-rut').value.trim()
+  }
+}
+
+// Cola local de cotizaciones que no se pudieron guardar
+function encolarCotizacionPendiente(datos){
+  const torre=leerTorre()
+  const perif=leerPerif()
+  const tot=calcularTotales()
+  const folioLocal=folioConfirmado||document.getElementById('p-folio').textContent
+  const cola=JSON.parse(localStorage.getItem('tantecno_crm_pendientes')||'[]')
+  cola.push({
+    timestamp:new Date().toISOString(),
+    folioLocal,
+    cliente:datos,
+    componentes:armarComponentesJSON(torre,perif,tot),
+    total:tot.neto
+  })
+  localStorage.setItem('tantecno_crm_pendientes',JSON.stringify(cola))
+}
+
+// Construye el JSON de componentes que se guarda en cotizaciones.componentes
+function armarComponentesJSON(torre,perif,tot){
+  const brief=document.getElementById('f-brief').value.trim()
+  const just=document.getElementById('p-just').textContent.trim()
+  return {
+    torre:torre.filter(c=>c.nombre).map(c=>({k:c.k,label:c.label,nombre:c.nombre,precio:c.precio})),
+    perifericos:perif.map(p=>({k:p.k,label:p.label,nombre:p.nombre,precio:p.precio})),
+    subtotal_componentes:tot.subComp,
+    utilidad:tot.util,
+    util_modo:utilMode,
+    iva_visible:document.getElementById('chk-iva').checked,
+    brief,
+    justificacion:just,
+    folio_local:folioConfirmado||document.getElementById('p-folio').textContent,
+    validez_dias:getValidez(),
+    plazo_dias:getPlazo(),
+    fecha:document.getElementById('f-fecha').value
+  }
+}
+
+// Insert real en Supabase. Crea cliente o empresa y luego cotización.
+// Retorna el folio (COT-YYYYMMDD-NNNN) o lanza error.
+async function guardarCotizacionCRM(datos){
+  const bearer=await getBearer()
+  const headers={
+    'apikey':SB_KEY,
+    'Authorization':`Bearer ${bearer}`,
+    'Content-Type':'application/json',
+    'Prefer':'return=representation'
+  }
+
+  let cliente_id=null
+  let empresa_id=null
+
+  if(datos.tipo==='empresa'){
+    const payload={
+      razon_social:datos.nombre,
+      nombre_fantasia:datos.nombre,
+      telefono:datos.telefono||null,
+      email:datos.email||null
+    }
+    if(datos.rut)payload.rut=datos.rut
+    const res=await fetch(`${SB_URL}/rest/v1/empresas`,{method:'POST',headers,body:JSON.stringify(payload)})
+    if(!res.ok){
+      const txt=await res.text()
+      // Si el error es por RUT duplicado (UNIQUE), buscamos la empresa existente
+      if(res.status===409&&datos.rut){
+        const buscar=await fetch(`${SB_URL}/rest/v1/empresas?rut=eq.${encodeURIComponent(datos.rut)}&select=id&limit=1`,{headers:{apikey:SB_KEY,Authorization:`Bearer ${bearer}`}})
+        if(buscar.ok){
+          const arr=await buscar.json()
+          if(arr.length){empresa_id=arr[0].id}
+        }
+      }
+      if(!empresa_id)throw new Error('empresas: '+res.status+' '+txt)
+    }else{
+      const rows=await res.json()
+      empresa_id=rows[0].id
+    }
+  }else{
+    const payload={
+      nombre:datos.nombre,
+      telefono:datos.telefono||null,
+      email:datos.email||null
+    }
+    if(datos.rut)payload.rut=datos.rut
+    const res=await fetch(`${SB_URL}/rest/v1/clientes`,{method:'POST',headers,body:JSON.stringify(payload)})
+    if(!res.ok){
+      const txt=await res.text()
+      throw new Error('clientes: '+res.status+' '+txt)
+    }
+    const rows=await res.json()
+    cliente_id=rows[0].id
+  }
+
+  const torre=leerTorre()
+  const perif=leerPerif()
+  const tot=calcularTotales()
+  const componentes=armarComponentesJSON(torre,perif,tot)
+
+  const cotPayload={
+    cliente_id,
+    empresa_id,
+    presupuesto:tot.neto,
+    total:tot.neto,
+    componentes,
+    estado:'nueva',
+    origen:'panel'
+  }
+
+  const res2=await fetch(`${SB_URL}/rest/v1/cotizaciones`,{method:'POST',headers,body:JSON.stringify(cotPayload)})
+  if(!res2.ok){
+    const txt=await res2.text()
+    throw new Error('cotizaciones: '+res2.status+' '+txt)
+  }
+  const rows2=await res2.json()
+  return rows2[0]&&rows2[0].folio?rows2[0].folio:null
+}
+
+
 function switchTab(t){
   const l=document.getElementById('left'),r=document.getElementById('right')
   const tf=document.getElementById('tab-form'),tp=document.getElementById('tab-prev')
@@ -1192,6 +1497,23 @@ function logout(){tantecnoAuth.signOut()}
   collectAllPriceInputs().forEach(el=>{
     el.addEventListener('blur',()=>checkPrices())
   })
+  // Modal CRM: cambio tipo persona/empresa actualiza label
+  document.querySelectorAll('input[name="crm-tipo"]').forEach(r=>{
+    r.addEventListener('change',actualizarLabelNombreCRM)
+  })
+  // Cerrar modal CRM con Escape o clic en overlay
+  document.addEventListener('keydown',e=>{
+    if(e.key==='Escape'){
+      const m=document.getElementById('modal-crm')
+      if(m&&m.classList.contains('show'))cerrarModalCRM()
+    }
+  })
+  const overlay=document.getElementById('modal-crm')
+  if(overlay){
+    overlay.addEventListener('click',e=>{
+      if(e.target===overlay)cerrarModalCRM()
+    })
+  }
 })();
 
 // ═══════════════════════════════════════════════════════════════
