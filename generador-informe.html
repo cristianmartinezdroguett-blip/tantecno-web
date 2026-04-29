@@ -303,6 +303,11 @@ table.ct .dscrow td{background:#f0fdf4;color:#166534;font-size:9.5px;}
 .modal-ok:hover{background:var(--accent-h);}
 .modal-cancel{padding:11px 16px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;color:var(--text2);font-family:var(--body);font-size:13px;font-weight:500;cursor:pointer;transition:.15s;}
 .modal-cancel:hover{background:var(--bg3);color:var(--text);border-color:var(--border-h);}
+.crm-tipo-g{position:relative;cursor:pointer;user-select:none;}
+.crm-tipo-g input{position:absolute;opacity:0;pointer-events:none;}
+.crm-tipo-g span{display:block;text-align:center;font-family:var(--body);font-size:13px;font-weight:500;color:var(--text2);background:var(--bg2);border:1px solid var(--border);border-radius:7px;padding:9px 8px;transition:.15s;}
+.crm-tipo-g:hover span{border-color:var(--border-h);color:var(--text);}
+.crm-tipo-g input:checked + span{background:var(--accent);border-color:var(--accent);color:#fff;}
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </head>
@@ -530,6 +535,48 @@ table.ct .dscrow td{background:#f0fdf4;color:#166534;font-size:9.5px;}
     <div class="modal-btns">
       <button class="modal-cancel" onclick="cerrarModal()">Cancelar</button>
       <button class="modal-ok" id="modal-ok" onclick="confirmarModal()">Agregar a cotización</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ MODAL CRM (Fase 4) ═══ -->
+<div class="modal-overlay" id="modal-crm" style="display:none;">
+  <div class="modal-box" style="width:auto;max-width:520px;">
+    <div class="modal-title">Registrar informe</div>
+    <div class="modal-sub">Estos datos quedan en el CRM. El nombre se usa también para el PDF.</div>
+
+    <div style="margin-bottom:12px;">
+      <div class="modal-label">Tipo</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
+        <label class="crm-tipo-g"><input type="radio" name="crm-tipo-g" value="persona" checked><span>Persona</span></label>
+        <label class="crm-tipo-g"><input type="radio" name="crm-tipo-g" value="empresa"><span>Empresa</span></label>
+      </div>
+    </div>
+
+    <div style="margin-bottom:12px;">
+      <div class="modal-label" id="crm-g-nombre-lbl">Nombre completo</div>
+      <input id="crm-g-nombre" class="modal-input" style="font-size:14px;font-weight:400;" placeholder="Nombre del cliente" autocomplete="off">
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 140px;gap:10px;margin-bottom:12px;">
+      <div>
+        <div class="modal-label">Teléfono <span style="color:var(--text3);font-family:var(--body);text-transform:none;letter-spacing:0;font-weight:500;">(o email)</span></div>
+        <input id="crm-g-telefono" class="modal-input" style="font-size:14px;font-weight:400;" placeholder="+56 9 ..." autocomplete="off">
+      </div>
+      <div>
+        <div class="modal-label">RUT <span style="color:var(--text3);font-family:var(--body);text-transform:none;letter-spacing:0;font-weight:500;">opcional</span></div>
+        <input id="crm-g-rut" class="modal-input" style="font-size:14px;font-weight:400;font-family:var(--mono);" placeholder="12345678-9" autocomplete="off">
+      </div>
+    </div>
+
+    <div style="margin-bottom:18px;">
+      <div class="modal-label">Email <span style="color:var(--text3);font-family:var(--body);text-transform:none;letter-spacing:0;font-weight:500;">(o teléfono)</span></div>
+      <input id="crm-g-email" type="email" class="modal-input" style="font-size:14px;font-weight:400;" placeholder="cliente@correo.cl" autocomplete="off">
+    </div>
+
+    <div class="modal-btns">
+      <button class="modal-cancel" onclick="cerrarModalCRMGen()">Cancelar</button>
+      <button class="modal-ok" id="btn-crm-g-guardar" onclick="confirmarCRMGenYDescargar()">Guardar y descargar</button>
     </div>
   </div>
 </div>
@@ -1373,6 +1420,192 @@ function aplicarSnapshotGenerador(snap){
   }
 }
 
+// ═══════════════════════════════════════════════════════════════
+// MODAL CRM (Fase 4) — guardar informe en Supabase antes de descargar
+// ═══════════════════════════════════════════════════════════════
+function abrirModalCRMGen(){
+  // Pre-llenar nombre y teléfono desde el formulario
+  const nombrePrev=(document.getElementById('r-cliente').value||'').trim()
+                ||(document.getElementById('p-cliente').textContent||'').trim().replace(/_+/g,'').trim()
+  const telPrev=(document.getElementById('r-tel').value||'').trim()
+  document.getElementById('crm-g-nombre').value=nombrePrev||''
+  document.getElementById('crm-g-telefono').value=telPrev||''
+  document.getElementById('crm-g-email').value=''
+  document.getElementById('crm-g-rut').value=''
+  // Reset tipo a persona
+  document.querySelector('input[name="crm-tipo-g"][value="persona"]').checked=true
+  actualizarLabelNombreCRMGen()
+  document.getElementById('modal-crm').style.display='flex'
+  setTimeout(()=>{
+    if(!nombrePrev)document.getElementById('crm-g-nombre').focus()
+    else if(!telPrev)document.getElementById('crm-g-telefono').focus()
+    else document.getElementById('crm-g-email').focus()
+  },80)
+}
+function cerrarModalCRMGen(){
+  document.getElementById('modal-crm').style.display='none'
+}
+function actualizarLabelNombreCRMGen(){
+  const tipo=document.querySelector('input[name="crm-tipo-g"]:checked').value
+  const lbl=document.getElementById('crm-g-nombre-lbl')
+  const inp=document.getElementById('crm-g-nombre')
+  if(tipo==='empresa'){
+    lbl.textContent='Razón social'
+    inp.placeholder='Nombre de la empresa'
+  }else{
+    lbl.textContent='Nombre completo'
+    inp.placeholder='Nombre del cliente'
+  }
+}
+async function confirmarCRMGenYDescargar(){
+  const tipo=document.querySelector('input[name="crm-tipo-g"]:checked').value
+  const nombre=document.getElementById('crm-g-nombre').value.trim()
+  const telefono=document.getElementById('crm-g-telefono').value.trim()
+  const email=document.getElementById('crm-g-email').value.trim()
+  const rut=document.getElementById('crm-g-rut').value.trim()
+  if(!nombre){toast('Ingresa el nombre');return}
+  if(!telefono&&!email){toast('Ingresa al menos teléfono o email');return}
+  // Sincronizar nombre del modal al campo y al PDF
+  document.getElementById('r-cliente').value=nombre
+  document.getElementById('p-cliente').textContent=nombre
+  if(telefono)document.getElementById('r-tel').value=telefono
+  const btn=document.getElementById('btn-crm-g-guardar')
+  btn.disabled=true;btn.textContent='Guardando…'
+  try{
+    const folioCRM=await guardarInformeCRM({tipo,nombre,telefono,email,rut})
+    if(folioCRM)toast('Informe registrado: '+folioCRM)
+    else toast('Guardado local (sin conexión) — descargando PDF')
+  }catch(e){
+    console.error('[TANTECNO] Error guardando CRM informe:',e)
+    encolarInformePendiente({tipo,nombre,telefono,email,rut})
+    toast('No se pudo guardar en CRM — quedó en cola local')
+  }finally{
+    btn.disabled=false;btn.textContent='Guardar y descargar'
+    cerrarModalCRMGen()
+    // Siempre descargar PDF, exitoso o no
+    await descargarPDFGen()
+  }
+}
+function encolarInformePendiente(datos){
+  try{
+    const cola=JSON.parse(localStorage.getItem('tantecno_crm_pendientes_informes')||'[]')
+    cola.push({
+      timestamp:new Date().toISOString(),
+      folioLocal:document.getElementById('p-ot').textContent,
+      cliente:datos,
+      payload:armarPayloadInforme(datos)
+    })
+    localStorage.setItem('tantecno_crm_pendientes_informes',JSON.stringify(cola))
+  }catch(e){console.warn('[encolar]',e)}
+}
+function armarPayloadInforme(datos){
+  // Snapshot del informe — equipo, diagnóstico, servicios, total
+  const equipo={
+    descripcion:document.getElementById('p-equipo').textContent.trim(),
+    fecha_recepcion:document.getElementById('p-frecep').textContent.trim(),
+    fecha_informe:document.getElementById('p-finf').textContent.trim(),
+    estado_fisico:document.getElementById('p-estado').textContent.trim(),
+    accesorios:document.getElementById('p-acc').textContent.trim()
+  }
+  const diagnostico={
+    s1:document.getElementById('p-s1').textContent.trim(),
+    s2:document.getElementById('p-s2').textContent.trim(),
+    problema_reportado:(document.getElementById('r-problema')||{value:''}).value.trim(),
+    hallazgos:Array.from(selH)
+  }
+  const servicios={
+    items:selS.map(s=>({id:s.id,n:s.n,d:s.d,precio:s.pe})),
+    descuento_pct:parseFloat(document.getElementById('f-dsc').value)||0,
+    descontar_diagnostico:!!document.getElementById('chk-diag').checked,
+    folio_local:document.getElementById('p-ot').textContent
+  }
+  // Calcular total
+  let sub=0
+  selS.forEach(s=>{sub+=s.pe||0})
+  const dsc=servicios.descuento_pct
+  let total=sub-(dsc>0?Math.round(sub*dsc/100):0)
+  if(servicios.descontar_diagnostico)total-=29900
+  return {equipo,diagnostico,servicios,total}
+}
+function estadoSegunSubtipo(){
+  const sub=document.getElementById('p-subtipo').textContent.trim()
+  if(sub==='POST-INTERVENCIÓN')return 'cerrada'
+  if(sub==='DIAGNÓSTICO — NO REPARABLE')return 'descartada'
+  return 'nueva' // COTIZACIÓN
+}
+async function guardarInformeCRM(datos){
+  const bearer=await getBearerNube()
+  if(bearer===SB_KEY)throw new Error('Sin sesión')
+  const headers={
+    'apikey':SB_KEY,
+    'Authorization':`Bearer ${bearer}`,
+    'Content-Type':'application/json',
+    'Prefer':'return=representation'
+  }
+  let cliente_id=null,empresa_id=null
+  if(datos.tipo==='empresa'){
+    const payload={razon_social:datos.nombre,nombre_fantasia:datos.nombre,telefono:datos.telefono||null,email:datos.email||null}
+    if(datos.rut)payload.rut=datos.rut
+    const res=await fetch(`${SB_URL}/rest/v1/empresas`,{method:'POST',headers,body:JSON.stringify(payload)})
+    if(!res.ok){
+      const txt=await res.text()
+      if(res.status===409&&datos.rut){
+        const buscar=await fetch(`${SB_URL}/rest/v1/empresas?rut=eq.${encodeURIComponent(datos.rut)}&select=id&limit=1`,{headers:{apikey:SB_KEY,Authorization:`Bearer ${bearer}`}})
+        if(buscar.ok){
+          const arr=await buscar.json()
+          if(arr.length)empresa_id=arr[0].id
+        }
+      }
+      if(!empresa_id)throw new Error('empresas: '+res.status+' '+txt)
+    }else{
+      const rows=await res.json()
+      empresa_id=rows[0].id
+    }
+  }else{
+    const payload={nombre:datos.nombre,telefono:datos.telefono||null,email:datos.email||null}
+    if(datos.rut)payload.rut=datos.rut
+    const res=await fetch(`${SB_URL}/rest/v1/clientes`,{method:'POST',headers,body:JSON.stringify(payload)})
+    if(!res.ok)throw new Error('clientes: '+res.status+' '+await res.text())
+    const rows=await res.json()
+    cliente_id=rows[0].id
+  }
+  // Armar payload del informe
+  const p=armarPayloadInforme(datos)
+  const infPayload={
+    cliente_id,empresa_id,
+    equipo:p.equipo,
+    diagnostico:p.diagnostico,
+    servicios:p.servicios,
+    total:p.total,
+    estado:estadoSegunSubtipo(),
+    origen:'panel'
+  }
+  const res2=await fetch(`${SB_URL}/rest/v1/informes`,{method:'POST',headers,body:JSON.stringify(infPayload)})
+  if(!res2.ok)throw new Error('informes: '+res2.status+' '+await res2.text())
+  const rows2=await res2.json()
+  return rows2[0]&&rows2[0].folio?rows2[0].folio:null
+}
+// Cerrar modal CRM con Escape o clic en overlay
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){
+    const m=document.getElementById('modal-crm')
+    if(m&&m.style.display==='flex')cerrarModalCRMGen()
+  }
+})
+;(function crmGenOverlayInit(){
+  const ov=document.getElementById('modal-crm')
+  if(ov){
+    ov.addEventListener('click',e=>{
+      if(e.target===ov)cerrarModalCRMGen()
+    })
+  }
+})();
+;(function crmGenTipoInit(){
+  document.querySelectorAll('input[name="crm-tipo-g"]').forEach(r=>{
+    r.addEventListener('change',actualizarLabelNombreCRMGen)
+  })
+})();
+
 document.getElementById('f-ot').value=String(getOT())
 document.getElementById('f-ot').addEventListener('change',function(){saveOT(parseInt(this.value)||getOT())})
 document.getElementById('f-dsc').addEventListener('input',renderPrevSvc)
@@ -1616,6 +1849,11 @@ function savePDF(){
     saveOT(folioActual+1)
     document.getElementById('p-ot').textContent=String(folioActual)
   }
+  // Abrir modal CRM antes de descargar (Fase 4)
+  abrirModalCRMGen()
+}
+
+function descargarPDFGen(){
   const cliente=document.getElementById('p-cliente').textContent.trim()
   const nit=String(folioConfirmado)
   const hoy=new Date()
@@ -1626,8 +1864,7 @@ function savePDF(){
   const clienteLimpio=cliente.replace(/[^a-zA-ZáéíóúÁÉÍÓÚüÜñÑ\s]/g,'').trim()||'Cliente'
   const filename=fechaStr+' - Informe Técnico N°'+nit+' - '+clienteLimpio+'.pdf'
   toast('Generando PDF…')
-  generarPDFDinamico(filename).then(blob=>{
-    // Descargar Blob con <a> temporal (patrón Chrome-compatible)
+  return generarPDFDinamico(filename).then(blob=>{
     const url=URL.createObjectURL(blob)
     const a=document.createElement('a')
     a.href=url
