@@ -61,8 +61,12 @@ body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);min-
 .cat-sort-btn:hover{border-color:var(--accent);color:var(--accent);}
 .cat-sort-btn.on{background:var(--accent);border-color:var(--accent);color:#fff;}
 .cat-empty{padding:24px 16px;text-align:center;color:var(--text3);font-size:13px;font-style:italic;}
-.svc-item{display:grid;grid-template-columns:1fr 110px 200px;gap:14px;align-items:center;padding:14px 16px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;transition:.15s;}
+.svc-item{display:grid;grid-template-columns:32px 1fr 110px 200px;gap:14px;align-items:center;padding:14px 16px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;transition:.15s;}
 .svc-item:hover{border-color:var(--border-h);}
+.fav-btn{background:none;border:none;cursor:pointer;font-size:20px;line-height:1;padding:4px 6px;color:var(--border-h);transition:.15s;border-radius:6px;}
+.fav-btn:hover{color:#e0a800;background:var(--bg2);}
+.fav-btn.on{color:#f4b400;}
+.fav-btn.on:hover{color:#d99500;}
 .svc-info .svc-name{font-size:13.5px;font-weight:600;color:var(--text);margin-bottom:3px;display:flex;align-items:center;flex-wrap:wrap;gap:6px;}
 .svc-info .svc-desc{font-size:11.5px;color:var(--text2);line-height:1.45;}
 .svc-info .svc-ai{font-size:10.5px;color:var(--accent);margin-top:3px;font-style:italic;}
@@ -148,9 +152,10 @@ body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);min-
   .cat-sort-btns{justify-content:stretch;}
   .cat-sort-btn{flex:1;padding:8px 6px;}
 
-  /* Servicio como tarjeta vertical */
-  .svc-item{grid-template-columns:1fr;gap:10px;padding:14px;}
-  .svc-info{min-width:0;}
+  /* Servicio como tarjeta vertical, estrella absoluta arriba-derecha */
+  .svc-item{grid-template-columns:1fr;gap:10px;padding:14px;position:relative;}
+  .fav-btn{position:absolute;top:8px;right:8px;font-size:22px;padding:6px 8px;}
+  .svc-info{min-width:0;padding-right:36px;}
   .svc-info .svc-name{font-size:14px;word-break:break-word;}
   .svc-info .svc-desc{font-size:12px;}
   .svc-price{text-align:left;font-size:15px;}
@@ -215,11 +220,11 @@ body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);min-
         <button type="button" class="cat-search-clear" id="cat-search-clear" title="Limpiar búsqueda">×</button>
       </div>
       <div class="cat-sort-btns">
-        <button type="button" class="cat-sort-btn on" data-sort="orig" title="Orden original">—</button>
-        <button type="button" class="cat-sort-btn" data-sort="az" title="Nombre A-Z">A↓</button>
-        <button type="button" class="cat-sort-btn" data-sort="za" title="Nombre Z-A">A↑</button>
-        <button type="button" class="cat-sort-btn" data-sort="pa" title="Precio menor a mayor">$↓</button>
-        <button type="button" class="cat-sort-btn" data-sort="pd" title="Precio mayor a menor">$↑</button>
+        <button type="button" class="cat-sort-btn" data-sort="orig" title="Orden manual (sin favoritos arriba)">—</button>
+        <button type="button" class="cat-sort-btn on" data-sort="az" title="Nombre A-Z (favoritos arriba)">A↓</button>
+        <button type="button" class="cat-sort-btn" data-sort="za" title="Nombre Z-A (favoritos arriba)">A↑</button>
+        <button type="button" class="cat-sort-btn" data-sort="pa" title="Precio menor a mayor (favoritos arriba)">$↓</button>
+        <button type="button" class="cat-sort-btn" data-sort="pd" title="Precio mayor a menor (favoritos arriba)">$↑</button>
       </div>
     </div>
     <div class="svc-list" id="list-active"></div>
@@ -363,6 +368,7 @@ function rowToItem(r){
   if(r.ai_nombre)item.aiNombre=r.ai_nombre
   if(r.ai_nota)item.aiNota=r.ai_nota
   if(r.insumo)item.insumo=true
+  if(r.favorito)item.favorito=true
   if(r.deleted_at)item.deletedAt=new Date(r.deleted_at).getTime()
   if(r.orden!=null)item.orden=r.orden
   return item
@@ -376,6 +382,7 @@ function itemToRow(item){
     ai_nombre:item.aiNombre||null,
     ai_nota:item.aiNota||null,
     insumo:!!item.insumo,
+    favorito:!!item.favorito,
     orden:item.orden||0
   }
 }
@@ -419,6 +426,9 @@ async function restoreItem(id){
 }
 async function hardDelete(id){
   return await sbFetch(`${TABLE}?id=eq.${encodeURIComponent(id)}`,{method:'DELETE'})
+}
+async function toggleFavoritoSb(id,nuevoValor){
+  return await sbFetch(`${TABLE}?id=eq.${encodeURIComponent(id)}`,{method:'PATCH',body:JSON.stringify({favorito:!!nuevoValor})})
 }
 async function checkIdExists(id){
   const rows=await sbFetch(`${TABLE}?id=eq.${encodeURIComponent(id)}&select=id`)
@@ -465,7 +475,7 @@ let _activeCache=[]
 let _trashCache=[]
 // Estado de filtro y orden del buscador (solo afecta panel activos)
 let _catSearch=''
-let _catSort='orig'  // 'orig'|'az'|'za'|'pa'|'pd'
+let _catSort='az'  // 'orig'|'az'|'za'|'pa'|'pd' — default A→Z
 function normalizeTxt(s){
   return (s||'').toString().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'')
 }
@@ -480,10 +490,35 @@ function getFilteredActive(){
       return n.includes(q)||d.includes(q)||ai.includes(q)
     })
   }
-  if(_catSort==='az')list.sort((a,b)=>normalizeTxt(a.n).localeCompare(normalizeTxt(b.n)))
-  else if(_catSort==='za')list.sort((a,b)=>normalizeTxt(b.n).localeCompare(normalizeTxt(a.n)))
-  else if(_catSort==='pa')list.sort((a,b)=>(a.p||0)-(b.p||0))
-  else if(_catSort==='pd')list.sort((a,b)=>(b.p||0)-(a.p||0))
+  // En modo "orig" respeta el orden manual de Supabase (columna orden).
+  // En el resto de modos, los favoritos van primero.
+  if(_catSort==='orig'){
+    // No se reordena por favoritos: orden manual estricto.
+  } else if(_catSort==='az'){
+    list.sort((a,b)=>{
+      const fa=a.favorito?0:1, fb=b.favorito?0:1
+      if(fa!==fb)return fa-fb
+      return normalizeTxt(a.n).localeCompare(normalizeTxt(b.n))
+    })
+  } else if(_catSort==='za'){
+    list.sort((a,b)=>{
+      const fa=a.favorito?0:1, fb=b.favorito?0:1
+      if(fa!==fb)return fa-fb
+      return normalizeTxt(b.n).localeCompare(normalizeTxt(a.n))
+    })
+  } else if(_catSort==='pa'){
+    list.sort((a,b)=>{
+      const fa=a.favorito?0:1, fb=b.favorito?0:1
+      if(fa!==fb)return fa-fb
+      return (a.p||0)-(b.p||0)
+    })
+  } else if(_catSort==='pd'){
+    list.sort((a,b)=>{
+      const fa=a.favorito?0:1, fb=b.favorito?0:1
+      if(fa!==fb)return fa-fb
+      return (b.p||0)-(a.p||0)
+    })
+  }
   return list
 }
 function drawActive(){
@@ -507,9 +542,12 @@ function drawActive(){
   list.forEach(s=>{
     const aiInfo=(s.aiNombre||s.aiNota)?`<div class="svc-ai">${escapeHtml(s.aiNombre||'')}${s.aiNombre&&s.aiNota?' · ':''}${escapeHtml(s.aiNota||'')}</div>`:''
     const insumoTag=s.insumo?'<span class="pill-insumo">insumo</span>':''
+    const favClass=s.favorito?'fav-btn on':'fav-btn'
+    const favTitle=s.favorito?'Quitar de favoritos':'Marcar como favorito'
     const row=document.createElement('div')
     row.className='svc-item'
     row.innerHTML=`
+      <button class="${favClass}" data-action="fav" title="${favTitle}">★</button>
       <div class="svc-info">
         <div class="svc-name">${escapeHtml(s.n)} ${insumoTag}</div>
         <div class="svc-desc">${escapeHtml(s.d)}</div>
@@ -520,6 +558,7 @@ function drawActive(){
         <button class="btn-icon" data-action="edit">✎ Editar</button>
         <button class="btn-icon danger" data-action="del">🗑 Eliminar</button>
       </div>`
+    row.querySelector('[data-action=fav]').onclick=()=>toggleFavorito(s.id)
     row.querySelector('[data-action=edit]').onclick=()=>abrirEditar(s.id)
     row.querySelector('[data-action=del]').onclick=()=>eliminar(s.id)
     c.appendChild(row)
@@ -634,6 +673,11 @@ async function guardarServicio(){
   if(ain)nuevo.aiNombre=ain
   if(aino)nuevo.aiNota=aino
   if(ins)nuevo.insumo=true
+  // Preservar favorito en edición (no se toca desde este modal)
+  if(editId!==null){
+    const actual=_activeCache.find(x=>x.id===editId)
+    if(actual&&actual.favorito)nuevo.favorito=true
+  }
 
   try{
     if(editId===null){
@@ -651,6 +695,32 @@ async function guardarServicio(){
   }catch(e){
     console.error(e)
     toast('Error al guardar: '+e.message.slice(0,60))
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════
+// FAVORITOS
+// ═══════════════════════════════════════════════════════════════
+async function toggleFavorito(id){
+  const idx=_activeCache.findIndex(x=>x.id===id)
+  if(idx<0)return
+  const actual=_activeCache[idx]
+  const nuevoValor=!actual.favorito
+  // UI optimista: actualiza cache y redibuja antes de confirmar con servidor
+  if(nuevoValor)_activeCache[idx]={...actual,favorito:true}
+  else{
+    const copy={...actual};delete copy.favorito;_activeCache[idx]=copy
+  }
+  drawActive()
+  try{
+    await toggleFavoritoSb(id,nuevoValor)
+    toast(nuevoValor?'★ Favorito':'Quitado de favoritos')
+  }catch(e){
+    // Revertir si falla
+    _activeCache[idx]=actual
+    drawActive()
+    console.error(e)
+    toast('No se pudo actualizar: '+e.message.slice(0,60))
   }
 }
 

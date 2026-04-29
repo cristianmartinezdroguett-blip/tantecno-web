@@ -111,8 +111,9 @@ body.splitting iframe,body.splitting #left,body.splitting #right{pointer-events:
 .cat-btn{display:flex;justify-content:space-between;align-items:center;width:100%;padding:7px 10px;margin-bottom:3px;background:var(--bg2);border:1px solid var(--border);border-radius:6px;cursor:pointer;text-align:left;transition:.15s;}
 .cat-btn:hover{background:var(--bg3);border-color:var(--border-h);}
 .cat-btn.on{background:var(--accent-bg);border-color:var(--accent);}
-.cat-btn .cn{font-size:12px;color:var(--text2);}.cat-btn.on .cn{color:var(--accent);font-weight:600;}
+.cat-btn .cn{font-size:12px;color:var(--text2);flex:1;min-width:0;}.cat-btn.on .cn{color:var(--accent);font-weight:600;}
 .cat-btn .cp{font-family:var(--mono);font-size:10px;color:var(--text3);flex-shrink:0;margin-left:6px;}.cat-btn.on .cp{color:var(--accent);font-weight:600;}
+.cat-btn .cat-fav-ico{color:#f4b400;font-size:11px;margin-right:6px;flex-shrink:0;}
 .ss{display:flex;align-items:center;gap:6px;background:var(--accent-bg);border:1px solid rgba(27,58,92,.22);border-radius:6px;padding:5px 9px;margin-bottom:3px;}
 .ss .sn{font-size:11.5px;color:var(--accent);flex:1;line-height:1.3;font-weight:500;}
 .ss input{width:82px;background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:3px 6px;color:var(--text);font-family:var(--mono);font-size:10.5px;text-align:right;outline:none;}
@@ -379,6 +380,10 @@ table.ct .dscrow td{background:#f0fdf4;color:#166534;font-size:9.5px;}
       </span>
     </div>
     <div class="svc-sel-wrap" id="svc-sel"><div class="no-svc">Ninguno agregado aún</div></div>
+    <label class="diag-toggle" style="display:flex;align-items:center;gap:8px;padding:8px 10px;margin-bottom:6px;background:var(--bg3);border:1px solid var(--border);border-radius:6px;cursor:pointer;font-size:12px;color:var(--text2);user-select:none;">
+      <input type="checkbox" id="chk-diag" style="margin:0;cursor:pointer;">
+      <span>Descontar diagnóstico previo (–$29.900)</span>
+    </label>
     <div class="dsc-row" style="margin-bottom:8px;">
       <label>Descuento</label>
       <input type="number" id="f-dsc" value="0" min="0" max="100">
@@ -391,11 +396,11 @@ table.ct .dscrow td{background:#f0fdf4;color:#166534;font-size:9.5px;}
         <button type="button" class="cat-search-clear" id="cat-search-clear" title="Limpiar búsqueda">×</button>
       </div>
       <div class="cat-sort-btns">
-        <button type="button" class="cat-sort-btn on" data-sort="orig" title="Orden original">—</button>
-        <button type="button" class="cat-sort-btn" data-sort="az" title="Nombre A-Z">A↓</button>
-        <button type="button" class="cat-sort-btn" data-sort="za" title="Nombre Z-A">A↑</button>
-        <button type="button" class="cat-sort-btn" data-sort="pa" title="Precio menor a mayor">$↓</button>
-        <button type="button" class="cat-sort-btn" data-sort="pd" title="Precio mayor a menor">$↑</button>
+        <button type="button" class="cat-sort-btn" data-sort="orig" title="Orden manual (sin favoritos arriba)">—</button>
+        <button type="button" class="cat-sort-btn on" data-sort="az" title="Nombre A-Z (favoritos arriba)">A↓</button>
+        <button type="button" class="cat-sort-btn" data-sort="za" title="Nombre Z-A (favoritos arriba)">A↑</button>
+        <button type="button" class="cat-sort-btn" data-sort="pa" title="Precio menor a mayor (favoritos arriba)">$↓</button>
+        <button type="button" class="cat-sort-btn" data-sort="pd" title="Precio mayor a menor (favoritos arriba)">$↑</button>
       </div>
     </div>
     <div id="cat-wrap"></div>
@@ -572,6 +577,7 @@ function rowToItem(r){
   if(r.ai_nombre)item.aiNombre=r.ai_nombre
   if(r.ai_nota)item.aiNota=r.ai_nota
   if(r.insumo)item.insumo=true
+  if(r.favorito)item.favorito=true
   if(r.orden!=null)item.orden=r.orden
   return item
 }
@@ -938,7 +944,7 @@ function renderHall(){
 let _modalItem=null
 // Estado de filtro y orden del catálogo
 let _catSearch=''
-let _catSort='orig'  // 'orig'|'az'|'za'|'pa'|'pd'
+let _catSort='az'  // 'orig'|'az'|'za'|'pa'|'pd' — default A→Z
 function normalizeTxt(s){
   return (s||'').toString().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'')
 }
@@ -953,12 +959,35 @@ function getFilteredCat(){
       return n.includes(q)||d.includes(q)
     })
   }
-  // Ordenar
-  if(_catSort==='az')list.sort((a,b)=>normalizeTxt(a.n).localeCompare(normalizeTxt(b.n)))
-  else if(_catSort==='za')list.sort((a,b)=>normalizeTxt(b.n).localeCompare(normalizeTxt(a.n)))
-  else if(_catSort==='pa')list.sort((a,b)=>(a.p||0)-(b.p||0))
-  else if(_catSort==='pd')list.sort((a,b)=>(b.p||0)-(a.p||0))
-  // 'orig' mantiene orden de CAT (Supabase)
+  // En modo "orig" respeta el orden manual de Supabase (columna orden).
+  // En el resto de modos, los favoritos van primero.
+  if(_catSort==='orig'){
+    // Sin reordenamiento por favoritos
+  } else if(_catSort==='az'){
+    list.sort((a,b)=>{
+      const fa=a.favorito?0:1, fb=b.favorito?0:1
+      if(fa!==fb)return fa-fb
+      return normalizeTxt(a.n).localeCompare(normalizeTxt(b.n))
+    })
+  } else if(_catSort==='za'){
+    list.sort((a,b)=>{
+      const fa=a.favorito?0:1, fb=b.favorito?0:1
+      if(fa!==fb)return fa-fb
+      return normalizeTxt(b.n).localeCompare(normalizeTxt(a.n))
+    })
+  } else if(_catSort==='pa'){
+    list.sort((a,b)=>{
+      const fa=a.favorito?0:1, fb=b.favorito?0:1
+      if(fa!==fb)return fa-fb
+      return (a.p||0)-(b.p||0)
+    })
+  } else if(_catSort==='pd'){
+    list.sort((a,b)=>{
+      const fa=a.favorito?0:1, fb=b.favorito?0:1
+      if(fa!==fb)return fa-fb
+      return (b.p||0)-(a.p||0)
+    })
+  }
   return list
 }
 function renderCat(){
@@ -970,8 +999,9 @@ function renderCat(){
   }
   list.forEach(item=>{
     const on=selS.find(s=>s.id===item.id)
-    const btn=document.createElement('button');btn.className='cat-btn'+(on?' on':'')
-    btn.innerHTML=`<span class="cn">${item.n}</span><span class="cp">${item.insumo?'+ insumo':fmt(item.p)}</span>`
+    const btn=document.createElement('button');btn.className='cat-btn'+(on?' on':'')+(item.favorito?' fav':'')
+    const star=item.favorito?'<span class="cat-fav-ico" title="Favorito">★</span>':''
+    btn.innerHTML=`${star}<span class="cn">${item.n}</span><span class="cp">${item.insumo?'+ insumo':fmt(item.p)}</span>`
     btn.onclick=()=>{
       if(on) return
       if(item.insumo){
@@ -1035,13 +1065,19 @@ function renderPrevSvc(){
   wrap.style.display='block';tb.innerHTML='';let sub=0
   selS.forEach(s=>{sub+=s.pe||0;tb.insertAdjacentHTML('beforeend',`<tr><td><b>${s.n}</b></td><td>${s.d}</td><td style="text-align:right;font-family:monospace;white-space:nowrap;">${fmt(s.pe)}</td></tr>`)})
   const dsc=parseFloat(document.getElementById('f-dsc').value)||0
+  const chkDiag=document.getElementById('chk-diag')
+  const descontarDiag=chkDiag&&chkDiag.checked
+  const DIAG_AMOUNT=29900
+  let tot=sub
   if(dsc>0){
-    const d=Math.round(sub*dsc/100),tot=sub-d
+    const d=Math.round(sub*dsc/100);tot=sub-d
     tb.insertAdjacentHTML('beforeend',`<tr class="dscrow"><td colspan="2" style="text-align:right;">Descuento ${dsc}%:</td><td style="text-align:right;font-family:monospace;">– ${fmt(d)}</td></tr>`)
-    tb.insertAdjacentHTML('beforeend',`<tr class="tot"><td colspan="2" style="text-align:right;">Total general:</td><td style="text-align:right;font-family:monospace;">${fmt(tot)}</td></tr>`)
-  } else {
-    tb.insertAdjacentHTML('beforeend',`<tr class="tot"><td colspan="2" style="text-align:right;">Total general:</td><td style="text-align:right;font-family:monospace;">${fmt(sub)}</td></tr>`)
   }
+  if(descontarDiag){
+    tot=tot-DIAG_AMOUNT
+    tb.insertAdjacentHTML('beforeend',`<tr class="dscrow"><td colspan="2" style="text-align:right;">Diagnóstico previo (descontado):</td><td style="text-align:right;font-family:monospace;">– ${fmt(DIAG_AMOUNT)}</td></tr>`)
+  }
+  tb.insertAdjacentHTML('beforeend',`<tr class="tot"><td colspan="2" style="text-align:right;">Total general:</td><td style="text-align:right;font-family:monospace;">${fmt(tot)}</td></tr>`)
 }
 function limpiar(){
   if(!confirm('¿Nuevo informe? Se perderán los datos actuales.'))return
@@ -1056,6 +1092,7 @@ function limpiar(){
   document.getElementById('r-problema').value=''
   document.getElementById('r-acc').value='Solo cargador'
   document.getElementById('f-dsc').value='0'
+  const chkDiag=document.getElementById('chk-diag');if(chkDiag)chkDiag.checked=false
   const today=new Date().toISOString().split('T')[0]
   document.getElementById('r-frecep').value=today
   document.getElementById('r-finf').value=today
@@ -1084,6 +1121,7 @@ function logout(){tantecnoAuth.signOut()}
 document.getElementById('f-ot').value=String(getOT())
 document.getElementById('f-ot').addEventListener('change',function(){saveOT(parseInt(this.value)||getOT())})
 document.getElementById('f-dsc').addEventListener('input',renderPrevSvc)
+document.getElementById('chk-diag').addEventListener('change',renderPrevSvc)
 const today=new Date().toISOString().split('T')[0]
 document.getElementById('r-frecep').value=today
 document.getElementById('r-finf').value=today
