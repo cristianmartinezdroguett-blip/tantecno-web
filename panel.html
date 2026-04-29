@@ -69,8 +69,84 @@ body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);min-
 .pnl-footer b{color:var(--text2);font-weight:600;}
 
 /* ═══════════════════════════════════════════════════════════════
-   MÓVIL (≤720px) — no toca desktop
+   CRM — bloques de panel
    ═══════════════════════════════════════════════════════════════ */
+.crm-block{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:22px;margin-bottom:20px;}
+.crm-block-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:14px;gap:10px;flex-wrap:wrap;}
+.crm-block-head h2{font-size:16px;font-weight:700;color:var(--text);letter-spacing:-.01em;}
+.crm-block-sub{font-family:var(--mono);font-size:11px;color:var(--text3);letter-spacing:.04em;}
+.crm-empty{padding:20px;text-align:center;color:var(--text3);font-size:13px;font-style:italic;}
+
+/* Por hacer — lista de tareas */
+.crm-todo-list{display:flex;flex-direction:column;gap:8px;}
+.crm-todo{display:grid;grid-template-columns:auto 1fr auto auto;gap:12px;align-items:center;padding:12px 14px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;transition:.15s;}
+.crm-todo:hover{border-color:var(--border-h);}
+.crm-todo-tipo{font-family:var(--mono);font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;font-weight:700;padding:3px 7px;border-radius:4px;}
+.crm-todo-tipo.cot{background:var(--blue-bg);color:var(--blue);}
+.crm-todo-tipo.inf{background:var(--accent-bg);color:var(--accent);}
+.crm-todo-info{min-width:0;}
+.crm-todo-cliente{font-size:13.5px;font-weight:600;color:var(--text);line-height:1.2;}
+.crm-todo-meta{font-family:var(--mono);font-size:10.5px;color:var(--text3);margin-top:3px;}
+.crm-todo-monto{font-family:var(--mono);font-size:13px;font-weight:600;color:var(--green);white-space:nowrap;}
+.crm-todo-actions{display:flex;gap:4px;}
+.crm-todo-btn{background:var(--bg2);border:1px solid var(--border);border-radius:5px;padding:5px 9px;font-size:11px;cursor:pointer;color:var(--text2);transition:.12s;font-family:var(--body);font-weight:500;}
+.crm-todo-btn:hover{background:var(--accent-bg);color:var(--accent);border-color:var(--accent);}
+.crm-todo-btn.ok:hover{background:var(--green-bg);color:var(--green);border-color:var(--green);}
+.crm-todo-btn.x:hover{background:var(--red-bg);color:var(--red);border-color:var(--red);}
+
+/* Buscar cliente */
+.crm-search-wrap{position:relative;margin-bottom:10px;}
+#crm-search{width:100%;padding:11px 38px 11px 14px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;font-family:var(--body);font-size:14px;color:var(--text);outline:none;transition:.15s;}
+#crm-search:focus{border-color:var(--accent);background:var(--bg2);box-shadow:0 0 0 3px var(--accent-bg);}
+#crm-search-clear{position:absolute;right:8px;top:50%;transform:translateY(-50%);background:none;border:none;font-size:18px;color:var(--text3);cursor:pointer;padding:4px 8px;border-radius:4px;display:none;}
+.crm-search-wrap.has-text #crm-search-clear{display:block;}
+#crm-search-clear:hover{color:var(--red);background:var(--red-bg);}
+.crm-cli-result{padding:14px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;margin-bottom:10px;}
+.crm-cli-name{font-size:14.5px;font-weight:700;color:var(--text);margin-bottom:4px;}
+.crm-cli-contact{font-family:var(--mono);font-size:11px;color:var(--text3);margin-bottom:10px;}
+.crm-cli-docs{display:flex;flex-direction:column;gap:5px;}
+.crm-cli-doc{display:grid;grid-template-columns:auto 1fr auto auto auto;gap:10px;align-items:center;padding:7px 10px;background:var(--bg2);border:1px solid var(--border);border-radius:6px;font-size:12.5px;}
+.crm-cli-doc-folio{font-family:var(--mono);font-size:11px;font-weight:600;color:var(--accent);}
+.crm-cli-doc-fecha{font-family:var(--mono);font-size:10.5px;color:var(--text3);}
+.crm-cli-doc-monto{font-family:var(--mono);font-weight:600;color:var(--green);}
+.crm-cli-doc-estado{font-family:var(--mono);font-size:9.5px;text-transform:uppercase;letter-spacing:.06em;padding:3px 7px;border-radius:4px;font-weight:600;}
+.crm-cli-doc-estado.nueva{background:var(--blue-bg);color:var(--blue);}
+.crm-cli-doc-estado.contactado{background:var(--yellow-bg);color:var(--yellow);}
+.crm-cli-doc-estado.cerrada{background:var(--green-bg);color:var(--green);}
+.crm-cli-doc-estado.descartada{background:var(--red-bg);color:var(--red);}
+
+/* Stats */
+.crm-stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:18px;}
+@media(max-width:780px){.crm-stats-grid{grid-template-columns:repeat(2,1fr);}}
+.crm-stat{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:14px;}
+.crm-stat-label{font-family:var(--mono);font-size:9.5px;color:var(--text3);letter-spacing:.06em;text-transform:uppercase;font-weight:600;margin-bottom:5px;}
+.crm-stat-value{font-size:22px;font-weight:800;color:var(--text);letter-spacing:-.02em;line-height:1.1;}
+.crm-stat-trend{font-family:var(--mono);font-size:10.5px;color:var(--text3);margin-top:4px;}
+.crm-stat-trend.up{color:var(--green);}
+.crm-stat-trend.down{color:var(--red);}
+
+/* Tops */
+.crm-tops{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+@media(max-width:780px){.crm-tops{grid-template-columns:1fr;}}
+.crm-top-block{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:14px;}
+.crm-top-title{font-family:var(--mono);font-size:9.5px;color:var(--text3);letter-spacing:.06em;text-transform:uppercase;font-weight:600;margin-bottom:10px;}
+.crm-top-row{display:flex;justify-content:space-between;align-items:baseline;padding:6px 0;font-size:12.5px;border-bottom:1px solid var(--border);}
+.crm-top-row:last-child{border-bottom:none;}
+.crm-top-name{color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding-right:8px;}
+.crm-top-val{font-family:var(--mono);color:var(--text2);font-weight:600;white-space:nowrap;}
+
+/* Tabla mensual */
+.crm-table-wrap{overflow-x:auto;}
+.crm-table{width:100%;border-collapse:collapse;font-size:13px;}
+.crm-table thead th{font-family:var(--mono);font-size:10px;font-weight:600;color:var(--text3);letter-spacing:.06em;text-transform:uppercase;padding:8px 10px;border-bottom:1px solid var(--border);text-align:left;}
+.crm-table thead th.num{text-align:right;}
+.crm-table tbody td{padding:9px 10px;border-bottom:1px solid var(--border);color:var(--text);}
+.crm-table tbody td.num{text-align:right;font-family:var(--mono);font-weight:500;}
+.crm-table tbody tr:hover{background:var(--bg3);}
+.crm-table tbody tr:last-child td{border-bottom:none;}
+.crm-table .month-label{font-weight:600;}
+
+
 @media(max-width:720px){
   .pnl-header{padding:12px 14px;gap:10px;}
   .pnl-brand{gap:8px;min-width:0;}
@@ -98,6 +174,17 @@ body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);min-
   .card-tag{top:12px;right:12px;font-size:9px;padding:2px 7px;}
 
   .pnl-footer{padding:14px;font-size:10.5px;line-height:1.5;}
+
+  /* CRM en móvil */
+  .crm-block{padding:16px;}
+  .crm-block-head h2{font-size:15px;}
+  .crm-todo{grid-template-columns:1fr;gap:8px;padding:12px;}
+  .crm-todo-actions{justify-content:stretch;}
+  .crm-todo-btn{flex:1;text-align:center;padding:7px;}
+  .crm-stat-value{font-size:18px;}
+  .crm-cli-doc{grid-template-columns:1fr;gap:5px;padding:10px;}
+  .crm-table{font-size:12px;}
+  .crm-table thead th, .crm-table tbody td{padding:7px 6px;}
 }
 </style>
 </head>
@@ -197,6 +284,109 @@ body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);min-
       </div>
       <div id="drafts-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;"></div>
     </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         CRM — Por hacer / Buscar / Control de ventas / Historial mensual
+         ═══════════════════════════════════════════════════════════════ -->
+    <div id="crm-section" style="margin-top:40px;display:none;">
+
+      <!-- Bloque 1: Por hacer -->
+      <div class="crm-block">
+        <div class="crm-block-head">
+          <h2>📋 Por hacer</h2>
+          <span class="crm-block-sub" id="todo-count">—</span>
+        </div>
+        <div id="todo-list" class="crm-todo-list">
+          <div class="crm-empty">Cargando…</div>
+        </div>
+      </div>
+
+      <!-- Bloque 2: Buscar cliente -->
+      <div class="crm-block">
+        <div class="crm-block-head">
+          <h2>🔎 Buscar cliente</h2>
+        </div>
+        <div class="crm-search-wrap">
+          <input type="text" id="crm-search" placeholder="Nombre, teléfono, RUT o folio (INF-…, COT-…)…" autocomplete="off">
+          <button type="button" id="crm-search-clear" title="Limpiar">×</button>
+        </div>
+        <div id="crm-search-results"></div>
+      </div>
+
+      <!-- Bloque 3: Control de ventas -->
+      <div class="crm-block">
+        <div class="crm-block-head">
+          <h2>📊 Control de ventas — este mes</h2>
+        </div>
+        <div class="crm-stats-grid">
+          <div class="crm-stat">
+            <div class="crm-stat-label">Servicios técnicos</div>
+            <div class="crm-stat-value" id="stat-inf-mes">—</div>
+            <div class="crm-stat-trend" id="stat-inf-trend"></div>
+          </div>
+          <div class="crm-stat">
+            <div class="crm-stat-label">Equipos nuevos</div>
+            <div class="crm-stat-value" id="stat-cot-mes">—</div>
+            <div class="crm-stat-trend" id="stat-cot-trend"></div>
+          </div>
+          <div class="crm-stat">
+            <div class="crm-stat-label">Total cerrado año</div>
+            <div class="crm-stat-value" id="stat-anio">—</div>
+            <div class="crm-stat-trend">YTD acumulado</div>
+          </div>
+          <div class="crm-stat">
+            <div class="crm-stat-label">% de cierre</div>
+            <div class="crm-stat-value" id="stat-pct">—</div>
+            <div class="crm-stat-trend" id="stat-pct-detail"></div>
+          </div>
+          <div class="crm-stat">
+            <div class="crm-stat-label">Ticket promedio</div>
+            <div class="crm-stat-value" id="stat-ticket">—</div>
+            <div class="crm-stat-trend">cerrados este mes</div>
+          </div>
+          <div class="crm-stat">
+            <div class="crm-stat-label">Diagnósticos hechos</div>
+            <div class="crm-stat-value" id="stat-diag">—</div>
+            <div class="crm-stat-trend">este mes</div>
+          </div>
+        </div>
+        <div class="crm-tops">
+          <div class="crm-top-block">
+            <div class="crm-top-title">Top servicios — más vendidos</div>
+            <div id="top-servicios" class="crm-top-list"><div class="crm-empty">—</div></div>
+          </div>
+          <div class="crm-top-block">
+            <div class="crm-top-title">Clientes recurrentes</div>
+            <div id="top-clientes" class="crm-top-list"><div class="crm-empty">—</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bloque 4: Historial mensual -->
+      <div class="crm-block">
+        <div class="crm-block-head">
+          <h2>📅 Historial — últimos 12 meses</h2>
+        </div>
+        <div class="crm-table-wrap">
+          <table class="crm-table">
+            <thead>
+              <tr>
+                <th>Mes</th>
+                <th class="num">Cotizado</th>
+                <th class="num">Cerrado</th>
+                <th class="num">% Cierre</th>
+                <th class="num">Tickets</th>
+              </tr>
+            </thead>
+            <tbody id="historial-body">
+              <tr><td colspan="5" class="crm-empty">Cargando…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+
   </div>
 </main>
 
@@ -295,8 +485,436 @@ async function renderDrafts(){
   sec.style.display='block'
 }
 
+// ═══════════════════════════════════════════════════════════════
+// CRM — utilidades comunes
+// ═══════════════════════════════════════════════════════════════
+const fmt=n=>'$'+(n||0).toLocaleString('es-CL')
+const fmtFecha=iso=>new Date(iso).toLocaleDateString('es-CL',{day:'2-digit',month:'short',year:'2-digit'})
+
+async function sbGet(path){
+  const bearer=await getBearer()
+  if(bearer===SB_KEY)throw new Error('Sin sesión')
+  const res=await fetch(`${SB_URL}/rest/v1/${path}`,{headers:{apikey:SB_KEY,Authorization:`Bearer ${bearer}`}})
+  if(!res.ok)throw new Error(`GET ${path}: ${res.status}`)
+  return await res.json()
+}
+async function sbPatch(path,body){
+  const bearer=await getBearer()
+  const res=await fetch(`${SB_URL}/rest/v1/${path}`,{
+    method:'PATCH',
+    headers:{apikey:SB_KEY,Authorization:`Bearer ${bearer}`,'Content-Type':'application/json'},
+    body:JSON.stringify(body)
+  })
+  if(!res.ok)throw new Error(`PATCH ${path}: ${res.status}`)
+  return await res.json().catch(()=>null)
+}
+
+// ═══════════════════════════════════════════════════════════════
+// BLOQUE 1: POR HACER
+// Cotizaciones e informes en estado 'nueva' o 'contactado', ordenados por antigüedad
+// ═══════════════════════════════════════════════════════════════
+async function cargarPorHacer(){
+  const cont=document.getElementById('todo-list')
+  const count=document.getElementById('todo-count')
+  try{
+    const [cots,infs]=await Promise.all([
+      sbGet(`cotizaciones?estado=in.(nueva,contactado)&deleted_at=is.null&order=created_at.asc&select=id,folio,total,estado,created_at,cliente_id,empresa_id,componentes`),
+      sbGet(`informes?estado=in.(nueva,contactado)&deleted_at=is.null&order=created_at.asc&select=id,folio,total,estado,created_at,cliente_id,empresa_id`)
+    ])
+    // Resolver nombres de clientes/empresas en lote
+    const cliIds=new Set(),empIds=new Set()
+    const all=[...cots.map(c=>({...c,_tipo:'cot'})),...infs.map(i=>({...i,_tipo:'inf'}))]
+    all.forEach(d=>{if(d.cliente_id)cliIds.add(d.cliente_id);if(d.empresa_id)empIds.add(d.empresa_id)})
+    const [cliMap,empMap]=await Promise.all([
+      cliIds.size?sbGet(`clientes?id=in.(${[...cliIds].join(',')})&select=id,nombre,telefono`).then(r=>Object.fromEntries(r.map(c=>[c.id,c]))):{},
+      empIds.size?sbGet(`empresas?id=in.(${[...empIds].join(',')})&select=id,razon_social,telefono`).then(r=>Object.fromEntries(r.map(e=>[e.id,e]))):{}
+    ])
+    if(!all.length){
+      cont.innerHTML='<div class="crm-empty">Sin tareas pendientes — todo al día ✓</div>'
+      count.textContent='0 pendientes'
+      return
+    }
+    count.textContent=all.length+(all.length===1?' pendiente':' pendientes')
+    cont.innerHTML=''
+    all.forEach(d=>{
+      const cli=d.cliente_id?cliMap[d.cliente_id]:(d.empresa_id?empMap[d.empresa_id]:null)
+      const nombre=cli?(cli.nombre||cli.razon_social||'sin nombre'):'sin nombre'
+      const dias=Math.floor((Date.now()-new Date(d.created_at).getTime())/(1000*60*60*24))
+      const diasTxt=dias===0?'hoy':(dias===1?'ayer':`${dias} días`)
+      const tipoLabel=d._tipo==='cot'?'COT':'INF'
+      const tipoCls=d._tipo==='cot'?'cot':'inf'
+      const row=document.createElement('div')
+      row.className='crm-todo'
+      row.innerHTML=`
+        <span class="crm-todo-tipo ${tipoCls}">${tipoLabel}</span>
+        <div class="crm-todo-info">
+          <div class="crm-todo-cliente">${escapeHtml(nombre)}</div>
+          <div class="crm-todo-meta">${escapeHtml(d.folio||'—')} · ${diasTxt} · ${d.estado}</div>
+        </div>
+        <div class="crm-todo-monto">${fmt(d.total)}</div>
+        <div class="crm-todo-actions">
+          <button class="crm-todo-btn" data-act="contactado" title="Marcar como contactado">📞</button>
+          <button class="crm-todo-btn ok" data-act="cerrada" title="Marcar como cerrada">✓</button>
+          <button class="crm-todo-btn x" data-act="descartada" title="Descartar">✕</button>
+        </div>
+      `
+      row.querySelectorAll('[data-act]').forEach(btn=>{
+        btn.onclick=()=>cambiarEstado(d._tipo,d.id,btn.dataset.act)
+      })
+      cont.appendChild(row)
+    })
+  }catch(e){
+    console.error('[porHacer]',e)
+    cont.innerHTML='<div class="crm-empty">Error al cargar — '+escapeHtml(e.message)+'</div>'
+  }
+}
+
+async function cambiarEstado(tipo,id,nuevoEstado){
+  const tabla=tipo==='cot'?'cotizaciones':'informes'
+  try{
+    await sbPatch(`${tabla}?id=eq.${id}`,{estado:nuevoEstado})
+    cargarPorHacer()  // recarga la lista
+    cargarStats()     // y stats por si afecta cierres
+    cargarHistorial()
+  }catch(e){
+    console.error('[cambiarEstado]',e)
+    alert('No se pudo actualizar')
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════
+// BLOQUE 2: BUSCAR CLIENTE
+// Busca por nombre, teléfono, email, RUT, o folio
+// ═══════════════════════════════════════════════════════════════
+let _searchTimer=null
+function setupBuscar(){
+  const inp=document.getElementById('crm-search')
+  const wrap=inp.parentElement
+  const clearBtn=document.getElementById('crm-search-clear')
+  inp.addEventListener('input',()=>{
+    const q=inp.value.trim()
+    wrap.classList.toggle('has-text',q.length>0)
+    if(_searchTimer)clearTimeout(_searchTimer)
+    if(!q){document.getElementById('crm-search-results').innerHTML='';return}
+    _searchTimer=setTimeout(()=>buscarCliente(q),350)
+  })
+  clearBtn.addEventListener('click',()=>{
+    inp.value=''
+    wrap.classList.remove('has-text')
+    document.getElementById('crm-search-results').innerHTML=''
+    inp.focus()
+  })
+}
+async function buscarCliente(q){
+  const cont=document.getElementById('crm-search-results')
+  cont.innerHTML='<div class="crm-empty">Buscando…</div>'
+  try{
+    // Búsqueda por folio directo
+    const folioMatch=q.match(/^(COT|INF)-[\d-]+/i)
+    if(folioMatch){
+      const folio=q.toUpperCase()
+      const [cots,infs]=await Promise.all([
+        sbGet(`cotizaciones?folio=eq.${encodeURIComponent(folio)}&deleted_at=is.null&select=*`),
+        sbGet(`informes?folio=eq.${encodeURIComponent(folio)}&deleted_at=is.null&select=*`)
+      ])
+      const docs=[...cots.map(c=>({...c,_tipo:'cot'})),...infs.map(i=>({...i,_tipo:'inf'}))]
+      if(!docs.length){cont.innerHTML='<div class="crm-empty">No se encontró ese folio</div>';return}
+      // Para cada doc, resolver el cliente y mostrar como ficha
+      await renderClientesFromDocs(docs,cont)
+      return
+    }
+    // Búsqueda en clientes (nombre, telefono, email, rut)
+    const ql=encodeURIComponent('*'+q+'*')
+    const filtros=[`nombre=ilike.${ql}`,`telefono=ilike.${ql}`,`email=ilike.${ql}`,`rut=ilike.${ql}`].join(',')
+    const clis=await sbGet(`clientes?or=(${filtros})&deleted_at=is.null&select=id,nombre,telefono,email,rut&limit=20`)
+    // Búsqueda en empresas
+    const fEmp=[`razon_social=ilike.${ql}`,`nombre_fantasia=ilike.${ql}`,`telefono=ilike.${ql}`,`email=ilike.${ql}`,`rut=ilike.${ql}`].join(',')
+    const emps=await sbGet(`empresas?or=(${fEmp})&deleted_at=is.null&select=id,razon_social,nombre_fantasia,telefono,email,rut&limit=20`)
+    if(!clis.length&&!emps.length){
+      cont.innerHTML='<div class="crm-empty">Sin resultados para "'+escapeHtml(q)+'"</div>'
+      return
+    }
+    cont.innerHTML=''
+    for(const c of clis){await renderFichaCliente('cliente',c,cont)}
+    for(const e of emps){await renderFichaCliente('empresa',e,cont)}
+  }catch(e){
+    console.error('[buscar]',e)
+    cont.innerHTML='<div class="crm-empty">Error: '+escapeHtml(e.message)+'</div>'
+  }
+}
+async function renderClientesFromDocs(docs,cont){
+  cont.innerHTML=''
+  // Agrupar por cliente_id/empresa_id
+  const cliIds=new Set(),empIds=new Set()
+  docs.forEach(d=>{if(d.cliente_id)cliIds.add(d.cliente_id);if(d.empresa_id)empIds.add(d.empresa_id)})
+  const [cliMap,empMap]=await Promise.all([
+    cliIds.size?sbGet(`clientes?id=in.(${[...cliIds].join(',')})&select=*`).then(r=>Object.fromEntries(r.map(c=>[c.id,c]))):{},
+    empIds.size?sbGet(`empresas?id=in.(${[...empIds].join(',')})&select=*`).then(r=>Object.fromEntries(r.map(e=>[e.id,e]))):{}
+  ])
+  for(const id of cliIds){if(cliMap[id])await renderFichaCliente('cliente',cliMap[id],cont)}
+  for(const id of empIds){if(empMap[id])await renderFichaCliente('empresa',empMap[id],cont)}
+}
+async function renderFichaCliente(tipo,c,cont){
+  const filtroIdField=tipo==='cliente'?'cliente_id':'empresa_id'
+  const [cots,infs]=await Promise.all([
+    sbGet(`cotizaciones?${filtroIdField}=eq.${c.id}&deleted_at=is.null&order=created_at.desc&select=id,folio,total,estado,created_at`).catch(()=>[]),
+    sbGet(`informes?${filtroIdField}=eq.${c.id}&deleted_at=is.null&order=created_at.desc&select=id,folio,total,estado,created_at`).catch(()=>[])
+  ])
+  const docs=[...cots.map(d=>({...d,_tipo:'cot'})),...infs.map(d=>({...d,_tipo:'inf'}))]
+    .sort((a,b)=>new Date(b.created_at)-new Date(a.created_at))
+  const ficha=document.createElement('div')
+  ficha.className='crm-cli-result'
+  const nombre=tipo==='cliente'?(c.nombre||'sin nombre'):(c.razon_social||c.nombre_fantasia||'sin nombre')
+  const contactBits=[]
+  if(c.telefono)contactBits.push('📞 '+c.telefono)
+  if(c.email)contactBits.push('✉️ '+c.email)
+  if(c.rut)contactBits.push('RUT '+c.rut)
+  ficha.innerHTML=`
+    <div class="crm-cli-name">${escapeHtml(nombre)}${tipo==='empresa'?' <span style="font-family:var(--mono);font-size:10px;color:var(--text3);font-weight:500;">EMPRESA</span>':''}</div>
+    <div class="crm-cli-contact">${escapeHtml(contactBits.join(' · '))||'sin datos de contacto'}</div>
+    <div class="crm-cli-docs">
+      ${docs.length?docs.map(d=>`
+        <div class="crm-cli-doc">
+          <span class="crm-cli-doc-folio">${escapeHtml(d.folio||'—')}</span>
+          <span class="crm-cli-doc-fecha">${fmtFecha(d.created_at)}</span>
+          <span class="crm-cli-doc-monto">${fmt(d.total)}</span>
+          <span class="crm-cli-doc-estado ${d.estado}">${d.estado}</span>
+          <span style="font-family:var(--mono);font-size:9.5px;color:var(--text3);">${d._tipo==='cot'?'COT':'INF'}</span>
+        </div>
+      `).join(''):'<div class="crm-empty" style="padding:8px;">Sin documentos registrados</div>'}
+    </div>
+  `
+  cont.appendChild(ficha)
+}
+
+// ═══════════════════════════════════════════════════════════════
+// BLOQUE 3: CONTROL DE VENTAS
+// ═══════════════════════════════════════════════════════════════
+function inicioMes(offset=0){
+  const d=new Date()
+  d.setMonth(d.getMonth()+offset,1)
+  d.setHours(0,0,0,0)
+  return d.toISOString()
+}
+function inicioAnio(){
+  const d=new Date(new Date().getFullYear(),0,1)
+  return d.toISOString()
+}
+async function cargarStats(){
+  try{
+    const inicioMesActual=inicioMes(0)
+    const inicioMesAnt=inicioMes(-1)
+    const finMesAnt=inicioMesActual
+    const inicioAnioActual=inicioAnio()
+    // Cerrados este mes (separados)
+    const [infMes,cotMes]=await Promise.all([
+      sbGet(`informes?estado=eq.cerrada&deleted_at=is.null&created_at=gte.${inicioMesActual}&select=total`),
+      sbGet(`cotizaciones?estado=eq.cerrada&deleted_at=is.null&created_at=gte.${inicioMesActual}&select=total`)
+    ])
+    const totalInfMes=infMes.reduce((s,x)=>s+(x.total||0),0)
+    const totalCotMes=cotMes.reduce((s,x)=>s+(x.total||0),0)
+    document.getElementById('stat-inf-mes').textContent=fmt(totalInfMes)
+    document.getElementById('stat-cot-mes').textContent=fmt(totalCotMes)
+    // Mes anterior para tendencia
+    const [infAnt,cotAnt]=await Promise.all([
+      sbGet(`informes?estado=eq.cerrada&deleted_at=is.null&created_at=gte.${inicioMesAnt}&created_at=lt.${finMesAnt}&select=total`),
+      sbGet(`cotizaciones?estado=eq.cerrada&deleted_at=is.null&created_at=gte.${inicioMesAnt}&created_at=lt.${finMesAnt}&select=total`)
+    ])
+    const totalInfAnt=infAnt.reduce((s,x)=>s+(x.total||0),0)
+    const totalCotAnt=cotAnt.reduce((s,x)=>s+(x.total||0),0)
+    setTrend('stat-inf-trend',totalInfMes,totalInfAnt)
+    setTrend('stat-cot-trend',totalCotMes,totalCotAnt)
+    // Total año
+    const [infAnio,cotAnio]=await Promise.all([
+      sbGet(`informes?estado=eq.cerrada&deleted_at=is.null&created_at=gte.${inicioAnioActual}&select=total`),
+      sbGet(`cotizaciones?estado=eq.cerrada&deleted_at=is.null&created_at=gte.${inicioAnioActual}&select=total`)
+    ])
+    const totalAnio=infAnio.reduce((s,x)=>s+(x.total||0),0)+cotAnio.reduce((s,x)=>s+(x.total||0),0)
+    document.getElementById('stat-anio').textContent=fmt(totalAnio)
+    // % de cierre y ticket promedio (este mes)
+    const [infTodos,cotTodos]=await Promise.all([
+      sbGet(`informes?deleted_at=is.null&created_at=gte.${inicioMesActual}&select=estado,total`),
+      sbGet(`cotizaciones?deleted_at=is.null&created_at=gte.${inicioMesActual}&select=estado,total`)
+    ])
+    const todos=[...infTodos,...cotTodos]
+    const cerrados=todos.filter(d=>d.estado==='cerrada')
+    const decididos=todos.filter(d=>d.estado==='cerrada'||d.estado==='descartada')
+    const pct=decididos.length?Math.round(cerrados.length*100/decididos.length):0
+    document.getElementById('stat-pct').textContent=pct+'%'
+    document.getElementById('stat-pct-detail').textContent=`${cerrados.length} cerradas / ${decididos.length} decididas`
+    const ticket=cerrados.length?Math.round(cerrados.reduce((s,d)=>s+(d.total||0),0)/cerrados.length):0
+    document.getElementById('stat-ticket').textContent=fmt(ticket)
+    // Diagnósticos hechos: informes cuyo servicios.items contiene id=diag
+    const infParaDiag=await sbGet(`informes?deleted_at=is.null&created_at=gte.${inicioMesActual}&select=servicios`)
+    let diagCount=0
+    infParaDiag.forEach(i=>{
+      const items=i.servicios&&i.servicios.items||[]
+      if(items.some(it=>it.id==='diag'))diagCount++
+    })
+    document.getElementById('stat-diag').textContent=diagCount
+    // Top servicios y clientes
+    cargarTopServicios()
+    cargarTopClientes()
+  }catch(e){
+    console.error('[stats]',e)
+  }
+}
+function setTrend(id,actual,anterior){
+  const el=document.getElementById(id)
+  if(!el)return
+  if(anterior===0&&actual===0){el.textContent='sin datos del mes anterior';el.className='crm-stat-trend';return}
+  if(anterior===0){el.textContent='↑ nuevo (sin base)';el.className='crm-stat-trend up';return}
+  const pct=Math.round((actual-anterior)*100/anterior)
+  if(pct>0){el.textContent=`↑ ${pct}% vs mes anterior`;el.className='crm-stat-trend up'}
+  else if(pct<0){el.textContent=`↓ ${Math.abs(pct)}% vs mes anterior`;el.className='crm-stat-trend down'}
+  else{el.textContent='= igual al mes anterior';el.className='crm-stat-trend'}
+}
+async function cargarTopServicios(){
+  const cont=document.getElementById('top-servicios')
+  try{
+    const inicioMesActual=inicioMes(0)
+    // Solo de informes (los servicios técnicos del catálogo)
+    const infs=await sbGet(`informes?deleted_at=is.null&created_at=gte.${inicioMesActual}&select=servicios`)
+    const counter={}
+    infs.forEach(i=>{
+      const items=i.servicios&&i.servicios.items||[]
+      items.forEach(it=>{
+        const k=it.n||it.id||'sin nombre'
+        if(!counter[k])counter[k]={n:k,count:0,monto:0}
+        counter[k].count++
+        counter[k].monto+=it.precio||0
+      })
+    })
+    const top=Object.values(counter).sort((a,b)=>b.count-a.count).slice(0,5)
+    if(!top.length){cont.innerHTML='<div class="crm-empty">Sin datos del mes</div>';return}
+    cont.innerHTML=top.map(s=>`
+      <div class="crm-top-row">
+        <span class="crm-top-name">${escapeHtml(s.n)}</span>
+        <span class="crm-top-val">${s.count}× · ${fmt(s.monto)}</span>
+      </div>
+    `).join('')
+  }catch(e){
+    console.error('[topServ]',e)
+    cont.innerHTML='<div class="crm-empty">—</div>'
+  }
+}
+async function cargarTopClientes(){
+  const cont=document.getElementById('top-clientes')
+  try{
+    // Clientes con más documentos (cotizaciones + informes) en los últimos 6 meses
+    const desde=inicioMes(-6)
+    const [cots,infs]=await Promise.all([
+      sbGet(`cotizaciones?deleted_at=is.null&created_at=gte.${desde}&select=cliente_id,empresa_id,total`),
+      sbGet(`informes?deleted_at=is.null&created_at=gte.${desde}&select=cliente_id,empresa_id,total`)
+    ])
+    const all=[...cots,...infs]
+    const counter={}
+    all.forEach(d=>{
+      const key=d.cliente_id?'c:'+d.cliente_id:(d.empresa_id?'e:'+d.empresa_id:null)
+      if(!key)return
+      if(!counter[key])counter[key]={key,count:0,monto:0}
+      counter[key].count++
+      counter[key].monto+=d.total||0
+    })
+    const top=Object.values(counter).sort((a,b)=>b.count-a.count).slice(0,5)
+    if(!top.length){cont.innerHTML='<div class="crm-empty">Sin datos</div>';return}
+    // Resolver nombres
+    const cliIds=top.filter(t=>t.key.startsWith('c:')).map(t=>t.key.slice(2))
+    const empIds=top.filter(t=>t.key.startsWith('e:')).map(t=>t.key.slice(2))
+    const [cliMap,empMap]=await Promise.all([
+      cliIds.length?sbGet(`clientes?id=in.(${cliIds.join(',')})&select=id,nombre`).then(r=>Object.fromEntries(r.map(c=>[c.id,c.nombre]))):{},
+      empIds.length?sbGet(`empresas?id=in.(${empIds.join(',')})&select=id,razon_social`).then(r=>Object.fromEntries(r.map(e=>[e.id,e.razon_social]))):{}
+    ])
+    cont.innerHTML=top.map(t=>{
+      const id=t.key.slice(2)
+      const nombre=t.key.startsWith('c:')?(cliMap[id]||'cliente'):(empMap[id]||'empresa')
+      return `
+        <div class="crm-top-row">
+          <span class="crm-top-name">${escapeHtml(nombre)}</span>
+          <span class="crm-top-val">${t.count} doc · ${fmt(t.monto)}</span>
+        </div>
+      `
+    }).join('')
+  }catch(e){
+    console.error('[topCli]',e)
+    cont.innerHTML='<div class="crm-empty">—</div>'
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════
+// BLOQUE 4: HISTORIAL MENSUAL (12 meses)
+// ═══════════════════════════════════════════════════════════════
+async function cargarHistorial(){
+  const tbody=document.getElementById('historial-body')
+  try{
+    const desde=inicioMes(-11) // 12 meses incluyendo el actual
+    const [cots,infs]=await Promise.all([
+      sbGet(`cotizaciones?deleted_at=is.null&created_at=gte.${desde}&select=created_at,estado,total`),
+      sbGet(`informes?deleted_at=is.null&created_at=gte.${desde}&select=created_at,estado,total`)
+    ])
+    const all=[...cots,...infs]
+    // Agrupar por mes (yyyy-mm)
+    const grupos={}
+    for(let i=0;i<12;i++){
+      const d=new Date()
+      d.setMonth(d.getMonth()-i,1)
+      const key=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`
+      grupos[key]={label:d.toLocaleDateString('es-CL',{month:'short',year:'numeric'}),cotizado:0,cerrado:0,decididos:0,cerrados:0,tickets:0,_d:d}
+    }
+    all.forEach(d=>{
+      const dt=new Date(d.created_at)
+      const key=`${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,'0')}`
+      if(!grupos[key])return
+      grupos[key].cotizado+=d.total||0
+      if(d.estado==='cerrada'){
+        grupos[key].cerrado+=d.total||0
+        grupos[key].cerrados++
+        grupos[key].decididos++
+        grupos[key].tickets++
+      } else if(d.estado==='descartada'){
+        grupos[key].decididos++
+      }
+    })
+    const filas=Object.values(grupos).sort((a,b)=>b._d-a._d)
+    tbody.innerHTML=''
+    filas.forEach(f=>{
+      const pct=f.decididos?Math.round(f.cerrados*100/f.decididos):0
+      const tr=document.createElement('tr')
+      tr.innerHTML=`
+        <td class="month-label">${f.label}</td>
+        <td class="num">${fmt(f.cotizado)}</td>
+        <td class="num">${fmt(f.cerrado)}</td>
+        <td class="num">${f.decididos?pct+'%':'—'}</td>
+        <td class="num">${f.tickets}</td>
+      `
+      tbody.appendChild(tr)
+    })
+  }catch(e){
+    console.error('[hist]',e)
+    tbody.innerHTML='<tr><td colspan="5" class="crm-empty">Error: '+escapeHtml(e.message)+'</td></tr>'
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════
+// INIT CRM
+// ═══════════════════════════════════════════════════════════════
+async function initCRM(){
+  // Solo mostrar si hay sesión válida
+  const bearer=await getBearer()
+  if(bearer===SB_KEY){
+    document.getElementById('crm-section').style.display='none'
+    return
+  }
+  document.getElementById('crm-section').style.display='block'
+  setupBuscar()
+  cargarPorHacer()
+  cargarStats()
+  cargarHistorial()
+}
+
 // Cargar al iniciar
 renderDrafts()
+initCRM()
 </script>
 
 </body>
